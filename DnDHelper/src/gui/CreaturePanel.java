@@ -4,8 +4,11 @@ import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Color;
+
 import javax.swing.JButton;
 
 public class CreaturePanel extends JPanel {
@@ -17,9 +20,11 @@ public class CreaturePanel extends JPanel {
 		setBackground(Color.WHITE);
 		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		setLayout(null);
+		this.setPreferredSize(new Dimension(300, 100));
+		//this.setMinimumSize(new Dimension(300, 100));
 		
 		JPanel MainPanel = new JPanel();
-		MainPanel.setBounds(0, 0, 250, 150);
+		MainPanel.setBounds(0, 0, 250, 100);
 		add(MainPanel);
 		MainPanel.setLayout(null);
 		
@@ -40,7 +45,7 @@ public class CreaturePanel extends JPanel {
 		MainPanel.add(btnInventory);
 		
 		JPanel BuffPanel = new JPanel();
-		BuffPanel.setBounds(10, 46, 230, 93);
+		BuffPanel.setBounds(10, 46, 219, 46);
 		MainPanel.add(BuffPanel);
 		
 		JPanel SelectPanel = new JPanel();
@@ -49,8 +54,8 @@ public class CreaturePanel extends JPanel {
 		SelectPanel.setLayout(null);
 		
 		JButton btnSelect = new JButton("Select");
-		btnSelect.setBounds(0, 0, 50, 150);
+		btnSelect.setBounds(0, 0, 50, 100);
 		SelectPanel.add(btnSelect);
-
+		
 	}
 }
