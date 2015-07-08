@@ -4,21 +4,31 @@ import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.JToggleButton;
 
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Color;
 
 import javax.swing.JButton;
+
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
+
 import javax.swing.SwingConstants;
+
 import java.awt.SystemColor;
+
 import javax.swing.UIManager;
 
 public class CreaturePanel extends JPanel {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5364541950907930931L;
 
 	/**
 	 * Create the panel.
@@ -27,7 +37,7 @@ public class CreaturePanel extends JPanel {
 		setBackground(Color.WHITE);
 		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		this.setPreferredSize(new Dimension(300, 100));
-		CreaturePanel panel = this;
+		//CreaturePanel panel = this;
 		setLayout(null);
 		
 		JPanel contentPane = new JPanel();
@@ -103,7 +113,7 @@ public class CreaturePanel extends JPanel {
 		contentPane.add(selectPanel);
 		selectPanel.setLayout(null);
 		
-		JButton btnSelect = new JButton("Select");
+		JToggleButton btnSelect = new JToggleButton("C");
 		btnSelect.setBounds(0, 0, 50, 100);
 		selectPanel.add(btnSelect);
 		

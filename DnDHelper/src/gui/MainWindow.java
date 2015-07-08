@@ -65,16 +65,24 @@ public class MainWindow extends JFrame {
 		MainWindow main = this;
 		
 		contentPane = new JPanel();
+		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
-		JScrollPane creaturesScroll = new JScrollPane();
-		contentPane.add(creaturesScroll, BorderLayout.WEST);
-		creaturesScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+	
+		
+		JPanel scrollCreatures = new JPanel();
+		//contentPane.add(scrollCreatures, BorderLayout.EAST);
+		
+		JScrollPane scrollPane = new JScrollPane(scrollCreatures);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setPreferredSize(new Dimension(300,600));
+		contentPane.add(scrollPane, BorderLayout.NORTH);
 		
 		JPanel creatures = new JPanel();
-		contentPane.add(creatures, BorderLayout.NORTH);
+		scrollCreatures.add(creatures);
+		//creatures.setPreferredSize(new Dimension(300,700));
 		creatures.setLayout(new BoxLayout(creatures, BoxLayout.PAGE_AXIS));
 		
 		for(CreaturePanel creaturepan : creaturePanels){
