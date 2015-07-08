@@ -1,34 +1,46 @@
 package gui;
 
-
-
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.Color;
 
-public class MainWindow extends JFrame  {
+public class MainWindow extends JFrame {
+
+	private JPanel contentPane;
+
 	/**
-	 * 
+	 * Launch the application.
 	 */
-	private static final long serialVersionUID = 2740437090361841747L;
-
-	public MainWindow(){
-//		JPanel mainPanel = new JPanel();
-//		mainPanel.setBackground(Color.white);
-//		mainPanel.setLayout(null); //TODO : MODIFIER LE LAYOUT
-//		this.setContentPane(mainPanel);
-		
-		this.setTitle("DnDHelper");
-		this.setSize(new Dimension(300,800));
-		this.setLocation(0, 0);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setResizable(false);
-		this.setAlwaysOnTop(true);
-		
-		
-		//this.pack();
-		this.setVisible(true);
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MainWindow frame = new MainWindow();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
+
+	/**
+	 * Create the frame.
+	 */
+	public MainWindow() {
+		setTitle("DnDHelper");
+		setAlwaysOnTop(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 294, 729);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		contentPane.add(new CreaturePanel());
+	}
+
 }

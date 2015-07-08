@@ -1,7 +1,7 @@
 package gui;
 
 public class Launcher {
-	public static void main(String[] args){
-		MainWindow main = new MainWindow();
+	public static void main(String[] args) {
+		MainWindowOld main = new MainWindowOld();
 	}
 }
