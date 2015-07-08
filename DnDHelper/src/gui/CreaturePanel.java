@@ -10,6 +10,13 @@ import java.awt.Font;
 import java.awt.Color;
 
 import javax.swing.JButton;
+import java.awt.CardLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.BorderLayout;
+import javax.swing.SwingConstants;
+import java.awt.SystemColor;
+import javax.swing.UIManager;
 
 public class CreaturePanel extends JPanel {
 
@@ -19,43 +26,86 @@ public class CreaturePanel extends JPanel {
 	public CreaturePanel() {
 		setBackground(Color.WHITE);
 		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		setLayout(null);
 		this.setPreferredSize(new Dimension(300, 100));
+		CreaturePanel panel = this;
+		setLayout(null);
+		
+		JPanel contentPane = new JPanel();
+		contentPane.setBounds(2, 2, 296, 96);
+		add(contentPane);
+		contentPane.setLayout(null);
+		
+		JPanel mainPanels = new JPanel();
+		mainPanels.setBounds(0, 0, 250, 100);
+		contentPane.add(mainPanels);
+		mainPanels.setLayout(new CardLayout(0, 0));
 		//this.setMinimumSize(new Dimension(300, 100));
 		
-		JPanel MainPanel = new JPanel();
-		MainPanel.setBounds(0, 0, 250, 100);
-		add(MainPanel);
-		MainPanel.setLayout(null);
+		JPanel mainPanelCreature = new JPanel();
+		mainPanels.add(mainPanelCreature, "name_309225081159039");
+		mainPanelCreature.setLayout(null);
 		
 		JTextPane txtpnCreaturename = new JTextPane();
 		txtpnCreaturename.setBounds(10, 7, 117, 28);
 		txtpnCreaturename.setEditable(false);
-		MainPanel.add(txtpnCreaturename);
-		txtpnCreaturename.setBackground(Color.LIGHT_GRAY);
+		mainPanelCreature.add(txtpnCreaturename);
+		txtpnCreaturename.setBackground(UIManager.getColor("Button.background"));
 		txtpnCreaturename.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		txtpnCreaturename.setText("CreatureName");
 		
 		JButton btnEdit = new JButton("Edit");
+		btnEdit.setToolTipText("Edit");
+		btnEdit.setFont(new Font("Tahoma", Font.PLAIN, 5));
 		btnEdit.setBounds(147, 12, 36, 23);
-		MainPanel.add(btnEdit);
+		mainPanelCreature.add(btnEdit);
 		
 		JButton btnInventory = new JButton("Inventory");
+		btnInventory.setToolTipText("Inventory");
+		btnInventory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CardLayout cl = (CardLayout) mainPanels.getLayout();
+				cl.next(mainPanels);
+			}
+		});
 		btnInventory.setBounds(193, 12, 36, 23);
-		MainPanel.add(btnInventory);
+		mainPanelCreature.add(btnInventory);
 		
 		JPanel BuffPanel = new JPanel();
 		BuffPanel.setBounds(10, 46, 219, 46);
-		MainPanel.add(BuffPanel);
+		mainPanelCreature.add(BuffPanel);
 		
-		JPanel SelectPanel = new JPanel();
-		SelectPanel.setBounds(250, 0, 50, 150);
-		add(SelectPanel);
-		SelectPanel.setLayout(null);
+		JPanel mainPanelInventory = new JPanel();
+		mainPanels.add(mainPanelInventory, "name_309312157043447");
+		mainPanelInventory.setLayout(new BorderLayout(0, 0));
+		
+		JPanel inventoryPanel = new JPanel();
+		mainPanelInventory.add(inventoryPanel, BorderLayout.WEST);
+		
+		JPanel miscPanel = new JPanel();
+		mainPanelInventory.add(miscPanel, BorderLayout.EAST);
+		miscPanel.setLayout(new BorderLayout(0, 0));
+		
+		JButton btnAddItem = new JButton("Add Item");
+		btnAddItem.setVerticalAlignment(SwingConstants.TOP);
+		miscPanel.add(btnAddItem, BorderLayout.NORTH);
+		
+		JButton btnBack = new JButton("Back");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CardLayout cl = (CardLayout) mainPanels.getLayout();
+				cl.next(mainPanels);
+			}
+		});
+		miscPanel.add(btnBack, BorderLayout.SOUTH);
+		
+		JPanel selectPanel = new JPanel();
+		selectPanel.setBounds(250, 0, 50, 100);
+		contentPane.add(selectPanel);
+		selectPanel.setLayout(null);
 		
 		JButton btnSelect = new JButton("Select");
 		btnSelect.setBounds(0, 0, 50, 100);
-		SelectPanel.add(btnSelect);
+		selectPanel.add(btnSelect);
 		
 	}
 }

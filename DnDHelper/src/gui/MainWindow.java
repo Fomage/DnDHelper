@@ -14,14 +14,23 @@ import java.awt.GridBagLayout;
 import javax.swing.BoxLayout;
 
 import java.awt.GridLayout;
+
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.SwingConstants;
 import javax.swing.JCheckBox;
+
 import java.awt.FlowLayout;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 public class MainWindow extends JFrame {
 
@@ -47,6 +56,8 @@ public class MainWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public MainWindow() {
+		List<CreaturePanel> creaturePanels = new ArrayList<CreaturePanel>();
+		
 		setResizable(false);
 		setTitle("DnDHelper");
 		setAlwaysOnTop(true);
@@ -58,15 +69,17 @@ public class MainWindow extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
+		JScrollPane creaturesScroll = new JScrollPane();
+		contentPane.add(creaturesScroll, BorderLayout.WEST);
+		creaturesScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		
 		JPanel creatures = new JPanel();
 		contentPane.add(creatures, BorderLayout.NORTH);
 		creatures.setLayout(new BoxLayout(creatures, BoxLayout.PAGE_AXIS));
 		
-		JPanel test1 = new CreaturePanel();
-		creatures.add(test1);
-		
-		JPanel test2 = new CreaturePanel();
-		creatures.add(test2);
+		for(CreaturePanel creaturepan : creaturePanels){
+			creatures.add(creaturepan);
+		}
 		
 		JPanel bot = new JPanel();
 		bot.setPreferredSize(new Dimension(300, 40));
@@ -74,6 +87,16 @@ public class MainWindow extends JFrame {
 		bot.setLayout(new BorderLayout(0, 0));
 		
 		JButton btnAddcreature = new JButton("Add Creature");
+		btnAddcreature.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				creaturePanels.add(new CreaturePanel());
+				for(CreaturePanel creaturepan : creaturePanels){
+					creatures.add(creaturepan);
+				}
+				main.getContentPane().validate();
+				main.pack();
+			}
+		});
 		bot.add(btnAddcreature,BorderLayout.WEST);
 		
 		JCheckBox chckbxResizable = new JCheckBox("Resizable");
@@ -87,6 +110,8 @@ public class MainWindow extends JFrame {
 				}
 				else{
 					main.setResizable(true);
+					contentPane.validate();
+					main.pack();
 				}
 			}
 		});
