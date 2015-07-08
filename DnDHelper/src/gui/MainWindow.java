@@ -15,10 +15,10 @@ public class MainWindow extends JFrame  {
 	private static final long serialVersionUID = 2740437090361841747L;
 
 	public MainWindow(){
-		JPanel mainPanel = new JPanel();
-		mainPanel.setBackground(Color.white);
-		mainPanel.setLayout(null); // MODIFIER LE LAYOUT
-		this.setContentPane(mainPanel);
+//		JPanel mainPanel = new JPanel();
+//		mainPanel.setBackground(Color.white);
+//		mainPanel.setLayout(null); //TODO : MODIFIER LE LAYOUT
+//		this.setContentPane(mainPanel);
 		
 		this.setTitle("DnDHelper");
 		this.setSize(new Dimension(300,800));
