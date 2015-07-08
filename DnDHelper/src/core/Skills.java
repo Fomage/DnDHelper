@@ -4,15 +4,15 @@ import java.io.Serializable;
 import java.util.Observable;
 import java.util.Observer;
 
-public class Creature extends Observable implements Serializable, Observer {
+public class Skills extends Observable implements Serializable, Observer {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3972269434795657303L;
+	private static final long serialVersionUID = 4563999116843397047L;
 
-	public Creature() {
-		
+	public Skills() {
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -21,6 +21,7 @@ public class Creature extends Observable implements Serializable, Observer {
 		
 	}
 	
-
+	
 
 }
+
