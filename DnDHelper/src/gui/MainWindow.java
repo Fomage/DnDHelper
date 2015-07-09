@@ -39,6 +39,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.Font;
+import java.awt.Component;
+import javax.swing.Box;
 
 public class MainWindow extends JFrame {
 
@@ -76,6 +78,7 @@ public class MainWindow extends JFrame {
 		
 		
 		ImageIcon diceicon = new ImageIcon("src/gui/images/dice2.png");
+		ImageIcon dicepressedicon = new ImageIcon("src/gui/images/dice2pressed.png");
 //		URL url = getClass().getResource("/gui/images/dice.png");
 //		Image diceimg;
 //		try {
@@ -185,10 +188,25 @@ public class MainWindow extends JFrame {
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Type 1 Roll", "Type 2 Roll", "w jkebfwebfwjfw ejfwlmfwme bfw "}));
 		diceRollPanel.add(comboBox, BorderLayout.WEST);
 		
+		JPanel rollPanel = new JPanel();
+		diceRollPanel.add(rollPanel, BorderLayout.EAST);
+		rollPanel.setLayout(new BorderLayout(0, 0));
+		
 		JButton btnRoll = new JButton(diceicon);
+		rollPanel.add(btnRoll, BorderLayout.WEST);
+		btnRoll.setPressedIcon(dicepressedicon);
+		btnRoll.setBorder(null);
+		btnRoll.setBorderPainted(false);
 		btnRoll.setFocusPainted(false);
-		btnRoll.setIcon(diceicon);
-		diceRollPanel.add(btnRoll, BorderLayout.EAST);
+		btnRoll.setContentAreaFilled(false);
+		
+		Component horizontalStrut = Box.createHorizontalStrut(20);
+		horizontalStrut.setPreferredSize(new Dimension(5, 0));
+		rollPanel.add(horizontalStrut, BorderLayout.EAST);
+		
+		Component verticalStrut = Box.createVerticalStrut(20);
+		verticalStrut.setPreferredSize(new Dimension(0, 5));
+		diceRollPanel.add(verticalStrut, BorderLayout.SOUTH);
 		
 		
 		contentPane.validate();

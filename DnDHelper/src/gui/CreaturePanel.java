@@ -28,6 +28,7 @@ import javax.swing.UIManager;
 import javax.swing.JTabbedPane;
 import javax.swing.ImageIcon;
 import java.awt.Component;
+import java.awt.Cursor;
 
 public class CreaturePanel extends JPanel {
 
@@ -45,19 +46,23 @@ public class CreaturePanel extends JPanel {
 		ImageIcon editIcon = new ImageIcon("src/gui/images/edit2.png");
 		ImageIcon creatureIcon = new ImageIcon("src/gui/images/person2.png");
 		ImageIcon inventoryIcon = new ImageIcon("src/gui/images/inventory2.png");
+		ImageIcon checkedIcon = new ImageIcon("src/gui/images/checked.png");
+		ImageIcon uncheckedIcon = new ImageIcon("src/gui/images/unchecked.png");
 		
 		setBackground(Color.WHITE);
-		this.setPreferredSize(new Dimension(300, 100));
+		this.setPreferredSize(new Dimension(303, 100));
 		CreaturePanel panel = this;
 		setLayout(null);
 		
 		JPanel contentPane = new JPanel();
 		contentPane.setBorder(null);
-		contentPane.setBounds(2, 2, 346, 140);
+		contentPane.setBounds(2, 2, 350, 108);
 		add(contentPane);
 		contentPane.setLayout(null);
 		
 		tabbedPaneTest = new JTabbedPane(JTabbedPane.RIGHT);
+		tabbedPaneTest.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		tabbedPaneTest.setFocusable(false);
 		tabbedPaneTest.setBorder(null);
 		tabbedPaneTest.setBounds(0, 0, 260, 100);
 		
@@ -87,6 +92,7 @@ public class CreaturePanel extends JPanel {
 		JButton btnEdit = new JButton(editIcon);
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//TODO : edit launches NewCreatureWindow with default values
 			}
 		});
 		btnEdit.setBorder(null);
@@ -95,7 +101,7 @@ public class CreaturePanel extends JPanel {
 		btnEdit.setContentAreaFilled(false);
 		btnEdit.setToolTipText("Edit");
 		btnEdit.setFont(new Font("Tahoma", Font.PLAIN, 7));
-		btnEdit.setBounds(168, 7, 35, 35);
+		btnEdit.setBounds(175, 7, 35, 35);
 		mainPanelCreature.add(btnEdit);
 		
 		JPanel buffPanel = new JPanel();
@@ -174,8 +180,12 @@ public class CreaturePanel extends JPanel {
 		textPane.setText("0");
 		selectPanel.add(textPane, BorderLayout.NORTH);
 		
-		JToggleButton btnSelect = new JToggleButton("S");
+		JToggleButton btnSelect = new JToggleButton(uncheckedIcon);
+		btnSelect.setSelectedIcon(checkedIcon);
+		btnSelect.setBorder(null);
+		btnSelect.setBorderPainted(false);
 		btnSelect.setFocusPainted(false);
+		btnSelect.setContentAreaFilled(false);
 		selectPanel.add(btnSelect, BorderLayout.CENTER);
 		
 	}
