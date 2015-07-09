@@ -6,6 +6,11 @@ import java.util.Observer;
 
 public class Buff extends Observable implements Observer, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2063353591841926763L;
+
 	public Buff() {
 		// TODO Auto-generated constructor stub
 	}

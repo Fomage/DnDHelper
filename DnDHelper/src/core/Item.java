@@ -6,6 +6,11 @@ import java.util.Observer;
 
 public class Item extends Observable implements Observer, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2147826682088213346L;
+
 	public Item() {
 		// TODO Auto-generated constructor stub
 	}

@@ -91,6 +91,14 @@ public class Stats extends Observable implements Serializable, Observer {
 			throw new Exception("Invalid arg in Stats::statToInt : "+arg);
 		}
 	}
+	
+	/**
+	 * @param arg an int supposedly representing a stat.
+	 * @return true if the int represents a stat, false otherwise.
+	 */
+	public static boolean isAStat(int arg){
+		return ((arg>=0) && (arg<6));
+	}
 
 	//Constructors
 	/**
