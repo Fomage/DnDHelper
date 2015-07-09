@@ -18,34 +18,30 @@ import javax.swing.JToggleButton;
 import javax.swing.AbstractListModel;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class NewBuffWindow extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8319463507363235057L;
 	private JPanel contentPane;
 	private JTextField txtName;
+	private CreaturePanel creaturePanel;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					NewBuffWindow frame = new NewBuffWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
 	 */
-	public NewBuffWindow() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+	public NewBuffWindow(CreaturePanel creaturePanel) {
+		this.creaturePanel = creaturePanel;
+		NewBuffWindow window = this;
+		setTitle("New Buff");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(400, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -65,7 +61,7 @@ public class NewBuffWindow extends JFrame {
 		contentPane.add(txtpnDescription);
 		
 		JSpinner spinner = new JSpinner();
-		spinner.setBounds(333, 189, 47, 32);
+		spinner.setBounds(207, 189, 47, 32);
 		contentPane.add(spinner);
 		
 		JToggleButton tglbtnPositiveBuff = new JToggleButton("Positive Buff");
@@ -78,7 +74,18 @@ public class NewBuffWindow extends JFrame {
 		
 		JComboBox comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Skill 1", "Skill 2"}));
-		comboBox.setBounds(54, 189, 195, 32);
+		comboBox.setBounds(5, 189, 195, 32);
 		contentPane.add(comboBox);
+		
+		JButton btnOK = new JButton("OK");
+		btnOK.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnOK.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//creaturePanel.setVisible(true);
+				window.dispose(); // TODO : save the new buff information into a new buff
+			}
+		});
+		btnOK.setBounds(280, 189, 144, 62);
+		contentPane.add(btnOK);
 	}
 }

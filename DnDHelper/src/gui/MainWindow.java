@@ -31,6 +31,8 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class MainWindow extends JFrame {
 
@@ -62,6 +64,7 @@ public class MainWindow extends JFrame {
 		setTitle("DnDHelper");
 		setAlwaysOnTop(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(10,10,317,145);
 		MainWindow main = this;
 		
 		contentPane = new JPanel();
@@ -77,7 +80,8 @@ public class MainWindow extends JFrame {
 		
 		JScrollPane scrollPane = new JScrollPane(scrollCreatures);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setPreferredSize(new Dimension(300,600));
+		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
+		scrollPane.setWheelScrollingEnabled(true);
 		contentPane.add(scrollPane, BorderLayout.NORTH);
 		
 		JPanel creatures = new JPanel();
@@ -90,14 +94,16 @@ public class MainWindow extends JFrame {
 		}
 		
 		JPanel bot = new JPanel();
-		bot.setPreferredSize(new Dimension(300, 40));
+		bot.setPreferredSize(new Dimension(300, 80));
 		contentPane.add(bot,BorderLayout.SOUTH);
-		bot.setLayout(new BorderLayout(0, 0));
 		
 		JButton btnAddcreature = new JButton("Add Creature");
 		btnAddcreature.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				creaturePanels.add(new CreaturePanel());
+				if(creaturePanels.size()>=6){
+					scrollPane.setPreferredSize(new Dimension(325,600));
+				}
 				for(CreaturePanel creaturepan : creaturePanels){
 					creatures.add(creaturepan);
 				}
@@ -105,9 +111,17 @@ public class MainWindow extends JFrame {
 				main.pack();
 			}
 		});
-		bot.add(btnAddcreature,BorderLayout.WEST);
+		bot.setLayout(new BorderLayout(0, 0));
+		
+		JPanel options = new JPanel();
+		bot.add(options, BorderLayout.EAST);
+		
+		JCheckBox chckbxOnTop = new JCheckBox("On Top");
+		options.add(chckbxOnTop);
+		chckbxOnTop.setSelected(true);
 		
 		JCheckBox chckbxResizable = new JCheckBox("Resizable");
+		options.add(chckbxResizable);
 		chckbxResizable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(main.isResizable()){
@@ -123,10 +137,42 @@ public class MainWindow extends JFrame {
 				}
 			}
 		});
-		bot.add(chckbxResizable,BorderLayout.EAST);
+		chckbxOnTop.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(main.isAlwaysOnTop()){
+					
+					main.setAlwaysOnTop(false);
+					contentPane.validate();
+					main.pack();
+				}
+				else{
+					main.setAlwaysOnTop(true);
+					contentPane.validate();
+					main.pack();
+				}
+			}
+		});
+		bot.add(btnAddcreature, BorderLayout.WEST);
+		
+		JPanel diceRollPanel = new JPanel();
+		bot.add(diceRollPanel, BorderLayout.SOUTH);
+		diceRollPanel.setLayout(new BorderLayout(0, 0));
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Type 1 Roll", "Type 2 Roll", "w jkebfwebfwjfw ejfwlmfwme bfw "}));
+		diceRollPanel.add(comboBox, BorderLayout.WEST);
+		
+		JButton btnRoll = new JButton("Roll");
+		diceRollPanel.add(btnRoll, BorderLayout.EAST);
+		
 		
 		contentPane.validate();
 		this.pack();
 	}
+	
+	
+	
+		
+	
 
 }
