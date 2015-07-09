@@ -3,7 +3,9 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Image;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -25,14 +27,18 @@ import javax.swing.SwingConstants;
 import javax.swing.JCheckBox;
 
 import java.awt.FlowLayout;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import java.awt.Font;
 
 public class MainWindow extends JFrame {
 
@@ -67,24 +73,39 @@ public class MainWindow extends JFrame {
 		setBounds(10,10,317,145);
 		MainWindow main = this;
 		
+		
+		
+		ImageIcon diceicon = new ImageIcon("src/gui/images/dice2.png");
+//		URL url = getClass().getResource("/gui/images/dice.png");
+//		Image diceimg;
+//		try {
+//			diceimg = ImageIO
+//					.read(url);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		
 		contentPane = new JPanel();
 		
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBorder(null);
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
 	
 		
 		JPanel scrollCreatures = new JPanel();
+		scrollCreatures.setBorder(null);
 		//contentPane.add(scrollCreatures, BorderLayout.EAST);
 		
 		JScrollPane scrollPane = new JScrollPane(scrollCreatures);
+		scrollPane.setBorder(null);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
 		scrollPane.setWheelScrollingEnabled(true);
 		contentPane.add(scrollPane, BorderLayout.NORTH);
 		
 		JPanel creatures = new JPanel();
+		creatures.setBorder(null);
 		scrollCreatures.add(creatures);
 		//creatures.setPreferredSize(new Dimension(300,700));
 		creatures.setLayout(new BoxLayout(creatures, BoxLayout.PAGE_AXIS));
@@ -97,7 +118,9 @@ public class MainWindow extends JFrame {
 		bot.setPreferredSize(new Dimension(300, 80));
 		contentPane.add(bot,BorderLayout.SOUTH);
 		
-		JButton btnAddcreature = new JButton("Add Creature");
+		JButton btnAddcreature = new JButton("+");
+		btnAddcreature.setFocusPainted(false);
+		btnAddcreature.setFont(new Font("SansSerif", Font.PLAIN, 35));
 		btnAddcreature.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				creaturePanels.add(new CreaturePanel());
@@ -162,7 +185,9 @@ public class MainWindow extends JFrame {
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Type 1 Roll", "Type 2 Roll", "w jkebfwebfwjfw ejfwlmfwme bfw "}));
 		diceRollPanel.add(comboBox, BorderLayout.WEST);
 		
-		JButton btnRoll = new JButton("Roll");
+		JButton btnRoll = new JButton(diceicon);
+		btnRoll.setFocusPainted(false);
+		btnRoll.setIcon(diceicon);
 		diceRollPanel.add(btnRoll, BorderLayout.EAST);
 		
 		
