@@ -41,9 +41,10 @@ public class CreaturePanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public CreaturePanel() {
+	public CreaturePanel(MainWindow main) {
 		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		ImageIcon editIcon = new ImageIcon("src/gui/images/edit2.png");
+		ImageIcon trashIcon = new ImageIcon("src/gui/images/trash2.png");
 		ImageIcon creatureIcon = new ImageIcon("src/gui/images/person2.png");
 		ImageIcon inventoryIcon = new ImageIcon("src/gui/images/inventory2.png");
 		ImageIcon checkedIcon = new ImageIcon("src/gui/images/checked.png");
@@ -82,6 +83,7 @@ public class CreaturePanel extends JPanel {
 		mainPanelCreature.setLayout(null);
 		
 		JTextPane txtpnCreaturename = new JTextPane();
+		txtpnCreaturename.setOpaque(false);
 		txtpnCreaturename.setBounds(10, 7, 117, 28);
 		txtpnCreaturename.setEditable(false);
 		mainPanelCreature.add(txtpnCreaturename);
@@ -101,8 +103,22 @@ public class CreaturePanel extends JPanel {
 		btnEdit.setContentAreaFilled(false);
 		btnEdit.setToolTipText("Edit");
 		btnEdit.setFont(new Font("Tahoma", Font.PLAIN, 7));
-		btnEdit.setBounds(175, 7, 35, 35);
+		btnEdit.setBounds(190, 12, 20, 20);
 		mainPanelCreature.add(btnEdit);
+		
+		JButton btnRemove = new JButton(trashIcon);
+		btnRemove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				main.removeCreature(panel);
+			}
+		});
+		btnRemove.setBorder(null);
+		btnRemove.setBorderPainted(false);
+		btnRemove.setFocusPainted(false);
+		btnRemove.setContentAreaFilled(false);
+		btnRemove.setToolTipText("Remove");
+		btnRemove.setBounds(155, 12, 20, 20);
+		mainPanelCreature.add(btnRemove);
 		
 		JPanel buffPanel = new JPanel();
 		buffPanel.setBounds(10, 46, 206, 46);
@@ -116,12 +132,16 @@ public class CreaturePanel extends JPanel {
 				NewBuffWindow newbuff = new NewBuffWindow(panel);
 				newbuff.setVisible(true);
 				panel.setVisible(false);
+				main.setAlwaysOnTop(false);
+				newbuff.toFront();
 				
 				
 				newbuff.addWindowListener(new WindowAdapter(){
 					public void windowClosed(WindowEvent e){
 						// TODO : RETURN NEW BUFF HERE with newbuff
 						
+						
+						main.setAlwaysOnTop(main.isOnTop());
 						panel.setVisible(true);
 						return;
 					}
@@ -153,7 +173,9 @@ public class CreaturePanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				NewItemWindow newitem = new NewItemWindow(panel);
 				newitem.setVisible(true);
+				newitem.toFront();
 				panel.setVisible(false);
+				main.setAlwaysOnTop(false);
 				
 				
 				newitem.addWindowListener(new WindowAdapter(){
