@@ -17,6 +17,7 @@ public class Creature extends Observable implements Serializable, Observer {
 	private Inventory inventory;
 	private Skills skills;
 	private Stats stats;
+	private String name;
 
 	//constructors
 	/**
@@ -27,10 +28,10 @@ public class Creature extends Observable implements Serializable, Observer {
 		buffer.addObserver(this);
 		inventory = new Inventory();
 		inventory.addObserver(this);
-		skills = new Skills();
-		skills.addObserver(this);
 		stats = new Stats();
-		skills.addObserver(this);
+		stats.addObserver(this);
+		setSkills(new Skills());
+		name="Default";
 	}
 	
 	/**
@@ -41,13 +42,14 @@ public class Creature extends Observable implements Serializable, Observer {
 	 * @param skills stats will be set as the corresponding statistics.
 	 * @throws Exception possibly...
 	 */
-	public Creature(Inventory inventory, Stats stats, Skills skills) throws Exception {
+	public Creature(Inventory inventory, Stats stats, Skills skills, String name) throws Exception {
 		buffer = new Buffer();
 		buffer.addObserver(this);
 		setInventory(inventory);
 		this.stats=stats;
 		stats.addObserver(this);
 		setSkills(skills);
+		this.name=name;
 	}
 	
 	//Accessors
@@ -94,6 +96,15 @@ public class Creature extends Observable implements Serializable, Observer {
 		notifyObservers();
 	}
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+		notifyObservers();
+	}
+
 	//Observable
 	@Override
 	public void update(Observable o, Object arg) {
