@@ -37,6 +37,29 @@ public class StatsTest {
 		fail("No exception raised");}catch(Exception e){}
 		try{Stats.statToString(6);
 		fail("No exception raised");}catch(Exception e){}
+		
+		for(int i=0;i<6;i++)
+			assertTrue(Stats.isAStat(i));
+		assertTrue(!Stats.isAStat(-1));
+		assertTrue(!Stats.isAStat(6));
+	}
+	
+	@Test
+	public void testAccessors() throws Exception{
+		Stats a = new Stats();
+		
+		Bugger bugger = new Bugger();
+		a.addObserver(bugger);
+		assertEquals(1,a.countObservers());
+		
+		for(int i=0;i<6;i++)
+			a.setStat(i, i*2);
+		for(int i=0;i<6;i++){
+			assertEquals(2*i,a.getStat(i));
+			assertEquals(2*i,a.getStats()[i]);
+			assertEquals(i-5,a.getMod(i));
+		}
+		assertEquals(6,bugger.count);
 	}
 
 }
