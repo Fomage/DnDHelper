@@ -78,6 +78,7 @@ public class NewItemWindow extends JFrame {
 		buffPanel.setLayout(new BorderLayout(0, 0));
 		
 		txtAssociatedBuffs = new JTextField();
+		txtAssociatedBuffs.setOpaque(false);
 		txtAssociatedBuffs.setEditable(false);
 		txtAssociatedBuffs.setText("Associated Buffs");
 		buffPanel.add(txtAssociatedBuffs, BorderLayout.NORTH);

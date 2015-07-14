@@ -22,6 +22,8 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.SwingConstants;
 import javax.swing.JCheckBox;
@@ -38,13 +40,22 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.UIManager;
+
 import java.awt.Font;
 import java.awt.Component;
+
 import javax.swing.Box;
+
+import java.awt.Window.Type;
+import java.awt.ComponentOrientation;
 
 public class MainWindow extends JFrame {
 
 	private JPanel contentPane;
+	boolean onTopState = true;
+	List<CreaturePanel> creaturePanels;
+	JPanel creatures;
 
 	/**
 	 * Launch the application.
@@ -53,6 +64,8 @@ public class MainWindow extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					 UIManager.setLookAndFeel(
+					            UIManager.getSystemLookAndFeelClassName());
 					MainWindow frame = new MainWindow();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -66,7 +79,8 @@ public class MainWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public MainWindow() {
-		List<CreaturePanel> creaturePanels = new ArrayList<CreaturePanel>();
+		setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		creaturePanels = new ArrayList<CreaturePanel>(); //TODO : Load creatures
 		
 		setResizable(false);
 		setTitle("DnDHelper");
@@ -89,6 +103,8 @@ public class MainWindow extends JFrame {
 //		}
 		
 		contentPane = new JPanel();
+		contentPane.setAlignmentY(Component.TOP_ALIGNMENT);
+		contentPane.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
 		contentPane.setBorder(null);
 		setContentPane(contentPane);
@@ -97,17 +113,23 @@ public class MainWindow extends JFrame {
 	
 		
 		JPanel scrollCreatures = new JPanel();
+		scrollCreatures.setAlignmentY(Component.TOP_ALIGNMENT);
+		scrollCreatures.setAlignmentX(Component.LEFT_ALIGNMENT);
 		scrollCreatures.setBorder(null);
 		//contentPane.add(scrollCreatures, BorderLayout.EAST);
 		
 		JScrollPane scrollPane = new JScrollPane(scrollCreatures);
+		scrollPane.setAlignmentY(Component.TOP_ALIGNMENT);
+		scrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
 		scrollPane.setBorder(null);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
 		scrollPane.setWheelScrollingEnabled(true);
 		contentPane.add(scrollPane, BorderLayout.NORTH);
 		
-		JPanel creatures = new JPanel();
+		creatures = new JPanel();
+		creatures.setAlignmentY(Component.TOP_ALIGNMENT);
+		creatures.setAlignmentX(Component.LEFT_ALIGNMENT);
 		creatures.setBorder(null);
 		scrollCreatures.add(creatures);
 		//creatures.setPreferredSize(new Dimension(300,700));
@@ -121,20 +143,43 @@ public class MainWindow extends JFrame {
 		bot.setPreferredSize(new Dimension(300, 80));
 		contentPane.add(bot,BorderLayout.SOUTH);
 		
+		JCheckBox chckbxOnTop = new JCheckBox("On Top");
+		
 		JButton btnAddcreature = new JButton("+");
 		btnAddcreature.setFocusPainted(false);
 		btnAddcreature.setFont(new Font("SansSerif", Font.PLAIN, 35));
 		btnAddcreature.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				creaturePanels.add(new CreaturePanel());
-				if(creaturePanels.size()>=6){
-					scrollPane.setPreferredSize(new Dimension(325,600));
-				}
-				for(CreaturePanel creaturepan : creaturePanels){
-					creatures.add(creaturepan);
-				}
-				main.getContentPane().validate();
-				main.pack();
+				NewCreatureWindow newcreature = new NewCreatureWindow();
+				newcreature.setVisible(true);
+				newcreature.toFront();
+				main.setAlwaysOnTop(false);
+				onTopState = false;
+				
+				
+				
+				newcreature.addWindowListener(new WindowAdapter(){
+					public void windowClosed(WindowEvent e){
+						if(newcreature.isFinished()){
+							creaturePanels.add(new CreaturePanel(main));
+						}
+						// TODO : RETURN NEW CREATURE HERE with newcreature
+						main.setAlwaysOnTop(chckbxOnTop.isSelected());
+						onTopState = true;
+						
+						if(creaturePanels.size()>=6){
+							scrollPane.setPreferredSize(new Dimension(325,600));
+						}
+						creatures.removeAll();
+						for(CreaturePanel cPanel : creaturePanels){
+							creatures.add(cPanel);
+						}
+						main.getContentPane().validate();
+						main.pack();
+					}
+				});
+
+				
 			}
 		});
 		bot.setLayout(new BorderLayout(0, 0));
@@ -142,7 +187,7 @@ public class MainWindow extends JFrame {
 		JPanel options = new JPanel();
 		bot.add(options, BorderLayout.EAST);
 		
-		JCheckBox chckbxOnTop = new JCheckBox("On Top");
+		
 		options.add(chckbxOnTop);
 		chckbxOnTop.setSelected(true);
 		
@@ -212,9 +257,25 @@ public class MainWindow extends JFrame {
 		contentPane.validate();
 		this.pack();
 	}
+
+	public boolean isOnTop() {
+		// TODO Auto-generated method stub
+		return onTopState;
+	}
 	
+	public void removeCreature(CreaturePanel cPanel){
+		creaturePanels.remove(cPanel);
+		check();
+	}
 	
-	
+	public void check(){
+		creatures.removeAll();
+		for(CreaturePanel cPanel : creaturePanels){
+			creatures.add(cPanel);
+		}
+		this.getContentPane().validate();
+		this.pack();
+	}
 		
 	
 
