@@ -53,6 +53,7 @@ public class Skill extends Observable implements Serializable, Observer {
 
 	public void setMod(int mod) {
 		this.mod = mod;
+		setChanged();
 		notifyObservers();
 	}
 
@@ -68,6 +69,7 @@ public class Skill extends Observable implements Serializable, Observer {
 		if(!Stats.isAStat(arg))
 			throw new Exception("Invalid arg in Skill::setStat : "+arg);
 		this.stat=arg;
+		setChanged();
 		notifyObservers();
 	}
 
@@ -77,6 +79,7 @@ public class Skill extends Observable implements Serializable, Observer {
 
 	public void setName(String name) {
 		this.name = name;
+		setChanged();
 		notifyObservers();
 	}
 	
@@ -88,6 +91,7 @@ public class Skill extends Observable implements Serializable, Observer {
 		this.stats.deleteObserver(this);
 		this.stats = stats;
 		stats.addObserver(this);
+		setChanged();
 		notifyObservers();
 	}
 
@@ -97,12 +101,13 @@ public class Skill extends Observable implements Serializable, Observer {
 	 * @throws Exception if something went VERY WRONG in my code. Notify me if u get this.
 	 */
 	public int getScore() throws Exception{
-		return getMod()+getStats().getStat(getStat());
+		return getMod()+getStats().getMod(getStat());
 	}
 
 	//Observer
 	@Override
 	public void update(Observable arg0, Object arg1) {
+		setChanged();
 		notifyObservers();
 	}
 

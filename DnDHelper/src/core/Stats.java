@@ -137,6 +137,7 @@ public class Stats extends Observable implements Serializable, Observer {
 	public void setStats(int[] stats) throws Exception{
 		if(isStats(stats))
 			this.stats = stats;
+		setChanged();
 		notifyObservers();
 	}
 	
@@ -150,7 +151,7 @@ public class Stats extends Observable implements Serializable, Observer {
 			return stats[i];
 		}
 		else
-			throw new Exception("Invalid arg in Stats::getStats : "+i);
+			throw new Exception("Invalid arg in Stats::getStat : "+i);
 	}
 	
 	/**
@@ -169,6 +170,7 @@ public class Stats extends Observable implements Serializable, Observer {
 		if((stat>=0) && (stat<6)) {
 			if(value>=0){
 				stats[stat]=value;
+				setChanged();
 				notifyObservers();
 			}
 			else
