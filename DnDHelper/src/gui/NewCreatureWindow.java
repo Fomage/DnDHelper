@@ -1,14 +1,11 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -16,23 +13,40 @@ import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JSpinner;
 import javax.swing.BoxLayout;
+
 import java.awt.FlowLayout;
 import java.awt.Component;
-import javax.swing.Box;
 
+import javax.swing.Box;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+
+import core.Creature;
+import core.Stats;
+
+@SuppressWarnings("serial")
 public class NewCreatureWindow extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtItemName;
 	private boolean finished = false;
-
+	private Creature creature;
 	
+	public NewCreatureWindow(){
+		
+		this(new Creature());
+		setTitle("New Creature");
+	}
 	/**
 	 * Create the frame.
 	 */
-	public NewCreatureWindow() {
+	/**
+	 * @wbp.parser.constructor
+	 */
+	public NewCreatureWindow(Creature creature) {
 		NewCreatureWindow window = this;
-		setTitle("Creature");
+		this.creature = creature;
+		setTitle("Edit Creature");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(400, 100, 449, 512);
 		contentPane = new JPanel();
@@ -42,7 +56,7 @@ public class NewCreatureWindow extends JFrame {
 		
 		txtItemName = new JTextField();
 		txtItemName.setToolTipText("Enter a fucking name wtf are you retarded?");
-		txtItemName.setText("Creature Name");
+		txtItemName.setText(creature.getName());
 		txtItemName.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtItemName.setColumns(10);
 		txtItemName.setBounds(20, 11, 143, 32);
@@ -57,23 +71,12 @@ public class NewCreatureWindow extends JFrame {
 		creatureInfo.add(creatureStats, BorderLayout.WEST);
 		creatureStats.setLayout(new BoxLayout(creatureStats, BoxLayout.Y_AXIS));
 		
-		JPanel sampleStat = new JPanel();
-		creatureStats.add(sampleStat);
-		sampleStat.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		//TODO creature statpanels
+		for(JPanel statPanel : createStatPanels()){
+			creatureStats.add(statPanel);
+		}
 		
-		JTextPane txtpnSamplestatname = new JTextPane();
-		txtpnSamplestatname.setOpaque(false);
-		txtpnSamplestatname.setEditable(false);
-		txtpnSamplestatname.setText("sampleStatName");
-		sampleStat.add(txtpnSamplestatname);
 		
-		JSpinner statValueSpinner = new JSpinner();
-		sampleStat.add(statValueSpinner);
-		
-		JTextPane txtpnSamplemodvalue = new JTextPane();
-		txtpnSamplemodvalue.setOpaque(false);
-		txtpnSamplemodvalue.setText("mod");
-		sampleStat.add(txtpnSamplemodvalue);
 		
 		JPanel creatureSkills = new JPanel();
 		creatureInfo.add(creatureSkills, BorderLayout.EAST);
@@ -124,6 +127,92 @@ public class NewCreatureWindow extends JFrame {
 	public boolean isFinished(){
 		return finished;
 	}
+	
+	public Creature getCreature(){
+		return creature;
 	}
+	
+	public JPanel[] createStatPanels(){
+		JPanel[] res = new JPanel[6];
+		for(int i = 0 ; i <6 ; i++){
+		
+			JPanel statPanel = new JPanel();
+			
+			statPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			
+			JTextPane txtpnStatName = new JTextPane();
+			txtpnStatName.setOpaque(false);
+			txtpnStatName.setEditable(false);
+			
+			try {
+				txtpnStatName.setText(Stats.statToString(i));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("fuck Nico (statToString)");
+			}
+			
+			statPanel.add(txtpnStatName);
+			
+			JTextPane txtpnSamplemodvalue = new JTextPane();
+			txtpnSamplemodvalue.setOpaque(false);
+			
+			class statSpinner extends JSpinner{
+				private int stat;
+				public statSpinner(int stat){
+					super();
+					this.stat = stat;
+				}
+				public int getStat(){
+					return stat;
+				}
+			}
+			
+			JSpinner statValueSpinner = new statSpinner(i);
+			if(creature == null){
+				System.out.println("ok");
+			}
+			try {
+				statValueSpinner.setValue(creature.getStats().getStat(i));
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			
+			statValueSpinner.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent arg0) {
+					
+					try {
+						creature.getStats().setStat(((statSpinner) arg0.getSource()).getStat(),(int) statValueSpinner.getValue());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					
+					try {
+						txtpnSamplemodvalue.setText(""+creature.getStats().getMod(((statSpinner) arg0.getSource()).getStat()));
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+			});
+			statPanel.add(statValueSpinner);
+			try {
+				txtpnSamplemodvalue.setText(""+creature.getStats().getMod(((statSpinner)statValueSpinner).getStat()));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			statPanel.add(txtpnSamplemodvalue);
+			res[i] = statPanel;
+		}
+		return res;
+	}
+	
+}
 
 

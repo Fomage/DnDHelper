@@ -161,7 +161,7 @@ public class MainWindow extends JFrame {
 				newcreature.addWindowListener(new WindowAdapter(){
 					public void windowClosed(WindowEvent e){
 						if(newcreature.isFinished()){
-							creaturePanels.add(new CreaturePanel(main));
+							creaturePanels.add(new CreaturePanel(main , newcreature.getCreature()));
 						}
 						// TODO : RETURN NEW CREATURE HERE with newcreature
 						main.setAlwaysOnTop(chckbxOnTop.isSelected());

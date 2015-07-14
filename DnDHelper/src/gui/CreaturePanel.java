@@ -27,6 +27,9 @@ import java.awt.SystemColor;
 import javax.swing.UIManager;
 import javax.swing.JTabbedPane;
 import javax.swing.ImageIcon;
+
+import core.Creature;
+
 import java.awt.Component;
 import java.awt.Cursor;
 
@@ -37,14 +40,26 @@ public class CreaturePanel extends JPanel {
 	 */
 	private static final long serialVersionUID = -5364541950907930931L;
 	private JTabbedPane tabbedPaneTest;
+	private Creature creature;
 
 	/**
 	 * Create the panel.
 	 */
-	public CreaturePanel(MainWindow main) {
+	public CreaturePanel(MainWindow main){
+		this(main, new Creature());
+	}
+	
+	/**
+	 * @wbp.parser.constructor
+	 */
+
+	public CreaturePanel(MainWindow main, Creature creature) {
+		
 		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		ImageIcon editIcon = new ImageIcon("src/gui/images/edit2.png");
+		ImageIcon editIconPressed = new ImageIcon("src/gui/images/edit2pressed.png");
 		ImageIcon trashIcon = new ImageIcon("src/gui/images/trash2.png");
+		ImageIcon trashIconPressed = new ImageIcon("src/gui/images/trash2pressed.png");
 		ImageIcon creatureIcon = new ImageIcon("src/gui/images/person2.png");
 		ImageIcon inventoryIcon = new ImageIcon("src/gui/images/inventory2.png");
 		ImageIcon checkedIcon = new ImageIcon("src/gui/images/checked.png");
@@ -52,6 +67,7 @@ public class CreaturePanel extends JPanel {
 		
 		setBackground(Color.WHITE);
 		this.setPreferredSize(new Dimension(303, 100));
+		this.creature = creature;
 		CreaturePanel panel = this;
 		setLayout(null);
 		
@@ -89,12 +105,14 @@ public class CreaturePanel extends JPanel {
 		mainPanelCreature.add(txtpnCreaturename);
 		txtpnCreaturename.setBackground(UIManager.getColor("Button.background"));
 		txtpnCreaturename.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		txtpnCreaturename.setText("CreatureName");
+		txtpnCreaturename.setText(creature.getName());
 		
 		JButton btnEdit = new JButton(editIcon);
+		btnEdit.setPressedIcon(editIconPressed);
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO : edit launches NewCreatureWindow with default values
+				//TODO : edit launches NewCreatureWindow with creature values
+				
 			}
 		});
 		btnEdit.setBorder(null);
@@ -107,6 +125,7 @@ public class CreaturePanel extends JPanel {
 		mainPanelCreature.add(btnEdit);
 		
 		JButton btnRemove = new JButton(trashIcon);
+		btnRemove.setPressedIcon(trashIconPressed);
 		btnRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				main.removeCreature(panel);
