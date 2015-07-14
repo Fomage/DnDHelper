@@ -73,7 +73,7 @@ public class Stats extends Observable implements Serializable, Observer {
 	 * @return the corresponding String (ex: "Fo")
 	 * @throws Exception if arg is fucked up.
 	 */
-	public static String statToInt(int arg) throws Exception{
+	public static String statToString(int arg) throws Exception{
 		switch(arg){
 		case 0:
 			return "Fo";
@@ -123,6 +123,7 @@ public class Stats extends Observable implements Serializable, Observer {
 	//Accesseurs
 	
 	/**
+	 * DO NOT USE THIS METHOD I'll delete it later
 	 * @return a fucking array ! With the stats inside in the canonical order.
 	 */
 	public int[] getStats() {
@@ -142,7 +143,7 @@ public class Stats extends Observable implements Serializable, Observer {
 	/**
 	 * @param i integer between 0 and 5
 	 * @return the value of the corresponding stat.
-	 * @throws Exception if the argumentis fucked up.
+	 * @throws Exception if the argument is fucked up.
 	 */
 	public int getStat(int i) throws Exception{
 		if((i>=0) && (i<6)) {
@@ -159,6 +160,11 @@ public class Stats extends Observable implements Serializable, Observer {
 		return getStat(statToInt(s));
 	}
 	
+	/**
+	 * @param stat  the stat u want to change
+	 * @param value the new value of the stat
+	 * @throws Exception if the arguments are invalid
+	 */
 	public void setStat(int stat, int value) throws Exception{
 		if((stat>=0) && (stat<6)) {
 			if(value>=0){
@@ -170,6 +176,18 @@ public class Stats extends Observable implements Serializable, Observer {
 		}
 		else
 			throw new Exception("Invalid stat argument in Stats::setStat : "+stat);
+	}
+	
+	/**
+	 * @param i the stat from which you want to obtain the modifier
+	 * @return the modifier of the stat (0 if 10-11, +1 if 12-13,...)
+	 * @throws Exception if an argument is invalid
+	 */
+	public int getMod(int i) throws Exception{
+		if(isAStat(i))
+			return (getStat(i)-10)/2;
+		else
+			throw new Exception("Invalid argument in Stats::getMod : "+i);
 	}
 	
 	//Observer
