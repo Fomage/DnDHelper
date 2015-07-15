@@ -73,7 +73,7 @@ public class NewCreatureWindow extends JFrame {
 		
 		
 		JPanel creatureInfo = new JPanel();
-		creatureInfo.setBounds(15, 54, 408, 323);
+		creatureInfo.setBounds(10, 67, 408, 323);
 		contentPane.add(creatureInfo);
 		creatureInfo.setLayout(new BorderLayout(0, 0));
 		
@@ -115,6 +115,7 @@ public class NewCreatureWindow extends JFrame {
 		creatureInfo.add(horizontalGlue, BorderLayout.CENTER);
 		
 		JButton button = new JButton("OK");
+		button.setBorder(null);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
@@ -134,13 +135,8 @@ public class NewCreatureWindow extends JFrame {
 			}
 		});
 		button.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		button.setBounds(279, 401, 144, 62);
+		button.setBounds(15, 401, 408, 62);
 		contentPane.add(button);
-		
-		JTextPane txtpnCharacterDescirption = new JTextPane();
-		txtpnCharacterDescirption.setText("Character Description");
-		txtpnCharacterDescirption.setBounds(25, 401, 219, 62);
-		contentPane.add(txtpnCharacterDescirption);
 		
 		JButton btnLoadExistingCreature = new JButton("Load Existing Creature");
 		btnLoadExistingCreature.setBounds(250, 15, 143, 26);
