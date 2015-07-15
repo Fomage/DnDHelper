@@ -94,13 +94,22 @@ public class MainWindow extends JFrame {
 		
 	
 		
-		JPanel scrollCreatures = new JPanel();
-		scrollCreatures.setAlignmentY(Component.TOP_ALIGNMENT);
-		scrollCreatures.setAlignmentX(Component.LEFT_ALIGNMENT);
-		scrollCreatures.setBorder(null);
-		//contentPane.add(scrollCreatures, BorderLayout.EAST);
+//		JPanel scrollCreatures = new JPanel();
+//		scrollCreatures.setAlignmentY(Component.TOP_ALIGNMENT);
+//		scrollCreatures.setAlignmentX(Component.LEFT_ALIGNMENT);
+//		scrollCreatures.setBorder(null);
 		
-		JScrollPane scrollPane = new JScrollPane(scrollCreatures);
+		//contentPane.add(scrollCreatures, BorderLayout.EAST);
+		creatures = new JPanel();
+		creatures.setAlignmentY(Component.TOP_ALIGNMENT);
+		creatures.setAlignmentX(Component.LEFT_ALIGNMENT);
+		creatures.setBorder(null);
+//		scrollCreatures.add(creatures);
+		//creatures.setPreferredSize(new Dimension(300,700));
+		creatures.setLayout(new BoxLayout(creatures, BoxLayout.PAGE_AXIS));
+		
+		
+		JScrollPane scrollPane = new JScrollPane(creatures);
 		scrollPane.setAlignmentY(Component.TOP_ALIGNMENT);
 		scrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
 		scrollPane.setBorder(null);
@@ -109,13 +118,7 @@ public class MainWindow extends JFrame {
 		scrollPane.setWheelScrollingEnabled(true);
 		contentPane.add(scrollPane, BorderLayout.NORTH);
 		
-		creatures = new JPanel();
-		creatures.setAlignmentY(Component.TOP_ALIGNMENT);
-		creatures.setAlignmentX(Component.LEFT_ALIGNMENT);
-		creatures.setBorder(null);
-		scrollCreatures.add(creatures);
-		//creatures.setPreferredSize(new Dimension(300,700));
-		creatures.setLayout(new BoxLayout(creatures, BoxLayout.PAGE_AXIS));
+		
 		
 		for(CreaturePanel creaturepan : creaturePanels){
 			creatures.add(creaturepan);

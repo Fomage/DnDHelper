@@ -1,25 +1,23 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JSpinner;
-import javax.swing.BoxLayout;
-
-import java.awt.FlowLayout;
-import java.awt.Component;
-
-import javax.swing.Box;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import core.Creature;
 import core.Stats;
@@ -119,6 +117,7 @@ public class NewCreatureWindow extends JFrame {
 		JButton button = new JButton("OK");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
 				NewCreatureWindow.this.creature.setName(NewCreatureWindow.this.txtCreatureName.getText());
 				for(int i = 0; i<6 ; i++){
 					try {
@@ -129,7 +128,7 @@ public class NewCreatureWindow extends JFrame {
 						e.printStackTrace();
 					}
 				}
-				//System.out.println("setting name" + NewCreatureWindow.this.creature.getName());
+				
 				finished = true;
 				window.dispose();
 			}
@@ -194,9 +193,7 @@ public class NewCreatureWindow extends JFrame {
 			}
 			
 			JSpinner statValueSpinner = new statSpinner(i);
-			if(creature == null){
-				System.out.println("ok");
-			}
+			
 			try {
 				statValueSpinner.setValue(creature.getStats().getStat(i));
 			} catch (Exception e1) {
@@ -207,7 +204,9 @@ public class NewCreatureWindow extends JFrame {
 			
 			statValueSpinner.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
-					
+					if((int)statValueSpinner.getValue()<0){
+						statValueSpinner.setValue(0);
+					}
 					try {
 						NewCreatureWindow.this.tempStats[((statSpinner) arg0.getSource()).getStat()]=(int) statValueSpinner.getValue();
 						
@@ -226,6 +225,7 @@ public class NewCreatureWindow extends JFrame {
 					
 				}
 			});
+			
 			statPanel.add(statValueSpinner);
 			try {
 				txtpnSamplemodvalue.setText(""+creature.getStats().getMod(((statSpinner)statValueSpinner).getStat()));

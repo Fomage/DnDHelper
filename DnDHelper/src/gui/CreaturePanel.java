@@ -13,25 +13,27 @@ import java.awt.event.WindowEvent;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 
 import core.Creature;
 
-public class CreaturePanel extends JPanel {
+public class CreaturePanel extends JPanel{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5364541950907930931L;
-	private JTabbedPane tabbedPaneTest;
-	@SuppressWarnings("unused")
+	private JTabbedPane tabbedPane;
 	private Creature creature;
 
 	/**
@@ -44,7 +46,7 @@ public class CreaturePanel extends JPanel {
 	/**
 	 * @wbp.parser.constructor
 	 */
-
+	
 	public CreaturePanel(MainWindow main, Creature creature) {
 		
 		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -56,6 +58,12 @@ public class CreaturePanel extends JPanel {
 		ImageIcon inventoryIcon = new ImageIcon("src/gui/images/inventory2.png");
 		ImageIcon checkedIcon = new ImageIcon("src/gui/images/checked.png");
 		ImageIcon uncheckedIcon = new ImageIcon("src/gui/images/unchecked.png");
+		ImageIcon goodvisBuffIcon = new ImageIcon("src/gui/images/goodvis.png");
+		ImageIcon goodinvisBuffIcon = new ImageIcon("src/gui/images/goodinvis.png");
+		ImageIcon badvisBuffIcon = new ImageIcon("src/gui/images/badvis.png");
+		ImageIcon badinvisBuffIcon = new ImageIcon("src/gui/images/badinvis.png");
+		
+		
 		
 		setBackground(Color.WHITE);
 		this.setPreferredSize(new Dimension(303, 100));
@@ -69,14 +77,14 @@ public class CreaturePanel extends JPanel {
 		add(contentPane);
 		contentPane.setLayout(null);
 		
-		tabbedPaneTest = new JTabbedPane(JTabbedPane.RIGHT);
-		tabbedPaneTest.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-		tabbedPaneTest.setFocusable(false);
-		tabbedPaneTest.setBorder(null);
-		tabbedPaneTest.setBounds(0, 0, 260, 100);
+		tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
+		tabbedPane.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		tabbedPane.setFocusable(false);
+		tabbedPane.setBorder(null);
+		tabbedPane.setBounds(0, 0, 260, 100);
 		
 		
-		contentPane.add(tabbedPaneTest);
+		contentPane.add(tabbedPane);
 		
 		JPanel mainPanels = new JPanel();
 		mainPanels.setBounds(0, 0, 250, 100);
@@ -87,7 +95,7 @@ public class CreaturePanel extends JPanel {
 		JPanel mainPanelCreature = new JPanel();
 		mainPanelCreature.setBorder(null);
 		//mainPanels.add(mainPanelCreature, "name_309225081159039");
-		tabbedPaneTest.addTab(null,creatureIcon,mainPanelCreature);
+		tabbedPane.addTab(null,creatureIcon,mainPanelCreature);
 		mainPanelCreature.setLayout(null);
 		
 		class CreatureNamePanel extends JTextPane implements Observer{
@@ -97,7 +105,7 @@ public class CreaturePanel extends JPanel {
 			private static final long serialVersionUID = 1L;
 
 			public void update(Observable o, Object arg) {
-				System.out.println("called");
+				
 				this.setText(((Creature)o).getName());
 			}
 		}
@@ -105,7 +113,7 @@ public class CreaturePanel extends JPanel {
 		CreatureNamePanel txtpnCreaturename = new CreatureNamePanel();
 		this.creature.addObserver(txtpnCreaturename);
 		txtpnCreaturename.setOpaque(false);
-		txtpnCreaturename.setBounds(10, 7, 117, 28);
+		txtpnCreaturename.setBounds(10, 0, 117, 28);
 		txtpnCreaturename.setEditable(false);
 		mainPanelCreature.add(txtpnCreaturename);
 		txtpnCreaturename.setBackground(UIManager.getColor("Button.background"));
@@ -149,7 +157,7 @@ public class CreaturePanel extends JPanel {
 		btnEdit.setContentAreaFilled(false);
 		btnEdit.setToolTipText("Edit");
 		btnEdit.setFont(new Font("Tahoma", Font.PLAIN, 7));
-		btnEdit.setBounds(190, 12, 20, 20);
+		btnEdit.setBounds(190, 5, 20, 20);
 		mainPanelCreature.add(btnEdit);
 		
 		JButton btnRemove = new JButton(trashIcon);
@@ -164,11 +172,11 @@ public class CreaturePanel extends JPanel {
 		btnRemove.setFocusPainted(false);
 		btnRemove.setContentAreaFilled(false);
 		btnRemove.setToolTipText("Remove");
-		btnRemove.setBounds(155, 12, 20, 20);
+		btnRemove.setBounds(155, 5, 20, 20);
 		mainPanelCreature.add(btnRemove);
 		
 		JPanel buffPanel = new JPanel();
-		buffPanel.setBounds(10, 46, 206, 46);
+		buffPanel.setBounds(10, 32, 210, 60);
 		mainPanelCreature.add(buffPanel);
 		buffPanel.setLayout(new BorderLayout(0, 0));
 		
@@ -197,20 +205,91 @@ public class CreaturePanel extends JPanel {
 		});
 		buffPanel.add(btnAddBuff, BorderLayout.EAST);
 		
-		JPanel currentBuffs = new JPanel();
-		buffPanel.add(currentBuffs, BorderLayout.WEST);
+		
+		
+		
+		
+		BuffPanel currentBuffs = new BuffPanel();
+		creature.addObserver(currentBuffs);
+		currentBuffs.setLayout(new BoxLayout(currentBuffs, BoxLayout.LINE_AXIS));
+		
+		
+		
+		JButton sampleBuff1 = new JButton(goodvisBuffIcon);
+		sampleBuff1.setBorder(null);
+		sampleBuff1.setOpaque(false);
+		sampleBuff1.setBorderPainted(false);
+		sampleBuff1.setFocusPainted(false);
+		sampleBuff1.setContentAreaFilled(false);
+		currentBuffs.add(sampleBuff1);
+		JButton sampleBuff2 = new JButton(goodinvisBuffIcon);
+		sampleBuff2.setBorder(null);
+		sampleBuff2.setOpaque(false);
+		sampleBuff2.setBorderPainted(false);
+		sampleBuff2.setFocusPainted(false);
+		sampleBuff2.setContentAreaFilled(false);
+		currentBuffs.add(sampleBuff2);
+		JButton sampleBuff3 = new JButton(badvisBuffIcon);
+		sampleBuff3.setBorder(null);
+		sampleBuff3.setOpaque(false);
+		sampleBuff3.setBorderPainted(false);
+		sampleBuff3.setFocusPainted(false);
+		sampleBuff3.setContentAreaFilled(false);
+		currentBuffs.add(sampleBuff3);
+		JButton sampleBuff4 = new JButton(badinvisBuffIcon);
+		sampleBuff4.setBorder(null);
+		sampleBuff4.setOpaque(false);
+		sampleBuff4.setBorderPainted(false);
+		sampleBuff4.setFocusPainted(false);
+		sampleBuff4.setContentAreaFilled(false);
+		currentBuffs.add(sampleBuff4);
+		JButton sampleBuff5 = new JButton(badinvisBuffIcon);
+		sampleBuff5.setBorder(null);
+		sampleBuff5.setOpaque(false);
+		sampleBuff5.setBorderPainted(false);
+		sampleBuff5.setFocusPainted(false);
+		sampleBuff5.setContentAreaFilled(false);
+		currentBuffs.add(sampleBuff5);
+		
+		JScrollPane buffScroll = new JScrollPane(currentBuffs);
+		buffScroll.setBorder(null);
+		buffScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		buffScroll.setPreferredSize(new Dimension(160, 0));
+		buffPanel.add(buffScroll, BorderLayout.WEST);
+		
 		
 		JPanel mainPanelInventory = new JPanel();
 		mainPanelInventory.setBorder(null);
 		//mainPanels.add(mainPanelInventory, "name_309312157043447");
-		tabbedPaneTest.addTab(null,inventoryIcon,mainPanelInventory);
+		tabbedPane.addTab(null,inventoryIcon,mainPanelInventory);
 		mainPanelInventory.setLayout(new BorderLayout(0, 0));
 		
 		JPanel inventoryPanel = new JPanel();
-		mainPanelInventory.add(inventoryPanel, BorderLayout.WEST);
+		mainPanelInventory.add(inventoryPanel, BorderLayout.CENTER);
+		inventoryPanel.setLayout(new BorderLayout(0, 0));
+		
+		
+		
+		InventoryPanel currentInventory = new InventoryPanel();
+		creature.addObserver(currentInventory);
+		currentInventory.setLayout(new BoxLayout(currentInventory, BoxLayout.LINE_AXIS));
+		
+		JScrollPane invScroll = new JScrollPane(currentInventory);
+		invScroll.setBorder(null);
+		invScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		invScroll.setPreferredSize(new Dimension(175, 0));
+		inventoryPanel.add(invScroll, BorderLayout.WEST);
+		
+		JButton sampleItem = new JButton(goodvisBuffIcon);
+		sampleItem.setBorder(null);
+		sampleItem.setOpaque(false);
+		sampleItem.setBorderPainted(false);
+		sampleItem.setFocusPainted(false);
+		sampleItem.setContentAreaFilled(false);
+		currentInventory.add(sampleItem);
 		
 		JPanel miscPanel = new JPanel();
-		mainPanelInventory.add(miscPanel, BorderLayout.EAST);
+		inventoryPanel.add(miscPanel);
 		miscPanel.setLayout(new BorderLayout(0, 0));
 		
 		JButton btnAddItem = new JButton("+");
@@ -257,5 +336,38 @@ public class CreaturePanel extends JPanel {
 		btnSelect.setContentAreaFilled(false);
 		selectPanel.add(btnSelect, BorderLayout.CENTER);
 		
+	}
+	
+	public void updateBuffPanel (BuffPanel buffPanel){
+		//TODO synchronize BuffPanel and this.creature Buffer
+	}
+	public void updateInventoryPanel (InventoryPanel inventoryPanel){
+		//TODO synchronize InventoryPanel and this.creature Inventory
+	}
+	class BuffPanel extends JPanel implements Observer{
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void update(Observable arg0, Object arg1) {
+			
+			updateBuffPanel(this);
+		}
+			
+	}
+	class InventoryPanel extends JPanel implements Observer{
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void update(Observable arg0, Object arg1) {
+			
+			updateInventoryPanel(this);
+		}
+			
 	}
 }
