@@ -1,7 +1,6 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,14 +10,16 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
 
 public class NewItemWindow extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtItemName;
 	private JTextField txtAssociatedBuffs;
@@ -67,8 +68,8 @@ public class NewItemWindow extends JFrame {
 		txtItemName.setBounds(5, 11, 143, 32);
 		contentPane.add(txtItemName);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"Type 1 items", "Type 2 items"}));
+		JComboBox<String> comboBox_1 = new JComboBox<String>();
+		comboBox_1.setModel(new DefaultComboBoxModel<String>(new String[] {"Type 1 items", "Type 2 items"}));
 		comboBox_1.setBounds(207, 11, 195, 32);
 		contentPane.add(comboBox_1);
 		

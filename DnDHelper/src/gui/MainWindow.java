@@ -1,57 +1,39 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.Image;
-
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import java.awt.Color;
-import java.awt.GridBagLayout;
-
-import javax.swing.BoxLayout;
-
-import java.awt.GridLayout;
-
-import javax.swing.JRadioButton;
-import javax.swing.JButton;
-
-import java.awt.event.ActionListener;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
-import javax.swing.SwingConstants;
-import javax.swing.JCheckBox;
-
-import java.awt.FlowLayout;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.UIManager;
-
-import java.awt.Font;
-import java.awt.Component;
-
-import javax.swing.Box;
-
-import java.awt.Window.Type;
-import java.awt.ComponentOrientation;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class MainWindow extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	boolean onTopState = true;
 	List<CreaturePanel> creaturePanels;
@@ -152,9 +134,10 @@ public class MainWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				NewCreatureWindow newcreature = new NewCreatureWindow();
 				newcreature.setVisible(true);
-				newcreature.toFront();
+				
 				main.setAlwaysOnTop(false);
-				onTopState = false;
+				newcreature.toFront();
+				
 				
 				
 				
@@ -164,8 +147,8 @@ public class MainWindow extends JFrame {
 							creaturePanels.add(new CreaturePanel(main , newcreature.getCreature()));
 						}
 						// TODO : RETURN NEW CREATURE HERE with newcreature
-						main.setAlwaysOnTop(chckbxOnTop.isSelected());
-						onTopState = true;
+						main.setAlwaysOnTop(onTopState);
+						
 						
 						if(creaturePanels.size()>=6){
 							scrollPane.setPreferredSize(new Dimension(325,600));
@@ -190,6 +173,20 @@ public class MainWindow extends JFrame {
 		
 		options.add(chckbxOnTop);
 		chckbxOnTop.setSelected(true);
+		chckbxOnTop.addChangeListener(new ChangeListener(){
+
+			
+			public void stateChanged(ChangeEvent arg0) {
+				if(onTopState){
+					onTopState = false;
+				}
+				else{
+					onTopState = true;
+				}
+				
+			}
+			
+		});
 		
 		JCheckBox chckbxResizable = new JCheckBox("Resizable");
 		options.add(chckbxResizable);
@@ -229,8 +226,8 @@ public class MainWindow extends JFrame {
 		bot.add(diceRollPanel, BorderLayout.SOUTH);
 		diceRollPanel.setLayout(new BorderLayout(0, 0));
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Type 1 Roll", "Type 2 Roll", "w jkebfwebfwjfw ejfwlmfwme bfw "}));
+		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Type 1 Roll", "Type 2 Roll", "w jkebfwebfwjfw ejfwlmfwme bfw "}));
 		diceRollPanel.add(comboBox, BorderLayout.WEST);
 		
 		JPanel rollPanel = new JPanel();
@@ -276,6 +273,15 @@ public class MainWindow extends JFrame {
 		this.getContentPane().validate();
 		this.pack();
 	}
+
+	
+
+	public boolean getOnTopState() {
+		// TODO Auto-generated method stub
+		return onTopState;
+	}
+	
+	
 		
 	
 
