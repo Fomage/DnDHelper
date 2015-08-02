@@ -61,6 +61,7 @@ public class Creature extends Observable implements Serializable, Observer {
 	public void setBuffer(Buffer buffer) {
 		this.buffer = buffer;
 		buffer.addObserver(this);
+		setChanged();
 		notifyObservers();
 	}
 
@@ -71,6 +72,7 @@ public class Creature extends Observable implements Serializable, Observer {
 	public void setInventory(Inventory inventory) {
 		this.inventory = inventory;
 		inventory.addObserver(this);
+		setChanged();
 		notifyObservers();
 	}
 
@@ -93,6 +95,7 @@ public class Creature extends Observable implements Serializable, Observer {
 		this.stats = stats;
 		skills.setStats(stats);
 		stats.addObserver(this);
+		setChanged();
 		notifyObservers();
 	}
 	
@@ -102,12 +105,14 @@ public class Creature extends Observable implements Serializable, Observer {
 
 	public void setName(String name) {
 		this.name = name;
+		setChanged();
 		notifyObservers();
 	}
 
 	//Observable
 	@Override
 	public void update(Observable o, Object arg) {
+		setChanged();
 		notifyObservers();
 	}
 

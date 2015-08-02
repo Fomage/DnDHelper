@@ -26,6 +26,8 @@ public class Skill extends Observable implements Serializable, Observer {
 		mod=-4;
 		stat=Stats.Fo;
 		name="Default";
+		stats=new Stats();
+		stats.addObserver(this);
 	}
 	
 	/**
