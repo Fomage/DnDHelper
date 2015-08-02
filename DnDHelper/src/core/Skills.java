@@ -101,6 +101,14 @@ public class Skills extends Observable implements Serializable, Observer {
 	public List<Skill> getSkills() {
 		return Collections.unmodifiableList(skills);
 	}
+	
+	public Skill getSkill(String s) throws Exception{
+		for(int i=0;i<skills.size();i++){
+			if(skills.get(i).getName().equals(s))
+				return skills.get(i);
+		}
+		throw new Exception("Skill "+s+" unfound in Skills::getSkill");
+	}
 
 	//Observable
 	@Override
