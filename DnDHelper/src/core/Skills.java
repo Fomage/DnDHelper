@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Collections;
 
 public class Skills extends Observable implements Serializable, Observer {
 
@@ -61,6 +62,7 @@ public class Skills extends Observable implements Serializable, Observer {
 	public void setStats(Stats stats) {
 		this.stats = stats;
 		refresh();
+		setChanged();
 		notifyObservers();
 	}
 	
@@ -68,6 +70,8 @@ public class Skills extends Observable implements Serializable, Observer {
 		skills.add(s);
 		s.setStats(getStats());
 		s.addObserver(this);
+		setChanged();
+		notifyObservers();
 	}
 	
 	/**
@@ -76,7 +80,10 @@ public class Skills extends Observable implements Serializable, Observer {
 	 */
 	public boolean removeSkill(Skill s){
 		if(containsSkill(s)){
+			skills.remove(s);
 			s.deleteObserver(this);
+			setChanged();
+			notifyObservers();
 			return true;
 		}
 		else
@@ -92,13 +99,14 @@ public class Skills extends Observable implements Serializable, Observer {
 	 * @return a list containing the skills.... it's a LinkedList...
 	 */
 	public List<Skill> getSkills() {
-		return skills;
+		return Collections.unmodifiableList(skills);
 	}
 
 	//Observable
 	@Override
 	public void update(Observable o, Object arg) {
 		if(!ignoreNotify){
+			setChanged();
 			notifyObservers();
 		}
 		//DOT NOT ADD ANYTHING HERE

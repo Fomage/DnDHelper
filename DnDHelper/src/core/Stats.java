@@ -123,7 +123,7 @@ public class Stats extends Observable implements Serializable, Observer {
 	//Accesseurs
 	
 	/**
-	 * DO NOT USE THIS METHOD I'll delete it later
+	 * DO NOT USE THIS METHOD I'll delete it later. Test-purpose only
 	 * @return a fucking array ! With the stats inside in the canonical order.
 	 */
 	public int[] getStats() {
