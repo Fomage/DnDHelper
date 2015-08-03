@@ -30,8 +30,8 @@ public class SkillBuff extends Buff {
 	 * @param name the name of this buff
 	 * @throws Exception if a problem happens during the apply. Cf apply.
 	 */
-	public SkillBuff(String skill,int mod,Creature creature, String name) throws Exception{
-		super(creature, name);
+	public SkillBuff(String skill,int mod,Creature creature, String name, boolean hidden, boolean positive) throws Exception{
+		super(creature, name, hidden, positive);
 		setSkill(skill);
 		setMod(mod);
 		apply();

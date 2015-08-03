@@ -15,7 +15,7 @@ public abstract class Buff extends Observable implements Observer, Serializable 
 	
 	private Creature creature;
 	private String name;
-	private boolean applied;
+	private boolean applied,hidden,positive;
 
 	//constructors
 	/**
@@ -25,12 +25,16 @@ public abstract class Buff extends Observable implements Observer, Serializable 
 		creature=new Creature();
 		name="Default";
 		applied=false;
+		hidden=false;
+		positive=true;
 	}
 	
-	public Buff(Creature creature, String name){
+	public Buff(Creature creature, String name, boolean hidden, boolean positive){
 		this.creature=creature;
 		this.name=name;
 		applied=false;
+		this.hidden=hidden;
+		this.positive=positive;
 	}
 	
 	//Methods
@@ -78,6 +82,26 @@ public abstract class Buff extends Observable implements Observer, Serializable 
 	
 	protected void setApplied(boolean b) {
 		applied=b;
+		setChanged();
+		notifyObservers();
+	}
+
+	public boolean isHidden() {
+		return hidden;
+	}
+
+	public void setHidden(boolean hidden) {
+		this.hidden = hidden;
+		setChanged();
+		notifyObservers();
+	}
+
+	public boolean isPositive() {
+		return positive;
+	}
+
+	public void setPositive(boolean positive) {
+		this.positive = positive;
 		setChanged();
 		notifyObservers();
 	}

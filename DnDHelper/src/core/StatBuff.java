@@ -29,8 +29,8 @@ public class StatBuff extends Buff {
 	 * @param name the name of this
 	 * @throws Exception if stat isn't a stat
 	 */
-	public StatBuff(int stat,int mod,Creature creature,String name) throws Exception{
-		super(creature,name);
+	public StatBuff(int stat,int mod,Creature creature,String name, boolean hidden, boolean positive) throws Exception{
+		super(creature,name,hidden,positive);
 		setStat(stat);
 		setMod(mod);
 		apply();
