@@ -15,6 +15,8 @@ import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
 
+import core.Buff;
+
 public class NewBuffWindow extends JFrame {
 
 	/**
@@ -24,14 +26,14 @@ public class NewBuffWindow extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtName;
 	@SuppressWarnings("unused")
-	private CreaturePanel creaturePanel;
+	private Buff buff;
 
 
 	/**
 	 * Create the frame.
 	 */
-	public NewBuffWindow(CreaturePanel creaturePanel) {
-		this.creaturePanel = creaturePanel;
+	public NewBuffWindow(Buff buff) {
+		this.buff = buff;
 		NewBuffWindow window = this;
 		setTitle("New Buff");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -42,7 +44,7 @@ public class NewBuffWindow extends JFrame {
 		contentPane.setLayout(null);
 		
 		txtName = new JTextField();
-		txtName.setToolTipText("Enter a fucking name wtf are you retarded?");
+		txtName.setToolTipText("Enter a name");
 		txtName.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtName.setBounds(5, 5, 143, 32);
 		txtName.setText("Buff Name");

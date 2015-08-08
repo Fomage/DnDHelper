@@ -14,6 +14,8 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
+import core.StatBuff;
+
 public class NewItemWindow extends JFrame {
 
 	/**
@@ -88,7 +90,7 @@ public class NewItemWindow extends JFrame {
 		JButton addBuff = new JButton("+");
 		addBuff.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NewBuffWindow newbuff = new NewBuffWindow(window.creaturePanel);
+				NewBuffWindow newbuff = new NewBuffWindow(new StatBuff());
 				newbuff.setVisible(true);
 			}
 		});

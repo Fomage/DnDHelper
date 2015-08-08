@@ -6,6 +6,8 @@ import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -74,6 +76,7 @@ public class MainWindow extends JFrame {
 		
 		
 		ImageIcon diceicon = new ImageIcon("src/gui/images/dice2.png");
+		Image icon =  diceicon.getImage();
 		ImageIcon dicepressedicon = new ImageIcon("src/gui/images/dice2pressed.png");
 //		URL url = getClass().getResource("/gui/images/dice.png");
 //		Image diceimg;
@@ -118,7 +121,7 @@ public class MainWindow extends JFrame {
 		scrollPane.setWheelScrollingEnabled(true);
 		contentPane.add(scrollPane, BorderLayout.NORTH);
 		
-		
+		setIconImage(icon);
 		
 		for(CreaturePanel creaturepan : creaturePanels){
 			creatures.add(creaturepan);
@@ -149,7 +152,7 @@ public class MainWindow extends JFrame {
 						if(newcreature.isFinished()){
 							creaturePanels.add(new CreaturePanel(main , newcreature.getCreature()));
 						}
-						// TODO : RETURN NEW CREATURE HERE with newcreature
+						// TODO : RETURN NEW CREATURE HERE with newcreature DONE
 						main.setAlwaysOnTop(onTopState);
 						
 						
@@ -252,6 +255,7 @@ public class MainWindow extends JFrame {
 		Component verticalStrut = Box.createVerticalStrut(20);
 		verticalStrut.setPreferredSize(new Dimension(0, 5));
 		diceRollPanel.add(verticalStrut, BorderLayout.SOUTH);
+		
 		
 		
 		contentPane.validate();
