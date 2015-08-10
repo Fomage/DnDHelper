@@ -28,7 +28,7 @@ public abstract class Serializer {
 	}
 
 	public static Serializable load(String path) throws Exception{
-		InputStream file = new FileInputStream("quarks.ser");
+		InputStream file = new FileInputStream(path);
 		InputStream buffer = new BufferedInputStream(file);
 		ObjectInput input = new ObjectInputStream(buffer);
 
