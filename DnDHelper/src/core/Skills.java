@@ -40,6 +40,40 @@ public class Skills extends Observable implements Serializable, Observer {
 		ignoreNotify=false;
 	}
 	
+	//buildBasicSKills
+	
+	/**
+	 * Add the following skills with a default value of -4 :
+	 * Art de la magie
+	 * Bluff
+	 * Déplacement silencieux
+	 * Détection
+	 * Diplomatie
+	 * Discrétion
+	 * Equilibre
+	 * Fouille
+	 * Intimidation
+	 * Perception auditive
+	 * Psychologie
+	 * Surive
+	 */
+	public void builBasicSkills() throws Exception{
+		Stats bidon = new Stats();
+		
+		addSkill(new Skill(-4,Stats.Int,bidon,"Art de la magie"));
+		addSkill(new Skill(-4,Stats.Cha,bidon,"Bluff"));
+		addSkill(new Skill(-4,Stats.Dex,bidon,"Déplacement silencieux"));
+		addSkill(new Skill(-4,Stats.Sag,bidon,"Détection"));
+		addSkill(new Skill(-4,Stats.Cha,bidon,"Diplomatie"));
+		addSkill(new Skill(-4,Stats.Dex,bidon,"Discretion"));
+		addSkill(new Skill(-4,Stats.Dex,bidon,"Equilibre"));
+		addSkill(new Skill(-4,Stats.Dex,bidon,"Fouille"));
+		addSkill(new Skill(-4,Stats.Cha,bidon,"Intimidation"));
+		addSkill(new Skill(-4,Stats.Sag,bidon,"Perception auditive"));
+		addSkill(new Skill(-4,Stats.Sag,bidon,"Psychologie"));
+		addSkill(new Skill(-4,Stats.Sag,bidon,"Survie"));
+	}
+	
 	//Refresh
 	
 	/**
