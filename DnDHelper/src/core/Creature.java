@@ -24,7 +24,7 @@ public class Creature extends Observable implements Serializable, Observer {
 	 * Default constructor... Use is not recommanded...
 	 */
 	public Creature() {
-		buffer = new Buffer();
+		buffer = new Buffer(this);
 		buffer.addObserver(this);
 		inventory = new Inventory();
 		inventory.addObserver(this);
@@ -43,7 +43,7 @@ public class Creature extends Observable implements Serializable, Observer {
 	 * @throws Exception possibly...
 	 */
 	public Creature(Inventory inventory, Stats stats, Skills skills, String name) throws Exception {
-		buffer = new Buffer();
+		buffer = new Buffer(this);
 		buffer.addObserver(this);
 		setInventory(inventory);
 		this.stats=stats;
