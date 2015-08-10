@@ -47,6 +47,7 @@ public class StatBuff extends Buff {
 					getStat(),
 					getCreature().getStats().getStat(getStat())+getMod());
 			setApplied(true);
+			System.out.println("Applied on "+getCreature().getName());
 		}
 	}
 

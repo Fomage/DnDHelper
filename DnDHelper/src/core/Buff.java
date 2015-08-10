@@ -35,7 +35,7 @@ public abstract class Buff extends Observable implements Observer, Serializable 
 		applied=false;
 		this.hidden=hidden;
 		this.positive=positive;
-		apply();
+		//apply();
 		creature.getBuffer().addBuff(this);
 	}
 	
