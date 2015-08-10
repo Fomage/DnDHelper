@@ -28,13 +28,13 @@ public class SkillBuff extends Buff {
 	 * @param name the name of this buff
 	 * @throws Exception if a problem happens during the apply. Cf apply.
 	 */
-	public SkillBuff(String skill,int mod, String name, boolean hidden, boolean positive){
+	public SkillBuff(String skill,int mod, String name, boolean hidden, boolean positive) {
 		super(name, hidden, positive);
-		setSkill(skill);
-		setMod(mod);
+		this.skill=skill;
+		this.mod=mod;
 	}
 	
-	static SkillBuff makeSkillBuff(String skill,int mod,String name){
+	static SkillBuff makeSkillBuff(String skill,int mod,String name) {
 		if(mod>=0)
 			return new SkillBuff(skill,mod,name,false,true);
 		else
@@ -72,8 +72,14 @@ public class SkillBuff extends Buff {
 		return skill;
 	}
 
-	public void setSkill(String skill) {
+	public void setSkill(String skill) throws Exception{
+		for(Creature c : getApplied()){
+			unapply(c);
+		}
 		this.skill = skill;
+		for(Creature c : getApplied()){
+			apply(c);
+		}
 		setChanged();
 		notifyObservers();
 	}
@@ -82,8 +88,14 @@ public class SkillBuff extends Buff {
 		return mod;
 	}
 
-	public void setMod(int mod) {
+	public void setMod(int mod) throws Exception{
+		for(Creature c : getApplied()){
+			unapply(c);
+		}
 		this.mod = mod;
+		for(Creature c : getApplied()){
+			apply(c);
+		}
 		setChanged();
 		notifyObservers();
 	}

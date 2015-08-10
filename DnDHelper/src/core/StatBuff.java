@@ -74,7 +74,13 @@ public class StatBuff extends Buff {
 
 	public void setStat(int stat) throws Exception{
 		if(Stats.isAStat(stat)){
+			for(Creature c : getApplied()){
+				unapply(c);
+			}
 			this.stat = stat;
+			for(Creature c : getApplied()){
+				apply(c);
+			}
 			setChanged();
 			notifyObservers();
 		}
@@ -86,8 +92,14 @@ public class StatBuff extends Buff {
 		return mod;
 	}
 
-	public void setMod(int mod) {
+	public void setMod(int mod) throws Exception{
+		for(Creature c : getApplied()){
+			unapply(c);
+		}
 		this.mod = mod;
+		for(Creature c : getApplied()){
+			apply(c);
+		}
 		setChanged();
 		notifyObservers();
 	}

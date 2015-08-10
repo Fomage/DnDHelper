@@ -26,7 +26,7 @@ public class Creature extends Observable implements Serializable, Observer {
 	public Creature() {
 		buffer = new Buffer(this);
 		buffer.addObserver(this);
-		inventory = new Inventory();
+		inventory = new Inventory(this);
 		inventory.addObserver(this);
 		stats = new Stats();
 		stats.addObserver(this);

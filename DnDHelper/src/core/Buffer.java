@@ -94,6 +94,7 @@ public class Buffer extends Observable implements Observer, Serializable {
 			buffs.add(b);
 			if(!b.isApplied(creature))
 				b.apply(creature);
+			b.addObserver(this);
 			setChanged();
 			notifyObservers();
 		}
@@ -109,6 +110,7 @@ public class Buffer extends Observable implements Observer, Serializable {
 			if(b.isApplied(creature))
 				b.unapply(creature);
 			buffs.remove(b);
+			b.deleteObserver(this);
 			setChanged();
 			notifyObservers();
 			return true;
