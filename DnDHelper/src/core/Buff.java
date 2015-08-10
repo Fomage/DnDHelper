@@ -29,12 +29,14 @@ public abstract class Buff extends Observable implements Observer, Serializable 
 		positive=true;
 	}
 	
-	public Buff(Creature creature, String name, boolean hidden, boolean positive){
+	public Buff(Creature creature, String name, boolean hidden, boolean positive) throws Exception{
 		this.creature=creature;
 		this.name=name;
 		applied=false;
 		this.hidden=hidden;
 		this.positive=positive;
+		apply();
+		creature.getBuffer().addBuff(this);
 	}
 	
 	//Methods
@@ -57,13 +59,20 @@ public abstract class Buff extends Observable implements Observer, Serializable 
 	}
 
 	/**
-	 * This immediately applies the buff to the creature. If you don't like it tell me
+	 * This immediately applies the buff to the creature. If you don't like it tell me. It also adds this to
+	 * the new creature's buffer.
 	 * @param creature the new creature on which the buff is applied
 	 */
-	public void setCreature(Creature creature) {
-		this.creature = creature;
-		setChanged();
-		notifyObservers();
+	public void setCreature(Creature creature) throws Exception{
+		if(this.creature!=creature){
+			if(applied)
+				unapply();
+			this.creature = creature;
+			apply();
+			creature.getBuffer().addBuff(this);
+			setChanged();
+			notifyObservers();
+		}
 	}
 
 	public String getName() {
