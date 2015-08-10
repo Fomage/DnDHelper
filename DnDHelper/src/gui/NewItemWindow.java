@@ -34,7 +34,7 @@ public class NewItemWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public NewItemWindow(CreaturePanel creaturePanel) {
+	public NewItemWindow(CreaturePanel creaturePanel,MainWindow main) {
 		this.creaturePanel = creaturePanel;
 		
 		NewItemWindow window = this;
@@ -90,7 +90,7 @@ public class NewItemWindow extends JFrame {
 		JButton addBuff = new JButton("+");
 		addBuff.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NewBuffWindow newbuff = new NewBuffWindow(null,creaturePanel.getCreature());
+				NewBuffWindow newbuff = new NewBuffWindow(null,creaturePanel.getCreature(),main);
 				newbuff.setVisible(true);
 			}
 		});
