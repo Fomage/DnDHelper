@@ -14,7 +14,7 @@ import java.io.Serializable;
 
 public abstract class Serializer {
 
-	static void save(Serializable o,String path) throws Exception{
+	public static void save(Serializable o,String path) throws Exception{
 
 		OutputStream file = new FileOutputStream(path);
 		OutputStream buffer = new BufferedOutputStream(file);
@@ -27,7 +27,7 @@ public abstract class Serializer {
 		file.close();
 	}
 
-	static Serializable load(String path) throws Exception{
+	public static Serializable load(String path) throws Exception{
 		InputStream file = new FileInputStream("quarks.ser");
 		InputStream buffer = new BufferedInputStream(file);
 		ObjectInput input = new ObjectInputStream(buffer);
