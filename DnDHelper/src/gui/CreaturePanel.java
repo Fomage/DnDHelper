@@ -23,6 +23,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 
@@ -38,7 +39,7 @@ public class CreaturePanel extends JPanel{
 	private static final long serialVersionUID = -5364541950907930931L;
 	private JTabbedPane tabbedPane;
 	private Creature creature;
-	
+	private BuffPanel currentBuffs;
 
 	/**
 	 * Create the panel.
@@ -201,13 +202,15 @@ public class CreaturePanel extends JPanel{
 				newbuff.addWindowListener(new WindowAdapter(){
 					public void windowClosed(WindowEvent e){
 						try {
+							if(newbuff.isFinished()){
+								creature.getBuffer().addBuff(newbuff.getBuff());
+							}
 							
-							creature.getBuffer().addBuff(newbuff.getBuff());
 						} catch (Exception e1) {
 							
 							e1.printStackTrace();
 						}
-						updateBuffPanel(currentBuffs);
+						//updateBuffPanel(currentBuffs);
 						
 						// TODO : RETURN NEW BUFF HERE with newbuff
 						return;
@@ -216,6 +219,7 @@ public class CreaturePanel extends JPanel{
 			}
 		});
 		buffPanel.add(btnAddBuff, BorderLayout.EAST);
+		this.currentBuffs=currentBuffs;
 		
 		
 		
@@ -348,15 +352,20 @@ public class CreaturePanel extends JPanel{
 		
 	}
 	
-	public void updateBuffPanel (BuffPanel buffPanel){
-		//System.out.println(this.creature.getBuffer().getBuffs().size());
+	public void updateBuffPanel (BuffPanel currentBuffs){
+		//System.out.println("updating buff panel");
+
 		List<Buff> buffs = this.creature.getBuffer().getBuffs();
-		buffPanel.removeAll();
+		currentBuffs.removeAll();
 		for(Buff buff : buffs){
 			//System.out.println(buff.getName());
-			BuffButton associatedButton = new BuffButton(buff);
-			buffPanel.add(associatedButton);
+			BuffButton associatedButton = new BuffButton(buff,this);
+			currentBuffs.add(associatedButton);
 		}
+		currentBuffs.invalidate();
+		currentBuffs.validate();
+		currentBuffs.repaint();
+		//System.out.println("updated buff panel");
 		//TODO synchronize BuffPanel and this.creature Buffer
 		
 		
@@ -377,10 +386,12 @@ public class CreaturePanel extends JPanel{
 		ImageIcon image;
 		
 		private static final long serialVersionUID = 1L;
-		private Buff buff;
+		private Buff associatedBuff;
 		
-		public BuffButton (Buff buff){
+		public BuffButton (Buff buff,CreaturePanel parent){
+			
 			super();
+			associatedBuff=buff;
 			
 			image = badvisBuffIcon;
 			if(buff.isHidden()){
@@ -398,23 +409,52 @@ public class CreaturePanel extends JPanel{
 			}
 			this.setIcon(image);
 			//TODO set the right icon and update accordingly
-			this.setToolTipText("<html>"+buff.getName()+"<br>"+buff.getDescription()+"</html>");
-			this.setBuff(buff);
+			this.setToolTipText("<html>"+associatedBuff.getName()+"<br>"+associatedBuff.getDescription()+"</html>");
+			this.setBuff(associatedBuff);
 			this.setBorder(null);
 			this.setOpaque(false);
 			this.setBorderPainted(false);
 			this.setFocusPainted(false);
 			this.setContentAreaFilled(false);
+			this.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					NewBuffWindow newbuff = new NewBuffWindow(buff,creature);
+					newbuff.setVisible(true);
+					//panel.setVisible(false);
+//					main.setAlwaysOnTop(false);
+					newbuff.toFront();
+					
+					
+					newbuff.addWindowListener(new WindowAdapter(){
+						public void windowClosed(WindowEvent e){
+							try {
+								
+								
+							} catch (Exception e1) {
+								
+								e1.printStackTrace();
+							}
+							parent.updateBuffPanel(parent.currentBuffs);
+							
+							// TODO : RETURN NEW BUFF HERE with newbuff
+							return;
+						}
+					});
+					
+				}
+			});
 		}
 		
 		
 
 		public Buff getBuff() {
-			return buff;
+			return associatedBuff;
 		}
 
 		public void setBuff(Buff buff) {
-			this.buff = buff;
+			this.associatedBuff = buff;
 		}
 		
 	}

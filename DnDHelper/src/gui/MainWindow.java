@@ -271,6 +271,9 @@ public class MainWindow extends JFrame {
 	
 	public void removeCreature(CreaturePanel cPanel){
 		creaturePanels.remove(cPanel);
+		if(!this.isResizable()){
+			this.pack();
+		}
 		check();
 	}
 	
