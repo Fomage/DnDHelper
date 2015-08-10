@@ -44,10 +44,23 @@ public class Buffer extends Observable implements Observer, Serializable {
 		return creature;
 	}
 
-	public void setCreature(Creature creature) {
+	/**
+	 * Unapply all the buffs to the old Creature and applies all the buffs to the new Creature.
+	 * @param creature the new Creature.
+	 * @throws Exception if there is a problem applying or unapplying the buffs.
+	 */
+	public void setCreature(Creature creature) throws Exception{
+		for(Buff b : buffs){
+			if(b.isApplied(this.creature))
+				b.unapply(this.creature);
+		}
 		this.deleteObserver(this.creature);
 		this.creature = creature;
 		this.addObserver(creature);
+		for(Buff b : buffs){
+			if(!b.isApplied(creature))
+				b.apply(creature);
+		}
 		setChanged();
 		notifyObservers();
 	}
@@ -74,11 +87,12 @@ public class Buffer extends Observable implements Observer, Serializable {
 
 	/**
 	 * @param b the buff will be immediately applied.
-	 * @throws Exception
+	 * @throws Exception if the buff has trouble being applied
 	 */
 	public void addBuff(Buff b) throws Exception{
 		if(!buffs.contains(b)){
-			b.setCreature(creature);
+			if(!b.isApplied(creature))
+				b.apply(creature);
 			setChanged();
 			notifyObservers();
 		}
@@ -91,8 +105,8 @@ public class Buffer extends Observable implements Observer, Serializable {
 	 */
 	public boolean removeBuff(Buff b) throws Exception{
 		if(buffs.contains(b)){
-			if(b.isApplied())
-				b.unapply();
+			if(b.isApplied(creature))
+				b.unapply(creature);
 			buffs.remove(b);
 			setChanged();
 			notifyObservers();

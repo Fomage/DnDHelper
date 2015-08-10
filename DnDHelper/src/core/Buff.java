@@ -1,6 +1,9 @@
 package core;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -12,31 +15,27 @@ public abstract class Buff extends Observable implements Observer, Serializable 
 	private static final long serialVersionUID = 2063353591841926763L;
 	
 	//attributes
-	
-	private Creature creature;
+
 	private String name;
-	private boolean applied,hidden,positive;
+	private boolean hidden,positive;
+	private List<Creature> applied;
 
 	//constructors
 	/**
-	 * Default constructor, based on a default-generated creature...................that's evil. name="Default"
+	 * Default constructor...................that's evil. name="Default"
 	 */
 	public Buff() {
-		creature=new Creature();
 		name="Default";
-		applied=false;
+		applied=new ArrayList<Creature>();
 		hidden=false;
 		positive=true;
 	}
 	
-	public Buff(Creature creature, String name, boolean hidden, boolean positive) throws Exception{
-		this.creature=creature;
+	public Buff(String name, boolean hidden, boolean positive){
 		this.name=name;
-		applied=false;
+		applied=new ArrayList<Creature>();
 		this.hidden=hidden;
 		this.positive=positive;
-		//apply();
-		creature.getBuffer().addBuff(this);
 	}
 	
 	//Methods
@@ -45,36 +44,15 @@ public abstract class Buff extends Observable implements Observer, Serializable 
 	 * Applies the buff to the creature, modifying it.
 	 * @throws Exception if it is already applied when called, or if some serious shit happened elsewhere.
 	 */
-	abstract public void apply() throws Exception;
+	abstract public void apply(Creature creature) throws Exception;
 	/**
 	 * Removes the effects of the buffs that were applied by using apply()
 	 * @throws Exception if it is not yet applied when called, or if some serious shit happened elsewhere.
 	 */
-	abstract public void unapply() throws Exception;
+	abstract public void unapply(Creature creature) throws Exception;
 	
 	//Accessors
 	
-	public Creature getCreature() {
-		return creature;
-	}
-
-	/**
-	 * This immediately applies the buff to the creature. If you don't like it tell me. It also adds this to
-	 * the new creature's buffer.
-	 * @param creature the new creature on which the buff is applied
-	 */
-	public void setCreature(Creature creature) throws Exception{
-		if(this.creature!=creature){
-			if(applied)
-				unapply();
-			this.creature = creature;
-			apply();
-			creature.getBuffer().addBuff(this);
-			setChanged();
-			notifyObservers();
-		}
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -85,14 +63,25 @@ public abstract class Buff extends Observable implements Observer, Serializable 
 		notifyObservers();
 	}
 	
-	public boolean isApplied() {
-		return applied;
+	public boolean isApplied(Creature c) {
+		return applied.contains(c);
 	}
 	
-	protected void setApplied(boolean b) {
-		applied=b;
-		setChanged();
-		notifyObservers();
+	protected void setApplied(Creature c, boolean b) {
+		if((!applied.contains(c))&&b){
+			applied.add(c);
+			setChanged();
+			notifyObservers();
+		}
+		else if ((applied.contains(c))&&(!b) ){
+			applied.remove(c);
+			setChanged();
+			notifyObservers();
+		}
+	}
+	
+	public List<Creature> getApplied() {
+		return Collections.unmodifiableList(applied);
 	}
 
 	public boolean isHidden() {

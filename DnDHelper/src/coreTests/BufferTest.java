@@ -21,7 +21,11 @@ public class BufferTest {
 		assertEquals(0,jean.getBuffer().getBuffs().size());
 		
 		jean.getBuffer().addBuff(new StatBuff(Stats.Fo,5,jean,"gné",false,true));
-		Buff a = new StatBuff(Stats.Fo,2,jean,"FO+2",false,true);
+		Buff a = new StatBuff(Stats.Dex,2,jean,"FO+2",false,true);
+		
+		assertEquals(1,jean.getStats().getMod(Stats.Dex));
+		assertTrue(null!=jean.getBuffer().searchBuff("gné"));
+		assertTrue(jean.getBuffer().getBuffs().contains(a));
 		
 	}
 

@@ -22,44 +22,47 @@ public class StatBuff extends Buff {
 	}
 
 	/**
-	 * Applies the buff to the creature immediately. If you don't like it tell me.
 	 * @param stat the stat on which this buff will apply
 	 * @param mod the amount added to the stat
-	 * @param creature the Creature on which this buff will be applied
 	 * @param name the name of this
 	 * @throws Exception if stat isn't a stat
 	 */
-	public StatBuff(int stat,int mod,Creature creature,String name, boolean hidden, boolean positive) throws Exception{
-		super(creature,name,hidden,positive);
+	public StatBuff(int stat,int mod,String name, boolean hidden, boolean positive) throws Exception{
+		super(name,hidden,positive);
 		setStat(stat);
 		setMod(mod);
-		apply();
+	}
+	
+	static StatBuff makeStatBuff(int stat,int mod,String name) throws Exception{
+		if(mod>=0)
+			return new StatBuff(stat,mod,name,false,true);
+		else
+			return new StatBuff(stat,mod,name,false,false);
 	}
 
 	//Buff Methods
 
 	@Override
-	public void apply() throws Exception{
-		if(isApplied())
-			throw new Exception("StatBuff is already applied : "+getName()+" on creature "+getCreature().getName());
+	public void apply(Creature creature) throws Exception{
+		if(isApplied(creature))
+			throw new Exception("StatBuff is already applied : "+getName()+" on creature "+creature.getName());
 		else{
-			getCreature().getStats().setStat(
+			creature.getStats().setStat(
 					getStat(),
-					getCreature().getStats().getStat(getStat())+getMod());
-			setApplied(true);
-			System.out.println("Applied on "+getCreature().getName());
+					creature.getStats().getStat(getStat())+getMod());
+			setApplied(creature,true);
 		}
 	}
 
 	@Override
-	public void unapply() throws Exception{
-		if(!isApplied())
-			throw new Exception("StatBuff is not yet applied : "+getName()+" on creature "+getCreature().getName());
+	public void unapply(Creature creature) throws Exception{
+		if(!isApplied(creature))
+			throw new Exception("StatBuff is not yet applied : "+getName()+" on creature "+creature.getName());
 		else{
-			getCreature().getStats().setStat(
+			creature.getStats().setStat(
 					getStat(),
-					getCreature().getStats().getStat(getStat())-getMod());
-			setApplied(false);
+					creature.getStats().getStat(getStat())-getMod());
+			setApplied(creature,false);
 		}
 	}
 

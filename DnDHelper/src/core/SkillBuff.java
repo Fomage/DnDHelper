@@ -23,43 +23,47 @@ public class SkillBuff extends Buff {
 	}
 
 	/**
-	 * This will immediately apply the buff to creature. If you don't like it tell me
 	 * @param skill the name of the skill on which to apply this buff
 	 * @param mod the amount added to skill when this is applied
-	 * @param creature the creature on which this buff is applied
 	 * @param name the name of this buff
 	 * @throws Exception if a problem happens during the apply. Cf apply.
 	 */
-	public SkillBuff(String skill,int mod,Creature creature, String name, boolean hidden, boolean positive) throws Exception{
-		super(creature, name, hidden, positive);
+	public SkillBuff(String skill,int mod, String name, boolean hidden, boolean positive){
+		super(name, hidden, positive);
 		setSkill(skill);
 		setMod(mod);
-		apply();
+	}
+	
+	static SkillBuff makeSkillBuff(String skill,int mod,String name){
+		if(mod>=0)
+			return new SkillBuff(skill,mod,name,false,true);
+		else
+			return new SkillBuff(skill,mod,name,false,false);
 	}
 
 	
 	//Buffer
 	@Override
-	public void apply() throws Exception {
-		if(isApplied())
-			throw new Exception("SkillBuff is already applied : "+getName()+" on creature "+getCreature().getName());
+	public void apply(Creature creature) throws Exception {
+		if(isApplied(creature))
+			throw new Exception("SkillBuff is already applied : "+getName()+" on creature "+creature.getName());
 		else{
-			getCreature().getSkills().getSkill(getSkill()).setMod(
-					getCreature().getSkills().getSkill(getSkill()).getMod()
+			creature.getSkills().getSkill(getSkill()).setMod(
+					creature.getSkills().getSkill(getSkill()).getMod()
 					+getMod());
-			setApplied(true);
+			setApplied(creature,true);
 		}
 	}
 
 	@Override
-	public void unapply() throws Exception {
-		if(!isApplied())
-			throw new Exception("SkillBuff is not yet applied : "+getName()+" on creature "+getCreature().getName());
+	public void unapply(Creature creature) throws Exception {
+		if(!isApplied(creature))
+			throw new Exception("SkillBuff is not yet applied : "+getName()+" on creature "+creature.getName());
 		else{
-			getCreature().getSkills().getSkill(getSkill()).setMod(
-					getCreature().getSkills().getSkill(getSkill()).getMod()
+			creature.getSkills().getSkill(getSkill()).setMod(
+					creature.getSkills().getSkill(getSkill()).getMod()
 					-getMod());
-			setApplied(true);
+			setApplied(creature,false);
 		}
 	}
 
