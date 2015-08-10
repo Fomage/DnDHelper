@@ -7,7 +7,6 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -152,7 +151,7 @@ public class MainWindow extends JFrame {
 						if(newcreature.isFinished()){
 							creaturePanels.add(new CreaturePanel(main , newcreature.getCreature()));
 						}
-						// TODO : RETURN NEW CREATURE HERE with newcreature DONE
+						// TODO : RETURN NEW CREATURE HERE with <code> newcreature </code> DONE
 						main.setAlwaysOnTop(onTopState);
 						
 						
@@ -164,7 +163,10 @@ public class MainWindow extends JFrame {
 							creatures.add(cPanel);
 						}
 						main.getContentPane().validate();
-						main.pack();
+						if(!main.isResizable()){
+							main.pack();
+						}
+						
 					}
 				});
 
@@ -278,7 +280,9 @@ public class MainWindow extends JFrame {
 			creatures.add(cPanel);
 		}
 		this.getContentPane().validate();
-		this.pack();
+		if(!this.isAutoRequestFocus()){
+			this.pack();
+		}
 	}
 
 	

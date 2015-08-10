@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -112,12 +113,14 @@ public class CreaturePanel extends JPanel{
 		
 		CreatureNamePanel txtpnCreaturename = new CreatureNamePanel();
 		this.creature.addObserver(txtpnCreaturename);
+		
 		txtpnCreaturename.setOpaque(false);
 		txtpnCreaturename.setBounds(10, 0, 117, 28);
 		txtpnCreaturename.setEditable(false);
 		mainPanelCreature.add(txtpnCreaturename);
 		txtpnCreaturename.setBackground(UIManager.getColor("Button.background"));
-		txtpnCreaturename.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		
+		txtpnCreaturename.setFont(new Font(txtpnCreaturename.getFont().getName(), txtpnCreaturename.getFont().getStyle(), 18));
 		txtpnCreaturename.setText(creature.getName());
 		
 		JButton btnEdit = new JButton(editIcon);
@@ -188,7 +191,7 @@ public class CreaturePanel extends JPanel{
 		btnAddBuff.setFont(new Font("Tahoma", Font.PLAIN, 21));
 		btnAddBuff.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				NewBuffWindow newbuff = new NewBuffWindow(new StatBuff());
+				NewBuffWindow newbuff = new NewBuffWindow(null,creature);
 				newbuff.setVisible(true);
 				//panel.setVisible(false);
 				main.setAlwaysOnTop(false);
@@ -197,6 +200,15 @@ public class CreaturePanel extends JPanel{
 				
 				newbuff.addWindowListener(new WindowAdapter(){
 					public void windowClosed(WindowEvent e){
+						try {
+							
+							creature.getBuffer().addBuff(newbuff.getBuff());
+						} catch (Exception e1) {
+							
+							e1.printStackTrace();
+						}
+						updateBuffPanel(currentBuffs);
+						
 						// TODO : RETURN NEW BUFF HERE with newbuff
 						return;
 					}
@@ -321,7 +333,7 @@ public class CreaturePanel extends JPanel{
 		selectPanel.setLayout(new BorderLayout(0, 0));
 		
 		JTextPane textPane = new JTextPane();
-		textPane.setToolTipText("Dernier jet pour cette cr\u00E9ature");
+		textPane.setToolTipText("Dernier jet pour cette créature");
 		textPane.setEditable(false);
 		textPane.setText("0");
 		selectPanel.add(textPane, BorderLayout.NORTH);
@@ -337,6 +349,14 @@ public class CreaturePanel extends JPanel{
 	}
 	
 	public void updateBuffPanel (BuffPanel buffPanel){
+		//System.out.println(this.creature.getBuffer().getBuffs().size());
+		List<Buff> buffs = this.creature.getBuffer().getBuffs();
+		buffPanel.removeAll();
+		for(Buff buff : buffs){
+			//System.out.println(buff.getName());
+			BuffButton associatedButton = new BuffButton(buff);
+			buffPanel.add(associatedButton);
+		}
 		//TODO synchronize BuffPanel and this.creature Buffer
 		
 		
@@ -346,21 +366,23 @@ public class CreaturePanel extends JPanel{
 	}
 	
 	
-	class BuffButton extends JButton implements Observer{
+	class BuffButton extends JButton{
 		/**
 		 * 
 		 */
+		ImageIcon goodvisBuffIcon = new ImageIcon("src/gui/images/goodvis.png");
+		ImageIcon goodinvisBuffIcon = new ImageIcon("src/gui/images/goodinvis.png");
+		ImageIcon badvisBuffIcon = new ImageIcon("src/gui/images/badvis.png");
+		ImageIcon badinvisBuffIcon = new ImageIcon("src/gui/images/badinvis.png");
+		ImageIcon image;
+		
 		private static final long serialVersionUID = 1L;
 		private Buff buff;
 		
 		public BuffButton (Buff buff){
 			super();
-			ImageIcon goodvisBuffIcon = new ImageIcon("src/gui/images/goodvis.png");
-			ImageIcon goodinvisBuffIcon = new ImageIcon("src/gui/images/goodinvis.png");
-			ImageIcon badvisBuffIcon = new ImageIcon("src/gui/images/badvis.png");
-			ImageIcon badinvisBuffIcon = new ImageIcon("src/gui/images/badinvis.png");
-			ImageIcon image = badvisBuffIcon;
 			
+			image = badvisBuffIcon;
 			if(buff.isHidden()){
 				if(buff.isPositive()){
 					image = goodinvisBuffIcon;
@@ -376,6 +398,7 @@ public class CreaturePanel extends JPanel{
 			}
 			this.setIcon(image);
 			//TODO set the right icon and update accordingly
+			this.setToolTipText("<html>"+buff.getName()+"<br>"+buff.getDescription()+"</html>");
 			this.setBuff(buff);
 			this.setBorder(null);
 			this.setOpaque(false);
@@ -384,10 +407,7 @@ public class CreaturePanel extends JPanel{
 			this.setContentAreaFilled(false);
 		}
 		
-		public void update(Observable arg0, Object arg1) {
-			// TODO Sync this button and the associated buffer
-			
-		}
+		
 
 		public Buff getBuff() {
 			return buff;
@@ -425,6 +445,11 @@ public class CreaturePanel extends JPanel{
 			updateInventoryPanel(this);
 		}
 			
+	}
+
+	public Creature getCreature() {
+		// TODO Auto-generated method stub
+		return creature;
 	}
 
 	

@@ -90,7 +90,7 @@ public class NewItemWindow extends JFrame {
 		JButton addBuff = new JButton("+");
 		addBuff.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NewBuffWindow newbuff = new NewBuffWindow(new StatBuff());
+				NewBuffWindow newbuff = new NewBuffWindow(null,creaturePanel.getCreature());
 				newbuff.setVisible(true);
 			}
 		});
