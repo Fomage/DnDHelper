@@ -14,19 +14,7 @@ public class BufferTest {
 
 	@Test
 	public void testBuffer() throws Exception{
-		Bugger bug = new Bugger();
-		Creature jean = new Creature();
-		jean.setName("jean");
-		jean.addObserver(bug);
-		assertEquals(0,jean.getBuffer().getBuffs().size());
-		
-		jean.getBuffer().addBuff(new StatBuff(Stats.Fo,5,jean,"gné",false,true));
-		Buff a = new StatBuff(Stats.Dex,2,jean,"FO+2",false,true);
-		
-		assertEquals(1,jean.getStats().getMod(Stats.Dex));
-		assertTrue(null!=jean.getBuffer().searchBuff("gné"));
-		assertTrue(jean.getBuffer().getBuffs().contains(a));
-		
+		fail("Not yet implemented");
 	}
 
 	@Test

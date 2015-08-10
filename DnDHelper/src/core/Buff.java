@@ -16,7 +16,7 @@ public abstract class Buff extends Observable implements Observer, Serializable 
 	
 	//attributes
 
-	private String name;
+	private String name,description;
 	private boolean hidden,positive;
 	private List<Creature> applied;
 
@@ -100,6 +100,16 @@ public abstract class Buff extends Observable implements Observer, Serializable 
 
 	public void setPositive(boolean positive) {
 		this.positive = positive;
+		setChanged();
+		notifyObservers();
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 		setChanged();
 		notifyObservers();
 	}
