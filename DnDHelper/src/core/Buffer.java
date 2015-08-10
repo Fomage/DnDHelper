@@ -91,6 +91,7 @@ public class Buffer extends Observable implements Observer, Serializable {
 	 */
 	public void addBuff(Buff b) throws Exception{
 		if(!buffs.contains(b)){
+			buffs.add(b);
 			if(!b.isApplied(creature))
 				b.apply(creature);
 			setChanged();
