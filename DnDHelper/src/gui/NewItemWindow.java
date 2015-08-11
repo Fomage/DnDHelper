@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -20,6 +22,8 @@ import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
+import core.Buff;
+import core.Creature;
 import core.Item;
 import core.StatBuff;
 
@@ -33,11 +37,12 @@ public class NewItemWindow extends JFrame {
 	private JTextField txtItemName;
 	private JTextField txtAssociatedBuffs;
 	private JTextPane txtpnDescription;
-	private CreaturePanel creaturePanel;
+	private Creature creature;
 	private JComboBox<String> comboItemType;
 	private Item associatedItem;
 	private JPanel buffPanel;
 	private BuffPanel associatedBuffs;
+	private boolean finished = false;
 
 	/**
 	 * Launch the application.
@@ -46,16 +51,12 @@ public class NewItemWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public NewItemWindow(Item item,CreaturePanel creaturePanel,MainWindow main) {
-		this.creaturePanel = creaturePanel;
+	public NewItemWindow(Item item,Creature creature,MainWindow main) {
+		this.creature = creature;
 		this.associatedItem = item;
 		NewItemWindow window = this;
-		if(item == null){
-			setTitle("New Item");
-		}
-		else{
-			setTitle("Edit Item");
-		}
+		
+		setTitle("Edit Item");
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(400, 100, 450, 300);
@@ -74,10 +75,17 @@ public class NewItemWindow extends JFrame {
 		btnOK.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				window.dispose(); // TODO : save the new buff information into a new buff
+				finished = true;
+				associatedItem.setDescription(txtpnDescription.getText());
+				associatedItem.setType(comboItemType.getSelectedIndex());
+				associatedItem.setName(txtItemName.getText());
+				associatedBuffs.applyBuffsToItem();
+			
+				
+				window.dispose(); // TODO : save the new item information into a new item
 			}
 		});
-		btnOK.setBounds(280, 189, 144, 62);
+		btnOK.setBounds(280, 200, 144, 51);
 		contentPane.add(btnOK);	
 		
 		txtItemName = new JTextField();
@@ -90,7 +98,7 @@ public class NewItemWindow extends JFrame {
 		
 		comboItemType = new JComboBox<String>();
 		comboItemType.setModel(new DefaultComboBoxModel<String>(new String[] {"Amulet","Armor","Gem","Ring","Sword"}));
-		comboItemType.setBounds(207, 11, 195, 32);
+		comboItemType.setBounds(280, 157, 144, 32);
 		contentPane.add(comboItemType);
 		
 		buffPanel = new JPanel();
@@ -111,12 +119,12 @@ public class NewItemWindow extends JFrame {
 		associatedBuffs.setLayout(new BoxLayout(associatedBuffs, BoxLayout.LINE_AXIS));
 		//buffPanel.add(associatedBuffs, BorderLayout.CENTER);
 		
-		loadItem(item);
+		
 		
 		JButton addBuff = new JButton("+");
 		addBuff.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NewBuffWindow newbuff = new NewBuffWindow(null,item,main);
+				NewBuffWindow newbuff = new NewBuffWindow(null,item,main,associatedBuffs);
 				newbuff.setVisible(true);
 				
 				
@@ -129,8 +137,8 @@ public class NewItemWindow extends JFrame {
 								}
 								
 								
-								associatedItem.addBuff(newbuff.getBuff());
-								associatedBuffs.setItem(associatedItem);
+								
+								associatedBuffs.addToBuffer(newbuff.getBuff());
 								associatedBuffs.update();
 							}
 							
@@ -154,24 +162,68 @@ public class NewItemWindow extends JFrame {
 		buffScroll.setPreferredSize(new Dimension(160, 0));
 		buffPanel.add(buffScroll, BorderLayout.WEST);
 		
+		JButton btnMoveToStash = new JButton("Move to Stash");
+		btnMoveToStash.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					creature.getInventory().removeItem(associatedItem);
+					main.addItemToStash(associatedItem);
+					window.dispose();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		btnMoveToStash.setBounds(293, 11, 131, 34);
+		contentPane.add(btnMoveToStash);
+		
+		JComboBox<String> loadFromStash = new JComboBox<String>();
+		List<String> names = new ArrayList<String>();
+		for(Item stashedItem : main.getStash()){
+			names.add(stashedItem.getName());
+		}
+		loadFromStash.addActionListener(new ActionListener(){
+
+			public void actionPerformed(ActionEvent e) {
+				loadItem(main.getStash().get(loadFromStash.getSelectedIndex()));
+				main.removeFromStash(main.getStash().get(loadFromStash.getSelectedIndex()));
+				
+			}
+			
+		});
+		loadFromStash.setModel(new DefaultComboBoxModel<>(names.toArray(new String[names.size()])));
+		loadFromStash.setBounds(158, 11, 125, 32);
+		contentPane.add(loadFromStash);
+		
+		loadItem(associatedItem);
+		
 		
 	}
 	
 	
 	private void loadItem(Item item){
-		if(item != null){
+		
 			associatedItem = item;
+			associatedBuffs.setItem(associatedItem);
+			for(Buff buff : associatedItem.getBuffs()){
+				associatedBuffs.addToBuffer(buff);
+			}
+			associatedBuffs.update();
 			txtpnDescription.setText(item.getDescription());
 			txtItemName.setText(item.getName());
+			comboItemType.setSelectedIndex(item.getType());
 			
-		}
-		else{
 			
-			loadItem(new Item());
-		}
 	}
 	
 	public Item getItem(){
 		return associatedItem;
+	}
+
+
+	public boolean isFinished() {
+		
+		return finished;
 	}
 }

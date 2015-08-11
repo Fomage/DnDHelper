@@ -30,6 +30,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import core.Buff;
+import core.Item;
 
 public class MainWindow extends JFrame {
 
@@ -42,6 +43,7 @@ public class MainWindow extends JFrame {
 	List<CreaturePanel> creaturePanels;
 	JPanel creatures;
 	List<Buff> publicBuffs = new ArrayList<Buff>();
+	List<Item> stash = new ArrayList<Item>();
 
 	/**
 	 * Launch the application.
@@ -292,10 +294,23 @@ public class MainWindow extends JFrame {
 	}
 
 	public void addPublicBuff(Buff buff){
-		publicBuffs.add(buff);
+		if(buff == null){
+			return;
+		}
+		boolean alreadyPublic = false;
+		
+		for(Buff publicBuff : publicBuffs){
+			if(buff.getName().equals(publicBuff.getName())){
+				alreadyPublic = true;
+			}
+		}
+		if(!alreadyPublic){
+			publicBuffs.add(buff);
+		}
+		
 	}
 	
-	public List<Buff> getPublicBuff(){
+	public List<Buff> getPublicBuffs(){
 		return publicBuffs;
 	}
 	
@@ -303,6 +318,32 @@ public class MainWindow extends JFrame {
 		publicBuffs.remove(buff);
 	}
 
+	public void addItemToStash(Item item){
+		if(item == null){
+			return;
+		}
+		boolean alreadyInStash = false; //this should be impossible
+		
+		for(Buff publicBuff : publicBuffs){
+			if(item.getName().equals(publicBuff.getName())){
+				System.out.println("DUPLICATE ITEM");
+				alreadyInStash = true;
+			}
+		}
+		if(!alreadyInStash){
+			stash.add(item);
+		}
+		
+	}
+	
+	public List<Item> getStash(){
+		return stash;
+	}
+	
+	public void removeFromStash(Item item){
+		stash.remove(item);
+	}
+	
 	public boolean getOnTopState() {
 		// TODO Auto-generated method stub
 		return onTopState;
