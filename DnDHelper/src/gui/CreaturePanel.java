@@ -184,7 +184,7 @@ public class CreaturePanel extends JPanel{
 		mainPanelCreature.add(buffPanel);
 		buffPanel.setLayout(new BorderLayout(0, 0));
 		
-		BuffPanel currentBuffs = new BuffPanel(main);
+		currentBuffs = new BuffPanel(main,this);
 		creature.addObserver(currentBuffs);
 		currentBuffs.setLayout(new BoxLayout(currentBuffs, BoxLayout.LINE_AXIS));
 		
@@ -222,7 +222,7 @@ public class CreaturePanel extends JPanel{
 			}
 		});
 		buffPanel.add(btnAddBuff, BorderLayout.EAST);
-		this.currentBuffs=currentBuffs;
+		
 		
 		
 
@@ -273,10 +273,10 @@ public class CreaturePanel extends JPanel{
 		btnAddItem.setFocusPainted(false);
 		btnAddItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NewItemWindow newitem = new NewItemWindow(panel,main);
+				NewItemWindow newitem = new NewItemWindow(null,panel,main);
 				newitem.setVisible(true);
 				newitem.toFront();
-				panel.setVisible(false);
+				//panel.setVisible(false);
 				main.setAlwaysOnTop(false);
 				
 				
@@ -314,130 +314,130 @@ public class CreaturePanel extends JPanel{
 		
 	}
 	
-	public void updateBuffPanel (BuffPanel currentBuffs,MainWindow main){
-		//System.out.println("updating buff panel");
-
-		List<Buff> buffs = this.creature.getBuffer().getBuffs();
-		currentBuffs.removeAll();
-		for(Buff buff : buffs){
-			//System.out.println(buff.getName());
-			BuffButton associatedButton = new BuffButton(buff,this,main);
-			currentBuffs.add(associatedButton);
-		}
-		currentBuffs.invalidate();
-		currentBuffs.validate();
-		currentBuffs.repaint();
-		//System.out.println("updated buff panel");
-		//TODO synchronize BuffPanel and this.creature Buffer
-		
-		
-	}
+//	public void updateBuffPanel (BuffPanel currentBuffs,MainWindow main){
+//		//System.out.println("updating buff panel");
+//
+//		List<Buff> buffs = this.creature.getBuffer().getBuffs();
+//		currentBuffs.removeAll();
+//		for(Buff buff : buffs){
+//			//System.out.println(buff.getName());
+//			BuffButton associatedButton = new BuffButton(buff,this,main);
+//			currentBuffs.add(associatedButton);
+//		}
+//		currentBuffs.invalidate();
+//		currentBuffs.validate();
+//		currentBuffs.repaint();
+//		//System.out.println("updated buff panel");
+//		//TODO synchronize BuffPanel and this.creature Buffer
+//		
+////		
+//	}
 	public void updateInventoryPanel (InventoryPanel inventoryPanel){
 		//TODO synchronize InventoryPanel and this.creature Inventory
 	}
 	
 	
-	class BuffButton extends JButton{
+//	class BuffButton extends JButton{
 		/**
 		 * 
 		 */
-		ImageIcon goodvisBuffIcon = new ImageIcon("src/gui/images/goodvis.png");
-		ImageIcon goodinvisBuffIcon = new ImageIcon("src/gui/images/goodinvis.png");
-		ImageIcon badvisBuffIcon = new ImageIcon("src/gui/images/badvis.png");
-		ImageIcon badinvisBuffIcon = new ImageIcon("src/gui/images/badinvis.png");
-		ImageIcon image;
+//		ImageIcon goodvisBuffIcon = new ImageIcon("src/gui/images/goodvis.png");
+//		ImageIcon goodinvisBuffIcon = new ImageIcon("src/gui/images/goodinvis.png");
+//		ImageIcon badvisBuffIcon = new ImageIcon("src/gui/images/badvis.png");
+//		ImageIcon badinvisBuffIcon = new ImageIcon("src/gui/images/badinvis.png");
+//		ImageIcon image;
+//		
+//		private static final long serialVersionUID = 1L;
+//		private Buff associatedBuff;
+//		
+//		public BuffButton (Buff buff,CreaturePanel parent,MainWindow main){
+//			
+//			super();
+//			associatedBuff=buff;
+//			
+//			image = badvisBuffIcon;
+//			if(buff.isHidden()){
+//				if(buff.isPositive()){
+//					image = goodinvisBuffIcon;
+//				}
+//				else{
+//					image = badinvisBuffIcon;
+//				}
+//			}
+//			else{
+//				if(buff.isPositive()){
+//					image = goodvisBuffIcon;
+//				}
+//			}
+//			this.setIcon(image);
+//			//TODO set the right icon and update accordingly
+//			this.setToolTipText("<html>"+associatedBuff.getName()+"<br>"+associatedBuff.getDescription()+"</html>");
+//			this.setBuff(associatedBuff);
+//			this.setBorder(null);
+//			this.setOpaque(false);
+//			this.setBorderPainted(false);
+//			this.setFocusPainted(false);
+//			this.setContentAreaFilled(false);
+//			this.addActionListener(new ActionListener() {
+//				
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//					NewBuffWindow newbuff = new NewBuffWindow(buff,creature,main);
+//					newbuff.setVisible(true);
+//					//panel.setVisible(false);
+////					main.setAlwaysOnTop(false);
+//					newbuff.toFront();
+//					
+//					
+//					newbuff.addWindowListener(new WindowAdapter(){
+//						public void windowClosed(WindowEvent e){
+//							
+//							if(newbuff.isFinished() && newbuff.isPublic()){
+//								main.addPublicBuff(newbuff.getBuff());
+//							}
+//							parent.updateBuffPanel(parent.currentBuffs,main);
+//							
+//							// TODO : RETURN NEW BUFF HERE with newbuff
+//							return;
+//						}
+//					});
+//					
+//				}
+//			});
+//		}
+//		
+//		
+//
+//		public Buff getBuff() {
+//			return associatedBuff;
+//		}
+//
+//		public void setBuff(Buff buff) {
+//			this.associatedBuff = buff;
+//		}
 		
-		private static final long serialVersionUID = 1L;
-		private Buff associatedBuff;
-		
-		public BuffButton (Buff buff,CreaturePanel parent,MainWindow main){
-			
-			super();
-			associatedBuff=buff;
-			
-			image = badvisBuffIcon;
-			if(buff.isHidden()){
-				if(buff.isPositive()){
-					image = goodinvisBuffIcon;
-				}
-				else{
-					image = badinvisBuffIcon;
-				}
-			}
-			else{
-				if(buff.isPositive()){
-					image = goodvisBuffIcon;
-				}
-			}
-			this.setIcon(image);
-			//TODO set the right icon and update accordingly
-			this.setToolTipText("<html>"+associatedBuff.getName()+"<br>"+associatedBuff.getDescription()+"</html>");
-			this.setBuff(associatedBuff);
-			this.setBorder(null);
-			this.setOpaque(false);
-			this.setBorderPainted(false);
-			this.setFocusPainted(false);
-			this.setContentAreaFilled(false);
-			this.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					NewBuffWindow newbuff = new NewBuffWindow(buff,creature,main);
-					newbuff.setVisible(true);
-					//panel.setVisible(false);
-//					main.setAlwaysOnTop(false);
-					newbuff.toFront();
-					
-					
-					newbuff.addWindowListener(new WindowAdapter(){
-						public void windowClosed(WindowEvent e){
-							
-							if(newbuff.isFinished() && newbuff.isPublic()){
-								main.addPublicBuff(newbuff.getBuff());
-							}
-							parent.updateBuffPanel(parent.currentBuffs,main);
-							
-							// TODO : RETURN NEW BUFF HERE with newbuff
-							return;
-						}
-					});
-					
-				}
-			});
-		}
-		
-		
-
-		public Buff getBuff() {
-			return associatedBuff;
-		}
-
-		public void setBuff(Buff buff) {
-			this.associatedBuff = buff;
-		}
-		
-	}
+//	}
 	
-	class BuffPanel extends JPanel implements Observer{
-
-		/**
-		 * 
-		 */
-		
-		private MainWindow main;
-		
-		public BuffPanel(MainWindow main){
-			super();
-			this.main = main;
-		}
-		private static final long serialVersionUID = 1L;
-
-		public void update(Observable arg0, Object arg1) {
-			
-			updateBuffPanel(this,main);
-		}
-			
-	}
+//	class BuffPanel extends JPanel implements Observer{
+//
+//		/**
+//		 * 
+//		 */
+//		
+//		private MainWindow main;
+//		
+//		public BuffPanel(MainWindow main){
+//			super();
+//			this.main = main;
+//		}
+//		private static final long serialVersionUID = 1L;
+//
+//		public void update(Observable arg0, Object arg1) {
+//			
+//			updateBuffPanel(this,main);
+//		}
+//			
+//	}
 	
 	class InventoryPanel extends JPanel implements Observer{
 
@@ -457,6 +457,13 @@ public class CreaturePanel extends JPanel{
 		// TODO Auto-generated method stub
 		return creature;
 	}
+
+	public BuffPanel getCurrentBuffs() {
+		// TODO Auto-generated method stub
+		return currentBuffs;
+	}
+	
+	
 
 	
 	
