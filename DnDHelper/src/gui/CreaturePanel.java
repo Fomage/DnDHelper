@@ -171,6 +171,9 @@ public class CreaturePanel extends JPanel{
 		btnRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				main.removeCreature(panel);
+				if(!main.isResizable()){
+					main.pack();
+				}
 			}
 		});
 		btnRemove.setBorder(null);

@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -28,9 +30,13 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import core.Buff;
+import core.Creature;
 import core.Item;
+import core.Serializer;
+import java.awt.FlowLayout;
 
 public class MainWindow extends JFrame {
 
@@ -69,7 +75,16 @@ public class MainWindow extends JFrame {
 	public MainWindow() {
 		setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		creaturePanels = new ArrayList<CreaturePanel>(); //TODO : Load creatures
-		
+//		try {
+//			@SuppressWarnings("unchecked")
+//			List<Creature> creatureList = (List<Creature>) Serializer.load("./Session.ses");
+//			for(Creature creat : creatureList){
+//				creaturePanels.add(new CreaturePanel(this, creat));
+//			}
+//		} catch (Exception e1) {
+//			
+//			
+//		}
 		setResizable(false);
 		setTitle("DnDHelper");
 		setAlwaysOnTop(true);
@@ -180,11 +195,94 @@ public class MainWindow extends JFrame {
 		});
 		bot.setLayout(new BorderLayout(0, 0));
 		
+		JPanel sessionPanel = new JPanel();
+		bot.add(sessionPanel, BorderLayout.CENTER);
+		sessionPanel.setLayout(null);
+		
+		JButton saveSessionButton = new JButton("Save");
+		saveSessionButton.setBounds(0, 0, 89, 45);
+		sessionPanel.add(saveSessionButton);
+		saveSessionButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				List<Creature> session = new ArrayList<Creature>();
+				for(CreaturePanel creaturePanel : creaturePanels){
+					session.add(creaturePanel.getCreature());
+				}
+				
+				JFileChooser chooser = new JFileChooser(".");
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				        "Session Files", "ses");
+				chooser.setFileFilter(filter);
+				int returnVal = chooser.showSaveDialog(main);
+				
+				try {
+					if(chooser.getSelectedFile()!=null){
+						Serializer.save((Serializable) session, chooser.getSelectedFile().getPath()+".ses");
+					}
+					
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+		});
+		
+		JButton loadSessionButton = new JButton("Load");
+		loadSessionButton.setBounds(89, 0, 89, 45);
+		sessionPanel.add(loadSessionButton);
+		loadSessionButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				
+				JFileChooser chooser = new JFileChooser(".");
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				        "Session Files", "ses");
+				chooser.setFileFilter(filter);
+				int returnVal = chooser.showOpenDialog(main);
+				
+				try {
+					//System.out.println(chooser.getSelectedFile().getPath());
+					
+					if(chooser.getSelectedFile()!=null){
+						@SuppressWarnings("unchecked")
+						List<Creature> creatureList = (List<Creature>) Serializer.load(chooser.getSelectedFile().getPath());
+						creaturePanels = new ArrayList<CreaturePanel>();
+						for(Creature creat : creatureList){
+							
+							creaturePanels.add(new CreaturePanel(main, creat));
+							if(creaturePanels.size()>=6){
+								scrollPane.setPreferredSize(new Dimension(325,600));
+							}
+							creatures.removeAll();
+							for(CreaturePanel cPanel : creaturePanels){
+								creatures.add(cPanel);
+							}
+							main.getContentPane().validate();
+							if(!main.isResizable()){
+								main.pack();
+							}
+						}
+						main.pack();
+					}
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
+				
+				
+				
+			}
+		});
+		
 		JPanel options = new JPanel();
 		bot.add(options, BorderLayout.EAST);
+		options.setLayout(new BorderLayout(0, 0));
 		
 		
-		options.add(chckbxOnTop);
+		options.add(chckbxOnTop, BorderLayout.SOUTH);
 		chckbxOnTop.setSelected(true);
 		chckbxOnTop.addChangeListener(new ChangeListener(){
 
@@ -202,7 +300,10 @@ public class MainWindow extends JFrame {
 		});
 		
 		JCheckBox chckbxResizable = new JCheckBox("Resizable");
-		options.add(chckbxResizable);
+		options.add(chckbxResizable, BorderLayout.NORTH);
+		
+		Component verticalGlue = Box.createVerticalGlue();
+		options.add(verticalGlue, BorderLayout.CENTER);
 		chckbxResizable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(main.isResizable()){
@@ -267,6 +368,45 @@ public class MainWindow extends JFrame {
 		
 		contentPane.validate();
 		this.pack();
+		
+		JFileChooser chooser = new JFileChooser(".");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+		        "Session Files", "ses");
+		chooser.setFileFilter(filter);
+		int returnVal = chooser.showOpenDialog(main);
+		
+		try {
+			//System.out.println(chooser.getSelectedFile().getPath());
+			
+			if(chooser.getSelectedFile()!=null){
+				@SuppressWarnings("unchecked")
+				List<Creature> creatureList = (List<Creature>) Serializer.load(chooser.getSelectedFile().getPath());
+				creaturePanels = new ArrayList<CreaturePanel>();
+				for(Creature creat : creatureList){
+					
+					creaturePanels.add(new CreaturePanel(main, creat));
+					if(creaturePanels.size()>=6){
+						scrollPane.setPreferredSize(new Dimension(325,600));
+					}
+					creatures.removeAll();
+					for(CreaturePanel cPanel : creaturePanels){
+						creatures.add(cPanel);
+					}
+					main.getContentPane().validate();
+					if(!main.isResizable()){
+						main.pack();
+					}
+				}
+				main.pack();
+			}
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		
+		
 	}
 
 	public boolean isOnTop() {

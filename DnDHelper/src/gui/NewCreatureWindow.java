@@ -131,7 +131,7 @@ public class NewCreatureWindow extends JFrame {
 					}
 				}
 				try {
-					Serializer.save(NewCreatureWindow.this.creature,"./"+creature.getName()+".cre");
+					//Serializer.save(NewCreatureWindow.this.creature,"./"+creature.getName()+".cre");
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

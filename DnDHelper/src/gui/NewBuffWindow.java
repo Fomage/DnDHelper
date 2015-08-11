@@ -22,6 +22,7 @@ import core.Buff;
 import core.Creature;
 import core.Item;
 import core.Serializer;
+import core.Skill;
 import core.SkillBuff;
 import core.StatBuff;
 import core.Stats;
@@ -94,7 +95,13 @@ public class NewBuffWindow extends JFrame {
 		
 		
 		skillComboBox = new JComboBox<String>();
-		skillComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Skill 1", "Skill 2"}));
+		String[] skills = new String[creature.getSkills().getSkills().size()];
+		int c = 0;
+		for(Skill skill : creature.getSkills().getSkills()){
+			skills[c] = skill.getName();
+			c++;
+		}
+		skillComboBox.setModel(new DefaultComboBoxModel<String>(skills));
 		skillComboBox.setBounds(60, 207, 153, 32);
 		contentPane.add(skillComboBox);
 				
@@ -182,7 +189,16 @@ public class NewBuffWindow extends JFrame {
 							}
 						}
 						else{
-							
+							try {
+								((SkillBuff)localBuff).setSkill((String)skillComboBox.getSelectedItem());
+								((SkillBuff)localBuff).setMod((int)spinnerMod.getValue());
+								((SkillBuff)localBuff).setName(txtName.getText());
+								((SkillBuff)localBuff).setHidden(chckbxHiddenBuff.isSelected());
+								((SkillBuff)localBuff).setPositive(chckbxPositiveBuff.isSelected());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}						
 						}
 					}
 				}
@@ -219,7 +235,20 @@ public class NewBuffWindow extends JFrame {
 						}
 					}
 					else{
-						
+						try {
+							String desc = txtpnDescription.getText();
+							if(desc.equals("Buff Description")){
+								desc = "";
+							}
+							localBuff = new SkillBuff((String)skillComboBox.getSelectedItem(),(int)spinnerMod.getValue(),txtName.getText(),chckbxHiddenBuff.isSelected(),chckbxPositiveBuff.isSelected());
+							localBuff.setDescription(desc);
+							Serializer.save(localBuff, "./"+localBuff.getName()+".buf");
+						}
+							
+						 catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 				if(localBuff==null){
@@ -246,8 +275,10 @@ public class NewBuffWindow extends JFrame {
 				
 				try {
 					//System.out.println(chooser.getSelectedFile().getPath());
+					if(chooser.getSelectedFile()!=null){
+						loadBuff((Buff)Serializer.load(chooser.getSelectedFile().getPath()));
+					}
 					
-					loadBuff((Buff)Serializer.load(chooser.getSelectedFile().getPath()));
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -601,6 +632,7 @@ public class NewBuffWindow extends JFrame {
 				statorskillBox.setSelectedIndex(1);
 			}
 			if(buff instanceof SkillBuff){
+				skillComboBox.setSelectedItem(((SkillBuff)buff).getSkill());
 				spinnerMod.setValue(((SkillBuff) buff).getMod());
 			}
 			chckbxPositiveBuff.setSelected(buff.isPositive());
