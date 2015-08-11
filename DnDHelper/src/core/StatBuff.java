@@ -32,7 +32,7 @@ public class StatBuff extends Buff {
 		setStat(stat);
 		setMod(mod);
 	}
-	
+
 	static StatBuff makeStatBuff(int stat,int mod,String name) throws Exception{
 		if(mod>=0)
 			return new StatBuff(stat,mod,name,false,true);
@@ -66,6 +66,22 @@ public class StatBuff extends Buff {
 		}
 	}
 
+	protected void applyAll() throws Exception{
+		for(Creature c : getApplied()){
+			c.getStats().setStat(
+					getStat(),
+					c.getStats().getStat(getStat())+getMod());
+		}
+	}
+
+	protected void unapplyAll() throws Exception{
+		for(Creature c : getApplied()){
+			c.getStats().setStat(
+					getStat(),
+					c.getStats().getStat(getStat())-getMod());
+		}
+	}
+
 	//Accessors
 
 	public int getStat() {
@@ -74,13 +90,9 @@ public class StatBuff extends Buff {
 
 	public void setStat(int stat) throws Exception{
 		if(Stats.isAStat(stat)){
-			for(Creature c : getApplied()){
-				unapply(c);
-			}
+			unapplyAll();
 			this.stat = stat;
-			for(Creature c : getApplied()){
-				apply(c);
-			}
+			applyAll();
 			setChanged();
 			notifyObservers();
 		}
@@ -93,13 +105,9 @@ public class StatBuff extends Buff {
 	}
 
 	public void setMod(int mod) throws Exception{
-		for(Creature c : getApplied()){
-			unapply(c);
-		}
+		unapplyAll();
 		this.mod = mod;
-		for(Creature c : getApplied()){
-			apply(c);
-		}
+		applyAll();
 		setChanged();
 		notifyObservers();
 	}

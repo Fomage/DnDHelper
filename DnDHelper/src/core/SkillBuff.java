@@ -66,6 +66,22 @@ public class SkillBuff extends Buff {
 			setApplied(creature,false);
 		}
 	}
+	
+	protected void applyAll() throws Exception{
+		for(Creature c : getApplied()){
+			c.getSkills().getSkill(getSkill()).setMod(
+					c.getSkills().getSkill(getSkill()).getMod()
+					+getMod());
+		}
+	}
+	
+	protected void unapplyAll() throws Exception{
+		for(Creature c : getApplied()){
+			c.getSkills().getSkill(getSkill()).setMod(
+					c.getSkills().getSkill(getSkill()).getMod()
+					-getMod());
+		}
+	}
 
 	//Accessors
 	public String getSkill() {
@@ -73,13 +89,9 @@ public class SkillBuff extends Buff {
 	}
 
 	public void setSkill(String skill) throws Exception{
-		for(Creature c : getApplied()){
-			unapply(c);
-		}
+		unapplyAll();
 		this.skill = skill;
-		for(Creature c : getApplied()){
-			apply(c);
-		}
+		applyAll();
 		setChanged();
 		notifyObservers();
 	}
@@ -89,13 +101,9 @@ public class SkillBuff extends Buff {
 	}
 
 	public void setMod(int mod) throws Exception{
-		for(Creature c : getApplied()){
-			unapply(c);
-		}
+		unapplyAll();
 		this.mod = mod;
-		for(Creature c : getApplied()){
-			apply(c);
-		}
+		applyAll();
 		setChanged();
 		notifyObservers();
 	}

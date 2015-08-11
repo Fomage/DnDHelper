@@ -18,18 +18,21 @@ public class Item extends Observable implements Observer, Serializable {
 	
 	private String name,description;
 	private List<Buff> buffs;
+	private int type;
 
 	//
 	public Item() {
 		name="Default";
 		description="";
 		buffs=new ArrayList<Buff>();
+		type=0;
 	}
 	
-	public Item(String name, String description){
+	public Item(String name, String description, int type){
 		this.name=name;
 		this.description=description;
 		buffs=new ArrayList<Buff>();
+		this.type=type;
 	}
 	
 	//getters setters
@@ -101,6 +104,16 @@ public class Item extends Observable implements Observer, Serializable {
 		}
 		else
 			return false;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+		setChanged();
+		notifyObservers();
 	}
 
 	//Observable

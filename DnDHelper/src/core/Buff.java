@@ -51,6 +51,9 @@ public abstract class Buff extends Observable implements Observer, Serializable 
 	 */
 	abstract public void unapply(Creature creature) throws Exception;
 	
+	abstract protected void applyAll() throws Exception;
+	abstract protected void unapplyAll() throws Exception;
+	
 	//Accessors
 	
 	public String getName() {
