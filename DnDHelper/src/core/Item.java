@@ -105,6 +105,12 @@ public class Item extends Observable implements Observer, Serializable {
 		else
 			return false;
 	}
+	
+	public void removeAllBuffs() throws Exception{
+		while(!buffs.isEmpty()){
+			removeBuff(buffs.get(0));
+		}
+	}
 
 	public int getType() {
 		return type;
