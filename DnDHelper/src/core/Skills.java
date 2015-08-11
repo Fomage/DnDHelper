@@ -1,6 +1,7 @@
 package core;
 
 import java.io.Serializable;
+import java.nio.file.attribute.AclEntry.Builder;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
@@ -31,13 +32,14 @@ public class Skills extends Observable implements Serializable, Observer {
 	}
 	
 	/**
-	 * Initially with no skills.
+	 * Initially with basic skills.
 	 * @param stats bases itself on theses stats for rolls.
 	 */
-	public Skills(Stats stats){
+	public Skills(Stats stats) throws Exception{
 		skills = new LinkedList<Skill>();
 		this.stats = stats;
 		ignoreNotify=false;
+		buildBasicSkills();
 	}
 	
 	//buildBasicSKills
@@ -57,7 +59,7 @@ public class Skills extends Observable implements Serializable, Observer {
 	 * Psychologie
 	 * Surive
 	 */
-	public void builBasicSkills() throws Exception{
+	public void buildBasicSkills() throws Exception{
 		Stats bidon = new Stats();
 		
 		addSkill(new Skill(-4,Stats.Int,bidon,"Art de la magie"));
