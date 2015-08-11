@@ -29,6 +29,8 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import core.Buff;
+
 public class MainWindow extends JFrame {
 
 	/**
@@ -39,6 +41,7 @@ public class MainWindow extends JFrame {
 	boolean onTopState = true;
 	List<CreaturePanel> creaturePanels;
 	JPanel creatures;
+	List<Buff> publicBuffs = new ArrayList<Buff>();
 
 	/**
 	 * Launch the application.
@@ -271,6 +274,9 @@ public class MainWindow extends JFrame {
 	
 	public void removeCreature(CreaturePanel cPanel){
 		creaturePanels.remove(cPanel);
+		if(!this.isResizable()){
+			this.pack();
+		}
 		check();
 	}
 	
@@ -285,7 +291,17 @@ public class MainWindow extends JFrame {
 		}
 	}
 
+	public void addPublicBuff(Buff buff){
+		publicBuffs.add(buff);
+	}
 	
+	public List<Buff> getPublicBuff(){
+		return publicBuffs;
+	}
+	
+	public void removePublicBuff(Buff buff){
+		publicBuffs.remove(buff);
+	}
 
 	public boolean getOnTopState() {
 		// TODO Auto-generated method stub

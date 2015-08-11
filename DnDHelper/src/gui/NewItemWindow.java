@@ -1,19 +1,26 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
+import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
+import core.Item;
 import core.StatBuff;
 
 public class NewItemWindow extends JFrame {
@@ -25,7 +32,12 @@ public class NewItemWindow extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtItemName;
 	private JTextField txtAssociatedBuffs;
+	private JTextPane txtpnDescription;
 	private CreaturePanel creaturePanel;
+	private JComboBox<String> comboItemType;
+	private Item associatedItem;
+	private JPanel buffPanel;
+	private BuffPanel associatedBuffs;
 
 	/**
 	 * Launch the application.
@@ -34,11 +46,17 @@ public class NewItemWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public NewItemWindow(CreaturePanel creaturePanel) {
+	public NewItemWindow(Item item,CreaturePanel creaturePanel,MainWindow main) {
 		this.creaturePanel = creaturePanel;
-		
+		this.associatedItem = item;
 		NewItemWindow window = this;
-		setTitle("New Item");
+		if(item == null){
+			setTitle("New Item");
+		}
+		else{
+			setTitle("Edit Item");
+		}
+		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(400, 100, 450, 300);
 		contentPane = new JPanel();
@@ -47,7 +65,7 @@ public class NewItemWindow extends JFrame {
 		contentPane.setLayout(null);
 		
 		
-		JTextPane txtpnDescription = new JTextPane();
+		txtpnDescription = new JTextPane();
 		txtpnDescription.setText("Item Description");
 		txtpnDescription.setBounds(5, 60, 419, 86);
 		contentPane.add(txtpnDescription);
@@ -70,12 +88,12 @@ public class NewItemWindow extends JFrame {
 		txtItemName.setBounds(5, 11, 143, 32);
 		contentPane.add(txtItemName);
 		
-		JComboBox<String> comboBox_1 = new JComboBox<String>();
-		comboBox_1.setModel(new DefaultComboBoxModel<String>(new String[] {"Type 1 items", "Type 2 items"}));
-		comboBox_1.setBounds(207, 11, 195, 32);
-		contentPane.add(comboBox_1);
+		comboItemType = new JComboBox<String>();
+		comboItemType.setModel(new DefaultComboBoxModel<String>(new String[] {"Amulet","Armor","Gem","Ring","Sword"}));
+		comboItemType.setBounds(207, 11, 195, 32);
+		contentPane.add(comboItemType);
 		
-		JPanel buffPanel = new JPanel();
+		buffPanel = new JPanel();
 		buffPanel.setBounds(5, 157, 254, 94);
 		contentPane.add(buffPanel);
 		buffPanel.setLayout(new BorderLayout(0, 0));
@@ -87,15 +105,73 @@ public class NewItemWindow extends JFrame {
 		buffPanel.add(txtAssociatedBuffs, BorderLayout.NORTH);
 		txtAssociatedBuffs.setColumns(10);
 		
+		
+		associatedBuffs = new BuffPanel(main, associatedItem);
+		associatedItem.addObserver(associatedBuffs);
+		associatedBuffs.setLayout(new BoxLayout(associatedBuffs, BoxLayout.LINE_AXIS));
+		//buffPanel.add(associatedBuffs, BorderLayout.CENTER);
+		
+		loadItem(item);
+		
 		JButton addBuff = new JButton("+");
 		addBuff.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NewBuffWindow newbuff = new NewBuffWindow(null,creaturePanel.getCreature());
+				NewBuffWindow newbuff = new NewBuffWindow(null,item,main);
 				newbuff.setVisible(true);
+				
+				
+				newbuff.addWindowListener(new WindowAdapter(){
+					public void windowClosed(WindowEvent e){
+						try {
+							if(newbuff.isFinished()){
+								if(newbuff.isPublic()){
+									main.addPublicBuff(newbuff.getBuff());
+								}
+								
+								
+								associatedItem.addBuff(newbuff.getBuff());
+								associatedBuffs.setItem(associatedItem);
+								associatedBuffs.update();
+							}
+							
+						} catch (Exception e1) {
+							
+							e1.printStackTrace();
+						}
+						//updateBuffPanel(currentBuffs);
+						
+						// TODO : RETURN NEW BUFF HERE with newbuff
+						return;
+					}
+				});
 			}
 		});
 		buffPanel.add(addBuff, BorderLayout.EAST);
 		
-		JPanel associatedBuffs = new JPanel();
-		buffPanel.add(associatedBuffs, BorderLayout.CENTER);}
+		JScrollPane buffScroll = new JScrollPane(associatedBuffs);
+		buffScroll.setBorder(null);
+		buffScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		buffScroll.setPreferredSize(new Dimension(160, 0));
+		buffPanel.add(buffScroll, BorderLayout.WEST);
+		
+		
+	}
+	
+	
+	private void loadItem(Item item){
+		if(item != null){
+			associatedItem = item;
+			txtpnDescription.setText(item.getDescription());
+			txtItemName.setText(item.getName());
+			
+		}
+		else{
+			
+			loadItem(new Item());
+		}
+	}
+	
+	public Item getItem(){
+		return associatedItem;
+	}
 }
