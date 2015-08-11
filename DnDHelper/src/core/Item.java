@@ -78,7 +78,7 @@ public class Item extends Observable implements Observer, Serializable {
 	}
 
 	/**
-	 * @param b the buff will NOT be applied.
+	 * @param b the buff will be applied.
 	 * @throws Exception if the buff has trouble being applied
 	 */
 	public void addBuff(Buff b) {

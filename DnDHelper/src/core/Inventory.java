@@ -51,8 +51,7 @@ public class Inventory extends Observable implements Observer, Serializable {
 			items.add(i);
 			i.addObserver(this);
 			for(Buff b : i.getBuffs()){
-				if(!b.isApplied(creature))
-					b.apply(creature);
+				creature.getBuffer().addBuff(b);
 			}
 			setChanged();
 			notifyObservers();

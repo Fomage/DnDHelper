@@ -4,25 +4,29 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import core.Buff;
 import core.Creature;
+import core.Item;
 import core.StatBuff;
+import core.Stats;
 
 public class CreatureTest {
 
 	@Test
 	public void testCreature() throws Exception{
-		System.out.println("Gnarl");
-		Creature tom = new Creature();
-		System.out.println("Gnarl");
-		tom.setName("tom");
-		System.out.println("Gnarl");
+		Creature bob= new Creature();
+		bob.setName("bob");
 		Bugger bug = new Bugger();
-		System.out.println("Gnarl");
-		tom.addObserver(bug);
+		bob.addObserver(bug);
 		
-		System.out.println("Gnarl");
-		tom.getBuffer().addBuff(new StatBuff(0,10,"testeuh",false,true));
-		System.out.println(bug.count);
+		Item machin = new Item("Machin","Un machin",0);
+		bob.getInventory().addItem(machin);
+		assertEquals(0,bob.getStats().getMod(Stats.Fo));
+		Buff buffDeMachin = new StatBuff(Stats.Fo,2,"Buff de machin",false,true);
+		machin.addBuff(buffDeMachin);
+		assertEquals(1,bob.getStats().getMod(Stats.Fo));
+		System.out.println(bob.getBuffer().getBuffs().size());
+		
 	}
 
 	@Test
