@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -29,6 +30,7 @@ import javax.swing.border.BevelBorder;
 
 import core.Buff;
 import core.Creature;
+import core.Item;
 import core.StatBuff;
 
 public class CreaturePanel extends JPanel{
@@ -63,7 +65,7 @@ public class CreaturePanel extends JPanel{
 		ImageIcon inventoryIcon = new ImageIcon("src/gui/images/inventory2.png");
 		ImageIcon checkedIcon = new ImageIcon("src/gui/images/checked.png");
 		ImageIcon uncheckedIcon = new ImageIcon("src/gui/images/unchecked.png");
-		ImageIcon swordIcon = new ImageIcon("src/gui/images/sword.png");
+		
 		
 		
 		
@@ -203,9 +205,11 @@ public class CreaturePanel extends JPanel{
 					public void windowClosed(WindowEvent e){
 						try {
 							if(newbuff.isFinished()){
+								
 								if(newbuff.isPublic()){
 									main.addPublicBuff(newbuff.getBuff());
 								}
+								
 								creature.getBuffer().addBuff(newbuff.getBuff());
 							}
 							
@@ -246,7 +250,7 @@ public class CreaturePanel extends JPanel{
 		
 		
 		
-		InventoryPanel currentInventory = new InventoryPanel();
+		InventoryPanel currentInventory = new InventoryPanel(main, panel);
 		creature.addObserver(currentInventory);
 		currentInventory.setLayout(new BoxLayout(currentInventory, BoxLayout.LINE_AXIS));
 		
@@ -256,13 +260,13 @@ public class CreaturePanel extends JPanel{
 		invScroll.setPreferredSize(new Dimension(175, 0));
 		inventoryPanel.add(invScroll, BorderLayout.WEST);
 		
-		JButton sampleItem = new JButton(swordIcon);
-		sampleItem.setBorder(null);
-		sampleItem.setOpaque(false);
-		sampleItem.setBorderPainted(false);
-		sampleItem.setFocusPainted(false);
-		sampleItem.setContentAreaFilled(false);
-		currentInventory.add(sampleItem);
+//		JButton sampleItem = new JButton(swordIcon);
+//		sampleItem.setBorder(null);
+//		sampleItem.setOpaque(false);
+//		sampleItem.setBorderPainted(false);
+//		sampleItem.setFocusPainted(false);
+//		sampleItem.setContentAreaFilled(false);
+//		currentInventory.add(sampleItem);
 		
 		JPanel miscPanel = new JPanel();
 		inventoryPanel.add(miscPanel);
@@ -273,7 +277,7 @@ public class CreaturePanel extends JPanel{
 		btnAddItem.setFocusPainted(false);
 		btnAddItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NewItemWindow newitem = new NewItemWindow(null,panel,main);
+				NewItemWindow newitem = new NewItemWindow(new Item(),panel.getCreature(),main);
 				newitem.setVisible(true);
 				newitem.toFront();
 				//panel.setVisible(false);
@@ -283,8 +287,20 @@ public class CreaturePanel extends JPanel{
 				newitem.addWindowListener(new WindowAdapter(){
 					public void windowClosed(WindowEvent e){
 						// TODO : RETURN NEW ITEM HERE with newitem
-						
-						panel.setVisible(true);
+						try {
+							if(newitem.isFinished()){
+								creature.getInventory().addItem(newitem.getItem());
+//								System.out.println(creature.getInventory().getItems().size());
+//								System.out.println(newitem.getItem().getBuffs().size());
+//								System.out.println(creature.getBuffer().getBuffs().size());
+							}
+							currentBuffs.update();
+							
+						} catch (Exception e1) {
+							
+							e1.printStackTrace();
+						}
+						//panel.setVisible(true);
 						return;
 					}
 				});
@@ -332,9 +348,9 @@ public class CreaturePanel extends JPanel{
 //		
 ////		
 //	}
-	public void updateInventoryPanel (InventoryPanel inventoryPanel){
-		//TODO synchronize InventoryPanel and this.creature Inventory
-	}
+//	public void updateInventoryPanel (InventoryPanel inventoryPanel){
+//		//TODO synchronize InventoryPanel and this.creature Inventory
+//	}
 	
 	
 //	class BuffButton extends JButton{
@@ -439,19 +455,19 @@ public class CreaturePanel extends JPanel{
 //			
 //	}
 	
-	class InventoryPanel extends JPanel implements Observer{
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public void update(Observable arg0, Object arg1) {
-			
-			updateInventoryPanel(this);
-		}
-			
-	}
+//	class InventoryPanel extends JPanel implements Observer{
+//
+//		/**
+//		 * 
+//		 */
+//		private static final long serialVersionUID = 1L;
+//
+//		public void update(Observable arg0, Object arg1) {
+//			
+//			updateInventoryPanel(this);
+//		}
+//			
+//	}
 
 	public Creature getCreature() {
 		// TODO Auto-generated method stub

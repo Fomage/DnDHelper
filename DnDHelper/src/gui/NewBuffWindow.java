@@ -222,6 +222,9 @@ public class NewBuffWindow extends JFrame {
 						
 					}
 				}
+				if(localBuff==null){
+					System.out.println("wtf");
+				}
 				window.dispose(); // TODO : save the new buff information into a new buff
 			}
 		});
@@ -260,13 +263,13 @@ public class NewBuffWindow extends JFrame {
 		
 		publicCombo = new JComboBox<String>();
 		List<String> names = new ArrayList<String>();
-		for(Buff publicbuff : main.getPublicBuff()){
+		for(Buff publicbuff : main.getPublicBuffs()){
 			names.add(publicbuff.getName());
 		}
 		publicCombo.setModel(new DefaultComboBoxModel<String>(names.toArray(new String[names.size()])));
 		publicCombo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				loadBuff(main.getPublicBuff().get(publicCombo.getSelectedIndex()));
+				loadBuff(main.getPublicBuffs().get(publicCombo.getSelectedIndex()));
 
 				
 			}
@@ -301,6 +304,7 @@ public class NewBuffWindow extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					try {
 						creature.getBuffer().removeBuff(localBuff);
+						window.dispose();
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -317,7 +321,7 @@ public class NewBuffWindow extends JFrame {
 		
 	}
 	
-	public NewBuffWindow(Buff buff, Item item, MainWindow main) {
+	public NewBuffWindow(Buff buff, Item item, MainWindow main,BuffPanel buffPanel) {
 		this.localBuff = buff;
 		NewBuffWindow window = this;
 		if(buff == null){
@@ -526,13 +530,13 @@ public class NewBuffWindow extends JFrame {
 		
 		publicCombo = new JComboBox<String>();
 		List<String> names = new ArrayList<String>();
-		for(Buff publicbuff : main.getPublicBuff()){
+		for(Buff publicbuff : main.getPublicBuffs()){
 			names.add(publicbuff.getName());
 		}
 		publicCombo.setModel(new DefaultComboBoxModel<String>(names.toArray(new String[names.size()])));
 		publicCombo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				loadBuff(main.getPublicBuff().get(publicCombo.getSelectedIndex()));
+				loadBuff(main.getPublicBuffs().get(publicCombo.getSelectedIndex()));
 
 				
 			}
@@ -541,22 +545,22 @@ public class NewBuffWindow extends JFrame {
 		publicCombo.setEnabled(false);
 		contentPane.add(publicCombo);
 		
-		chckbxPublicBuff = new JCheckBox("Public Buff");
-		chckbxPublicBuff.setBounds(214, 57, 94, 23);
-		if(localBuff!=null && names.contains(localBuff.getName())){
-			chckbxPublicBuff.setSelected(true);
-			publicCombo.setEnabled(true);
-		}
-		chckbxPublicBuff.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				publicCombo.setEnabled(chckbxPublicBuff.isSelected());
-				
-			}
-		});
-		contentPane.add(chckbxPublicBuff);
+//		chckbxPublicBuff = new JCheckBox("Public Buff");
+//		chckbxPublicBuff.setBounds(214, 57, 94, 23);
+//		if(localBuff!=null && names.contains(localBuff.getName())){
+//			chckbxPublicBuff.setSelected(true);
+//			publicCombo.setEnabled(true);
+//		}
+//		chckbxPublicBuff.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				
+//				publicCombo.setEnabled(chckbxPublicBuff.isSelected());
+//				
+//			}
+//		});
+//		contentPane.add(chckbxPublicBuff);
 		
 		
 		
@@ -566,11 +570,13 @@ public class NewBuffWindow extends JFrame {
 			btnRemove.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
-						item.getBuffs().remove(localBuff);
+						buffPanel.removeFromBuffer(localBuff);
+						buffPanel.update();
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
+					window.dispose();
 				}
 			});
 			btnRemove.setBounds(310, 11, 114, 62);
@@ -607,7 +613,8 @@ public class NewBuffWindow extends JFrame {
 	
 	
 	public Boolean isPublic(){
-		return chckbxPublicBuff.isSelected();
+		
+		return chckbxPublicBuff!=null && chckbxPublicBuff.isSelected();
 	}
 	
 	public Buff getBuff(){
