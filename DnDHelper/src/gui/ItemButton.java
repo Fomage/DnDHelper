@@ -8,35 +8,32 @@ import java.awt.event.WindowEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import core.Buff;
 import core.Creature;
 import core.Item;
 
-
-
 public class ItemButton extends JButton {
-	
+
 	ImageIcon amuletIcon = new ImageIcon("src/gui/images/amulet.png");
 	ImageIcon armorIcon = new ImageIcon("src/gui/images/armor.png");
 	ImageIcon gemIcon = new ImageIcon("src/gui/images/gem.png");
 	ImageIcon ringIcon = new ImageIcon("src/gui/images/ring.png");
 	ImageIcon swordIcon = new ImageIcon("src/gui/images/sword.png");
-	ImageIcon[] icons ={amuletIcon,armorIcon,gemIcon,ringIcon,swordIcon};
+	ImageIcon[] icons = { amuletIcon, armorIcon, gemIcon, ringIcon, swordIcon };
 	ImageIcon image;
-	
+
 	private static final long serialVersionUID = 1L;
 	private Item associatedItem;
-	
-	public ItemButton (Item item,Creature creature,MainWindow main,InventoryPanel currentInventoryPanel){
-		
+
+	public ItemButton(Item item, Creature creature, MainWindow main, InventoryPanel currentInventoryPanel) {
+
 		super();
-		associatedItem=item;
-		
+		associatedItem = item;
+
 		image = icons[item.getType()];
-		
+
 		this.setIcon(image);
-		//TODO set the right icon and update accordingly
-		this.setToolTipText("<html>"+associatedItem.getName()+"<br>"+associatedItem.getDescription()+"</html>");
+		// DONE set the right icon and update accordingly
+		this.setToolTipText("<html>" + associatedItem.getName() + "<br>" + associatedItem.getDescription() + "</html>");
 		this.setItem(associatedItem);
 		this.setBorder(null);
 		this.setOpaque(false);
@@ -44,33 +41,29 @@ public class ItemButton extends JButton {
 		this.setFocusPainted(false);
 		this.setContentAreaFilled(false);
 		this.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO : 2 cases : item or creature dependent
-				NewItemWindow newitem = new NewItemWindow(item,creature,main);
+				// DONE : 2 cases : item or creature dependent
+				NewItemWindow newitem = new NewItemWindow(item, creature, main);
 				newitem.setVisible(true);
-				//panel.setVisible(false);
-//				main.setAlwaysOnTop(false);
+				// panel.setVisible(false);
+				// main.setAlwaysOnTop(false);
 				newitem.toFront();
-				
-				
-				newitem.addWindowListener(new WindowAdapter(){
-					public void windowClosed(WindowEvent e){
-						
-					
+
+				newitem.addWindowListener(new WindowAdapter() {
+					public void windowClosed(WindowEvent e) {
+
 						currentInventoryPanel.update();
-						
-						// TODO : RETURN NEW BUFF HERE with newbuff
+
+						// DONE : RETURN NEW BUFF HERE with newbuff
 						return;
 					}
 				});
-				
+
 			}
 		});
 	}
-	
-	
 
 	public Item getItem() {
 		return associatedItem;

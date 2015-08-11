@@ -52,14 +52,13 @@ public class NewBuffWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public NewBuffWindow(Buff buff,Creature creature,MainWindow main) {
+	public NewBuffWindow(Buff buff, Creature creature, MainWindow main) {
 		this.localBuff = buff;
 		NewBuffWindow window = this;
-		if(buff == null){
+		if (buff == null) {
 			setTitle("New Buff");
-		}
-		else{
-		
+		} else {
+
 			setTitle("Edit Buff");
 		}
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -68,193 +67,193 @@ public class NewBuffWindow extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		txtName = new JTextField();
 		txtName.setToolTipText("Enter a name");
 		txtName.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtName.setBounds(5, 5, 203, 32);
-		
+
 		contentPane.add(txtName);
 		txtName.setColumns(10);
-		
+
 		txtpnDescription = new JTextPane();
-		
+
 		txtpnDescription.setBounds(5, 92, 419, 86);
 		contentPane.add(txtpnDescription);
-		
+
 		spinnerMod = new JSpinner();
 		spinnerMod.setBounds(223, 207, 47, 32);
 		contentPane.add(spinnerMod);
-		
-		
+
 		statorskillBox = new JComboBox<String>();
-		statorskillBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Skill", "Stat"}));
+		statorskillBox.setModel(new DefaultComboBoxModel<String>(new String[] { "Skill", "Stat" }));
 		statorskillBox.setBounds(5, 207, 45, 32);
 		contentPane.add(statorskillBox);
-		
-		
-		
+
 		skillComboBox = new JComboBox<String>();
 		String[] skills = new String[creature.getSkills().getSkills().size()];
 		int c = 0;
-		for(Skill skill : creature.getSkills().getSkills()){
+		for (Skill skill : creature.getSkills().getSkills()) {
 			skills[c] = skill.getName();
 			c++;
 		}
 		skillComboBox.setModel(new DefaultComboBoxModel<String>(skills));
 		skillComboBox.setBounds(60, 207, 153, 32);
 		contentPane.add(skillComboBox);
-				
 
 		statComboBox = new JComboBox<String>();
-		statComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Force", "Dextérité","Constitution","Intelligence","Sagesse","Charisme"}));
+		statComboBox.setModel(new DefaultComboBoxModel<String>(
+				new String[] { "Force", "Dextérité", "Constitution", "Intelligence", "Sagesse", "Charisme" }));
 		statComboBox.setBounds(60, 207, 153, 32);
 		contentPane.add(statComboBox);
-		
-		
-		if(statorskillBox.getSelectedItem() == "Skill"){
-			//TODO load the correct skill
+
+		if (statorskillBox.getSelectedItem() == "Skill") {
+			// DONE load the correct skill
 			statComboBox.setVisible(false);
-		}
-		else{
+		} else {
 			skillComboBox.setVisible(false);
 		}
-		
-		
-		
-		
+
 		statorskillBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(statorskillBox.getSelectedItem()=="Stat"){
+				if (statorskillBox.getSelectedItem() == "Stat") {
 					statComboBox.setVisible(true);
 					skillComboBox.setVisible(false);
-				}
-				else{
+				} else {
 					statComboBox.setVisible(false);
 					skillComboBox.setVisible(true);
 				}
-				
+
 			}
 		});
-		
+
 		chckbxPositiveBuff = new JCheckBox("Positive Buff");
 		chckbxPositiveBuff.setBounds(214, 5, 94, 23);
 		contentPane.add(chckbxPositiveBuff);
-		
+
 		chckbxHiddenBuff = new JCheckBox("Hidden Buff");
 		chckbxHiddenBuff.setBounds(214, 31, 94, 23);
 		contentPane.add(chckbxHiddenBuff);
 
-		
-		
 		JButton btnOK = new JButton("OK");
 		btnOK.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				finished = true;
-				//creaturePanel.setVisible(true);
-				if(localBuff!=null){
-					if(statorskillBox.getSelectedItem() == "Stats" && localBuff instanceof SkillBuff){
-						
-					}
-					else if(statorskillBox.getSelectedItem() == "Skill" && localBuff instanceof StatBuff){
-						
-					}
-					else{
-						if(localBuff instanceof StatBuff){
+				// creaturePanel.setVisible(true);
+				if (localBuff != null) {
+					if (statorskillBox.getSelectedItem() == "Stats" && localBuff instanceof SkillBuff) {
+						// TODO : swap Class of Buff
+					} else if (statorskillBox.getSelectedItem() == "Skill" && localBuff instanceof StatBuff) {
+
+					} else {
+						if (localBuff instanceof StatBuff) {
 							int stat = Stats.Fo;
-							switch((String)statComboBox.getSelectedItem()){
-							case "Force": stat= Stats.Fo;
+							switch ((String) statComboBox.getSelectedItem()) {
+							case "Force":
+								stat = Stats.Fo;
 								break;
-							case "Dextérité": stat= Stats.Dex;
+							case "Dextérité":
+								stat = Stats.Dex;
 								break;
-							case "Constitution": stat= Stats.Con;
+							case "Constitution":
+								stat = Stats.Con;
 								break;
-							case "Intelligence": stat= Stats.Int;
-								break;	
-							case "Sagesse": stat= Stats.Sag;
-								break;	
-							case "Charisme": stat= Stats.Cha;
-								break;	
+							case "Intelligence":
+								stat = Stats.Int;
+								break;
+							case "Sagesse":
+								stat = Stats.Sag;
+								break;
+							case "Charisme":
+								stat = Stats.Cha;
+								break;
 							}
 							try {
 								((StatBuff) localBuff).setStat(stat);
-								((StatBuff) localBuff).setMod((int)spinnerMod.getValue());
+								((StatBuff) localBuff).setMod((int) spinnerMod.getValue());
 								((StatBuff) localBuff).setName(txtName.getText());
 								((StatBuff) localBuff).setHidden(chckbxHiddenBuff.isSelected());
 								((StatBuff) localBuff).setPositive(chckbxPositiveBuff.isSelected());
 							} catch (Exception e) {
-								// TODO Auto-generated catch block
+
 								e.printStackTrace();
 							}
-						}
-						else{
+						} else {
 							try {
-								((SkillBuff)localBuff).setSkill((String)skillComboBox.getSelectedItem());
-								((SkillBuff)localBuff).setMod((int)spinnerMod.getValue());
-								((SkillBuff)localBuff).setName(txtName.getText());
-								((SkillBuff)localBuff).setHidden(chckbxHiddenBuff.isSelected());
-								((SkillBuff)localBuff).setPositive(chckbxPositiveBuff.isSelected());
+								((SkillBuff) localBuff).setSkill((String) skillComboBox.getSelectedItem());
+								((SkillBuff) localBuff).setMod((int) spinnerMod.getValue());
+								((SkillBuff) localBuff).setName(txtName.getText());
+								((SkillBuff) localBuff).setHidden(chckbxHiddenBuff.isSelected());
+								((SkillBuff) localBuff).setPositive(chckbxPositiveBuff.isSelected());
 							} catch (Exception e) {
-								// TODO Auto-generated catch block
+
 								e.printStackTrace();
-							}						
+							}
 						}
 					}
-				}
-				else{
-					if(statorskillBox.getSelectedItem()=="Stat"){
+				} else {
+					if (statorskillBox.getSelectedItem() == "Stat") {
 						int stat = Stats.Fo;
-						switch((String)statComboBox.getSelectedItem()){
-						case "Force": stat= Stats.Fo;
+						switch ((String) statComboBox.getSelectedItem()) {
+						case "Force":
+							stat = Stats.Fo;
 							break;
-						case "Dextérité": stat= Stats.Dex;
+						case "Dextérité":
+							stat = Stats.Dex;
 							break;
-						case "Constitution": stat= Stats.Con;
+						case "Constitution":
+							stat = Stats.Con;
 							break;
-						case "Intelligence": stat= Stats.Int;
-							break;	
-						case "Sagesse": stat= Stats.Sag;
-							break;	
-						case "Charisme": stat= Stats.Cha;
-							break;	
+						case "Intelligence":
+							stat = Stats.Int;
+							break;
+						case "Sagesse":
+							stat = Stats.Sag;
+							break;
+						case "Charisme":
+							stat = Stats.Cha;
+							break;
 						}
 						try {
 							String desc = txtpnDescription.getText();
-							if(desc.equals("Buff Description")){
+							if (desc.equals("Buff Description")) {
 								desc = "";
 							}
-							localBuff = new StatBuff(stat,(int)spinnerMod.getValue(),txtName.getText(),chckbxHiddenBuff.isSelected(),chckbxPositiveBuff.isSelected());
+							localBuff = new StatBuff(stat, (int) spinnerMod.getValue(), txtName.getText(),
+									chckbxHiddenBuff.isSelected(), chckbxPositiveBuff.isSelected());
 							localBuff.setDescription(desc);
-							Serializer.save(localBuff, "./"+localBuff.getName()+".buf");
+							Serializer.save(localBuff, "./" + localBuff.getName() + ".buf");
 						}
-							
-						 catch (Exception e) {
-							// TODO Auto-generated catch block
+
+						catch (Exception e) {
+
 							e.printStackTrace();
 						}
-					}
-					else{
+					} else {
 						try {
 							String desc = txtpnDescription.getText();
-							if(desc.equals("Buff Description")){
+							if (desc.equals("Buff Description")) {
 								desc = "";
 							}
-							localBuff = new SkillBuff((String)skillComboBox.getSelectedItem(),(int)spinnerMod.getValue(),txtName.getText(),chckbxHiddenBuff.isSelected(),chckbxPositiveBuff.isSelected());
+							localBuff = new SkillBuff((String) skillComboBox.getSelectedItem(),
+									(int) spinnerMod.getValue(), txtName.getText(), chckbxHiddenBuff.isSelected(),
+									chckbxPositiveBuff.isSelected());
 							localBuff.setDescription(desc);
-							Serializer.save(localBuff, "./"+localBuff.getName()+".buf");
+							Serializer.save(localBuff, "./" + localBuff.getName() + ".buf");
 						}
-							
-						 catch (Exception e) {
-							// TODO Auto-generated catch block
+
+						catch (Exception e) {
+
 							e.printStackTrace();
 						}
 					}
 				}
-				if(localBuff==null){
+				if (localBuff == null) {
 					System.out.println("wtf");
 				}
-				window.dispose(); // TODO : save the new buff information into a new buff
+				window.dispose(); // DONE : save the new buff information into a
+									// new buff
 			}
 		});
 		btnOK.setBounds(280, 189, 144, 62);
@@ -263,38 +262,35 @@ public class NewBuffWindow extends JFrame {
 		JButton btnLoadSavedBuff = new JButton("Saved");
 		btnLoadSavedBuff.setBounds(5, 48, 63, 29);
 		btnLoadSavedBuff.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+
 				JFileChooser chooser = new JFileChooser(".");
-				FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				        "Buff Files", "buf");
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Buff Files", "buf");
 				chooser.setFileFilter(filter);
+				@SuppressWarnings("unused")
 				int returnVal = chooser.showOpenDialog(main);
-				
+
 				try {
-					//System.out.println(chooser.getSelectedFile().getPath());
-					if(chooser.getSelectedFile()!=null){
-						loadBuff((Buff)Serializer.load(chooser.getSelectedFile().getPath()));
+					// System.out.println(chooser.getSelectedFile().getPath());
+					if (chooser.getSelectedFile() != null) {
+						loadBuff((Buff) Serializer.load(chooser.getSelectedFile().getPath()));
 					}
-					
+
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
+
 					e1.printStackTrace();
 				}
-				
-				//System.out.println(chooser.getSelectedFile().getName());
+
+				// System.out.println(chooser.getSelectedFile().getName());
 			}
 		});
 		contentPane.add(btnLoadSavedBuff);
-		
-		
 
-		
 		publicCombo = new JComboBox<String>();
 		List<String> names = new ArrayList<String>();
-		for(Buff publicbuff : main.getPublicBuffs()){
+		for (Buff publicbuff : main.getPublicBuffs()) {
 			names.add(publicbuff.getName());
 		}
 		publicCombo.setModel(new DefaultComboBoxModel<String>(names.toArray(new String[names.size()])));
@@ -302,33 +298,30 @@ public class NewBuffWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				loadBuff(main.getPublicBuffs().get(publicCombo.getSelectedIndex()));
 
-				
 			}
 		});
 		publicCombo.setBounds(85, 48, 123, 29);
 		publicCombo.setEnabled(false);
 		contentPane.add(publicCombo);
-		
+
 		chckbxPublicBuff = new JCheckBox("Public Buff");
 		chckbxPublicBuff.setBounds(214, 57, 94, 23);
-		if(localBuff!=null && names.contains(localBuff.getName())){
+		if (localBuff != null && names.contains(localBuff.getName())) {
 			chckbxPublicBuff.setSelected(true);
 			publicCombo.setEnabled(true);
 		}
 		chckbxPublicBuff.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 				publicCombo.setEnabled(chckbxPublicBuff.isSelected());
-				
+
 			}
 		});
 		contentPane.add(chckbxPublicBuff);
-		
-		
-		
-		if(localBuff!= null){
+
+		if (localBuff != null) {
 			JButton btnRemove = new JButton("REMOVE");
 			btnRemove.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			btnRemove.addActionListener(new ActionListener() {
@@ -337,7 +330,7 @@ public class NewBuffWindow extends JFrame {
 						creature.getBuffer().removeBuff(localBuff);
 						window.dispose();
 					} catch (Exception e1) {
-						// TODO Auto-generated catch block
+
 						e1.printStackTrace();
 					}
 				}
@@ -345,21 +338,16 @@ public class NewBuffWindow extends JFrame {
 			btnRemove.setBounds(310, 11, 114, 62);
 			contentPane.add(btnRemove);
 		}
-		
-		
-		
-		
-		
+
 	}
-	
-	public NewBuffWindow(Buff buff, Item item, MainWindow main,BuffPanel buffPanel) {
+
+	public NewBuffWindow(Buff buff, Item item, MainWindow main, BuffPanel buffPanel) {
 		this.localBuff = buff;
 		NewBuffWindow window = this;
-		if(buff == null){
+		if (buff == null) {
 			setTitle("New Buff");
-		}
-		else{
-		
+		} else {
+
 			setTitle("Edit Buff");
 		}
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -368,162 +356,160 @@ public class NewBuffWindow extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		txtName = new JTextField();
 		txtName.setToolTipText("Enter a name");
 		txtName.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtName.setBounds(5, 5, 203, 32);
-		
+
 		contentPane.add(txtName);
 		txtName.setColumns(10);
-		
+
 		txtpnDescription = new JTextPane();
-		
+
 		txtpnDescription.setBounds(5, 92, 419, 86);
 		contentPane.add(txtpnDescription);
-		
+
 		spinnerMod = new JSpinner();
 		spinnerMod.setBounds(223, 207, 47, 32);
 		contentPane.add(spinnerMod);
-		
-		
+
 		statorskillBox = new JComboBox<String>();
-		statorskillBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Skill", "Stat"}));
+		statorskillBox.setModel(new DefaultComboBoxModel<String>(new String[] { "Skill", "Stat" }));
 		statorskillBox.setBounds(5, 207, 45, 32);
 		contentPane.add(statorskillBox);
-		
-		
-		
+
 		skillComboBox = new JComboBox<String>();
-		skillComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Skill 1", "Skill 2"}));
+		skillComboBox.setModel(new DefaultComboBoxModel<String>(new String[] { "Skill 1", "Skill 2" }));
 		skillComboBox.setBounds(60, 207, 153, 32);
 		contentPane.add(skillComboBox);
-				
 
 		statComboBox = new JComboBox<String>();
-		statComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Force", "Dextérité","Constitution","Intelligence","Sagesse","Charisme"}));
+		statComboBox.setModel(new DefaultComboBoxModel<String>(
+				new String[] { "Force", "Dextérité", "Constitution", "Intelligence", "Sagesse", "Charisme" }));
 		statComboBox.setBounds(60, 207, 153, 32);
 		contentPane.add(statComboBox);
-		
-		
-		if(statorskillBox.getSelectedItem() == "Skill"){
-			//TODO load the correct skill
+
+		if (statorskillBox.getSelectedItem() == "Skill") {
+			// DONE load the correct skill
 			statComboBox.setVisible(false);
-		}
-		else{
+		} else {
 			skillComboBox.setVisible(false);
 		}
-		
-		
-		
-		
+
 		statorskillBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(statorskillBox.getSelectedItem()=="Stat"){
+				if (statorskillBox.getSelectedItem() == "Stat") {
 					statComboBox.setVisible(true);
 					skillComboBox.setVisible(false);
-				}
-				else{
+				} else {
 					statComboBox.setVisible(false);
 					skillComboBox.setVisible(true);
 				}
-				
+
 			}
 		});
-		
+
 		chckbxPositiveBuff = new JCheckBox("Positive Buff");
 		chckbxPositiveBuff.setBounds(214, 5, 94, 23);
 		contentPane.add(chckbxPositiveBuff);
-		
+
 		chckbxHiddenBuff = new JCheckBox("Hidden Buff");
 		chckbxHiddenBuff.setBounds(214, 31, 94, 23);
 		contentPane.add(chckbxHiddenBuff);
 
-		
-		
 		JButton btnOK = new JButton("OK");
 		btnOK.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				finished = true;
-				//creaturePanel.setVisible(true);
-				if(localBuff!=null){
-					if(statorskillBox.getSelectedItem() == "Stats" && localBuff instanceof SkillBuff){
-						
-					}
-					else if(statorskillBox.getSelectedItem() == "Skill" && localBuff instanceof StatBuff){
-						
-					}
-					else{
-						if(localBuff instanceof StatBuff){
+				// creaturePanel.setVisible(true);
+				if (localBuff != null) {
+					if (statorskillBox.getSelectedItem() == "Stats" && localBuff instanceof SkillBuff) {
+
+					} else if (statorskillBox.getSelectedItem() == "Skill" && localBuff instanceof StatBuff) {
+
+					} else {
+						if (localBuff instanceof StatBuff) {
 							int stat = Stats.Fo;
-							switch((String)statComboBox.getSelectedItem()){
-							case "Force": stat= Stats.Fo;
+							switch ((String) statComboBox.getSelectedItem()) {
+							case "Force":
+								stat = Stats.Fo;
 								break;
-							case "Dextérité": stat= Stats.Dex;
+							case "Dextérité":
+								stat = Stats.Dex;
 								break;
-							case "Constitution": stat= Stats.Con;
+							case "Constitution":
+								stat = Stats.Con;
 								break;
-							case "Intelligence": stat= Stats.Int;
-								break;	
-							case "Sagesse": stat= Stats.Sag;
-								break;	
-							case "Charisme": stat= Stats.Cha;
-								break;	
+							case "Intelligence":
+								stat = Stats.Int;
+								break;
+							case "Sagesse":
+								stat = Stats.Sag;
+								break;
+							case "Charisme":
+								stat = Stats.Cha;
+								break;
 							}
 							try {
 								((StatBuff) localBuff).setStat(stat);
-								((StatBuff) localBuff).setMod((int)spinnerMod.getValue());
+								((StatBuff) localBuff).setMod((int) spinnerMod.getValue());
 								((StatBuff) localBuff).setName(txtName.getText());
 								((StatBuff) localBuff).setHidden(chckbxHiddenBuff.isSelected());
 								((StatBuff) localBuff).setPositive(chckbxPositiveBuff.isSelected());
 							} catch (Exception e) {
-								// TODO Auto-generated catch block
+
 								e.printStackTrace();
 							}
-						}
-						else{
-							
+						} else {
+
 						}
 					}
-				}
-				else{
-					if(statorskillBox.getSelectedItem()=="Stat"){
+				} else {
+					if (statorskillBox.getSelectedItem() == "Stat") {
 						int stat = Stats.Fo;
-						switch((String)statComboBox.getSelectedItem()){
-						case "Force": stat= Stats.Fo;
+						switch ((String) statComboBox.getSelectedItem()) {
+						case "Force":
+							stat = Stats.Fo;
 							break;
-						case "Dextérité": stat= Stats.Dex;
+						case "Dextérité":
+							stat = Stats.Dex;
 							break;
-						case "Constitution": stat= Stats.Con;
+						case "Constitution":
+							stat = Stats.Con;
 							break;
-						case "Intelligence": stat= Stats.Int;
-							break;	
-						case "Sagesse": stat= Stats.Sag;
-							break;	
-						case "Charisme": stat= Stats.Cha;
-							break;	
+						case "Intelligence":
+							stat = Stats.Int;
+							break;
+						case "Sagesse":
+							stat = Stats.Sag;
+							break;
+						case "Charisme":
+							stat = Stats.Cha;
+							break;
 						}
 						try {
 							String desc = txtpnDescription.getText();
-							if(desc.equals("Buff Description")){
+							if (desc.equals("Buff Description")) {
 								desc = "";
 							}
-							localBuff = new StatBuff(stat,(int)spinnerMod.getValue(),txtName.getText(),chckbxHiddenBuff.isSelected(),chckbxPositiveBuff.isSelected());
+							localBuff = new StatBuff(stat, (int) spinnerMod.getValue(), txtName.getText(),
+									chckbxHiddenBuff.isSelected(), chckbxPositiveBuff.isSelected());
 							localBuff.setDescription(desc);
-							Serializer.save(localBuff, "./"+localBuff.getName()+".buf");
+							Serializer.save(localBuff, "./" + localBuff.getName() + ".buf");
 						}
-							
-						 catch (Exception e) {
-							// TODO Auto-generated catch block
+
+						catch (Exception e) {
+
 							e.printStackTrace();
 						}
-					}
-					else{
-						
+					} else {
+
 					}
 				}
-				window.dispose(); // TODO : save the new buff information into a new buff
+				window.dispose(); // DONE : save the new buff information into a
+									// new buff
 			}
 		});
 		btnOK.setBounds(280, 189, 144, 62);
@@ -532,38 +518,35 @@ public class NewBuffWindow extends JFrame {
 		JButton btnLoadSavedBuff = new JButton("Saved");
 		btnLoadSavedBuff.setBounds(5, 48, 63, 29);
 		btnLoadSavedBuff.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+
 				JFileChooser chooser = new JFileChooser(".");
-				FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				        "Buff Files", "buf");
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Buff Files", "buf");
 				chooser.setFileFilter(filter);
+				@SuppressWarnings("unused")
 				int returnVal = chooser.showOpenDialog(main);
-				
+
 				try {
-					//System.out.println(chooser.getSelectedFile().getPath());
-					
-					if(chooser.getSelectedFile()!=null){
-						loadBuff((Buff)Serializer.load(chooser.getSelectedFile().getPath()));
+					// System.out.println(chooser.getSelectedFile().getPath());
+
+					if (chooser.getSelectedFile() != null) {
+						loadBuff((Buff) Serializer.load(chooser.getSelectedFile().getPath()));
 					}
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
+
 					e1.printStackTrace();
 				}
-				
-				//System.out.println(chooser.getSelectedFile().getName());
+
+				// System.out.println(chooser.getSelectedFile().getName());
 			}
 		});
 		contentPane.add(btnLoadSavedBuff);
-		
-		
 
-		
 		publicCombo = new JComboBox<String>();
 		List<String> names = new ArrayList<String>();
-		for(Buff publicbuff : main.getPublicBuffs()){
+		for (Buff publicbuff : main.getPublicBuffs()) {
 			names.add(publicbuff.getName());
 		}
 		publicCombo.setModel(new DefaultComboBoxModel<String>(names.toArray(new String[names.size()])));
@@ -571,33 +554,30 @@ public class NewBuffWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				loadBuff(main.getPublicBuffs().get(publicCombo.getSelectedIndex()));
 
-				
 			}
 		});
 		publicCombo.setBounds(85, 48, 123, 29);
 		publicCombo.setEnabled(false);
 		contentPane.add(publicCombo);
-		
-//		chckbxPublicBuff = new JCheckBox("Public Buff");
-//		chckbxPublicBuff.setBounds(214, 57, 94, 23);
-//		if(localBuff!=null && names.contains(localBuff.getName())){
-//			chckbxPublicBuff.setSelected(true);
-//			publicCombo.setEnabled(true);
-//		}
-//		chckbxPublicBuff.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				
-//				publicCombo.setEnabled(chckbxPublicBuff.isSelected());
-//				
-//			}
-//		});
-//		contentPane.add(chckbxPublicBuff);
-		
-		
-		
-		if(localBuff!= null){
+
+		// chckbxPublicBuff = new JCheckBox("Public Buff");
+		// chckbxPublicBuff.setBounds(214, 57, 94, 23);
+		// if(localBuff!=null && names.contains(localBuff.getName())){
+		// chckbxPublicBuff.setSelected(true);
+		// publicCombo.setEnabled(true);
+		// }
+		// chckbxPublicBuff.addActionListener(new ActionListener() {
+		//
+		// @Override
+		// public void actionPerformed(ActionEvent e) {
+		//
+		// publicCombo.setEnabled(chckbxPublicBuff.isSelected());
+		//
+		// }
+		// });
+		// contentPane.add(chckbxPublicBuff);
+
+		if (localBuff != null) {
 			JButton btnRemove = new JButton("REMOVE");
 			btnRemove.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			btnRemove.addActionListener(new ActionListener() {
@@ -606,7 +586,7 @@ public class NewBuffWindow extends JFrame {
 						buffPanel.removeFromBuffer(localBuff);
 						buffPanel.update();
 					} catch (Exception e1) {
-						// TODO Auto-generated catch block
+
 						e1.printStackTrace();
 					}
 					window.dispose();
@@ -617,46 +597,41 @@ public class NewBuffWindow extends JFrame {
 		}
 	}
 
-	private void loadBuff(Buff buff){
+	private void loadBuff(Buff buff) {
 		this.localBuff = buff;
-		if(buff==null){
+		if (buff == null) {
 			txtName.setText("Buff Name");
 			txtpnDescription.setText("Buff Description");
-		}
-		else{
+		} else {
 			txtName.setText(buff.getName());
 			txtpnDescription.setText(buff.getDescription());
-			if(buff instanceof StatBuff){
-				statComboBox.setSelectedIndex(((StatBuff)buff).getStat());
+			if (buff instanceof StatBuff) {
+				statComboBox.setSelectedIndex(((StatBuff) buff).getStat());
 				spinnerMod.setValue(((StatBuff) buff).getMod());
 				statorskillBox.setSelectedIndex(1);
 			}
-			if(buff instanceof SkillBuff){
-				skillComboBox.setSelectedItem(((SkillBuff)buff).getSkill());
+			if (buff instanceof SkillBuff) {
+				skillComboBox.setSelectedItem(((SkillBuff) buff).getSkill());
 				spinnerMod.setValue(((SkillBuff) buff).getMod());
 			}
 			chckbxPositiveBuff.setSelected(buff.isPositive());
 			chckbxHiddenBuff.setSelected(buff.isHidden());
-			
+
 		}
-		
+
 	}
-	
-	
-	
-	
-	
-	public Boolean isPublic(){
-		
-		return chckbxPublicBuff!=null && chckbxPublicBuff.isSelected();
+
+	public Boolean isPublic() {
+
+		return chckbxPublicBuff != null && chckbxPublicBuff.isSelected();
 	}
-	
-	public Buff getBuff(){
+
+	public Buff getBuff() {
 		return localBuff;
 	}
 
 	public boolean isFinished() {
-		// TODO Auto-generated method stub
+
 		return finished;
 	}
 }

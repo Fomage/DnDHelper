@@ -20,49 +20,47 @@ public class BuffPanel extends JPanel implements Observer {
 	private Item item;
 	private List<Buff> tempBuffer = new ArrayList<Buff>();
 
-	
-	public BuffPanel(MainWindow main,CreaturePanel creaturePanel){
+	public BuffPanel(MainWindow main, CreaturePanel creaturePanel) {
 		super();
-		this.associatedCreature=creaturePanel.getCreature();
+		this.associatedCreature = creaturePanel.getCreature();
 		this.main = main;
 		isCreatureBound = true;
 	}
-	
-	public BuffPanel(MainWindow main, Item item){
+
+	public BuffPanel(MainWindow main, Item item) {
 		super();
 		this.main = main;
 		isCreatureBound = false;
 		this.item = item;
 	}
+
 	private static final long serialVersionUID = 1L;
 
 	public void update(Observable arg0, Object arg1) {
 		update();
-		
+
 	}
-	
-	public void update(){
+
+	public void update() {
 		List<Buff> buffs;
-		if(isCreatureBound){
+		if (isCreatureBound) {
 			buffs = associatedCreature.getBuffer().getBuffs();
-			
-		}
-		else{
+
+		} else {
 			buffs = tempBuffer;
-			//System.out.println(buffs.size());
+			// System.out.println(buffs.size());
 		}
 		this.removeAll();
-		
-		for(Buff buff : buffs){
-			//System.out.println(buff.getName());
+
+		for (Buff buff : buffs) {
+			// System.out.println(buff.getName());
 			BuffButton associatedButton;
-			if(isCreatureBound){
-				associatedButton = new BuffButton(buff,associatedCreature,main,this);
+			if (isCreatureBound) {
+				associatedButton = new BuffButton(buff, associatedCreature, main, this);
+			} else {
+				associatedButton = new BuffButton(buff, item, main, this);
 			}
-			else{
-				associatedButton = new BuffButton(buff,item,main,this);
-			}
-			
+
 			this.add(associatedButton);
 		}
 		this.invalidate();
@@ -71,34 +69,33 @@ public class BuffPanel extends JPanel implements Observer {
 	}
 
 	public void setItem(Item associatedItem) {
-	
+
 		item = associatedItem;
 		item.addObserver(this);
-		
+
 	}
-	
-	public void removeFromBuffer(Buff buff){
+
+	public void removeFromBuffer(Buff buff) {
 		tempBuffer.remove(buff);
 	}
-	
-	public void addToBuffer(Buff buff){
+
+	public void addToBuffer(Buff buff) {
 		tempBuffer.add(buff);
 	}
-	
-	
-	public void applyBuffsToItem(){
-		
-		
+
+	public void applyBuffsToItem() {
+
 		try {
 			item.removeAllBuffs();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
-		
-		if(!isCreatureBound){
-			for(Buff buff : tempBuffer){
-				//System.out.println("Applying "+buff.getName()+" to "+item.getName());
+
+		if (!isCreatureBound) {
+			for (Buff buff : tempBuffer) {
+				// System.out.println("Applying "+buff.getName()+" to
+				// "+item.getName());
 				item.addBuff(buff);
 			}
 		}
