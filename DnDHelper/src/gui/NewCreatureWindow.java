@@ -2,14 +2,21 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -18,8 +25,13 @@ import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
+import core.Buff;
 import core.Creature;
+import core.Serializer;
+import core.Skill;
+import core.Skills;
 import core.Stats;
 
 @SuppressWarnings("serial")
@@ -31,6 +43,7 @@ public class NewCreatureWindow extends JFrame {
 	private JPanel[] statPanels;
 	private int[] tempStats;
 	Creature creature;
+	private JPanel[] skillPanels;
 	
 	public NewCreatureWindow(){
 		
@@ -59,7 +72,7 @@ public class NewCreatureWindow extends JFrame {
 		
 		
 		txtCreatureName = new JTextField();
-		txtCreatureName.setToolTipText("Enter a fucking name wtf are you retarded?");
+		txtCreatureName.setToolTipText("Enter a name");
 		txtCreatureName.setText(creature.getName());
 		txtCreatureName.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtCreatureName.setColumns(10);
@@ -93,30 +106,18 @@ public class NewCreatureWindow extends JFrame {
 		creatureInfo.add(creatureSkills, BorderLayout.EAST);
 		creatureSkills.setLayout(new BoxLayout(creatureSkills, BoxLayout.Y_AXIS));
 		
-		JPanel sampleSkill = new JPanel();
-		creatureSkills.add(sampleSkill);
+		this.skillPanels = createSkillPanels();
+		for(JPanel skillPanel : skillPanels){
+			creatureSkills.add(skillPanel);
+		}
 		
-		JTextPane txtpnSampleskillname = new JTextPane();
-		txtpnSampleskillname.setEditable(false);
-		txtpnSampleskillname.setOpaque(false);
-		txtpnSampleskillname.setText("sampleSkillName");
-		sampleSkill.add(txtpnSampleskillname);
-		
-		JSpinner skillRankSpinner = new JSpinner();
-		sampleSkill.add(skillRankSpinner);
-		
-		JTextPane txtpnSampleskilltotvalue = new JTextPane();
-		txtpnSampleskilltotvalue.setOpaque(false);
-		txtpnSampleskilltotvalue.setEditable(false);
-		txtpnSampleskilltotvalue.setText("total");
-		sampleSkill.add(txtpnSampleskilltotvalue);
 		
 		Component horizontalGlue = Box.createHorizontalGlue();
 		creatureInfo.add(horizontalGlue, BorderLayout.CENTER);
 		
-		JButton button = new JButton("OK");
-		button.setBorder(null);
-		button.addActionListener(new ActionListener() {
+		JButton okButton = new JButton("OK");
+		okButton.setBorder(null);
+		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				NewCreatureWindow.this.creature.setName(NewCreatureWindow.this.txtCreatureName.getText());
@@ -129,17 +130,59 @@ public class NewCreatureWindow extends JFrame {
 						e.printStackTrace();
 					}
 				}
-				
+				try {
+					Serializer.save(NewCreatureWindow.this.creature,"./"+creature.getName()+".cre");
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				finished = true;
 				window.dispose();
 			}
 		});
-		button.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		button.setBounds(15, 401, 408, 62);
-		contentPane.add(button);
+		okButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		okButton.setBounds(15, 401, 408, 62);
+		contentPane.add(okButton);
 		
 		JButton btnLoadExistingCreature = new JButton("Load Existing Creature");
 		btnLoadExistingCreature.setBounds(250, 15, 143, 26);
+		btnLoadExistingCreature.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser(".");
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				        "Creature Files", "cre");
+				chooser.setFileFilter(filter);
+				int returnVal = chooser.showOpenDialog(window);
+				
+				try {
+					//System.out.println(chooser.getSelectedFile().getPath());
+					if(chooser.getSelectedFile()!= null){
+						NewCreatureWindow loadedCreature = new NewCreatureWindow((Creature)Serializer.load(chooser.getSelectedFile().getPath()));
+						loadedCreature.setVisible(true);
+						loadedCreature.toFront();
+						loadedCreature.addWindowListener(new WindowAdapter(){
+							public void windowClosed(WindowEvent e){
+								if(loadedCreature.isFinished()){
+									finished= true;
+									NewCreatureWindow.this.creature = loadedCreature.getCreature();
+								}
+								window.dispose();
+								
+								
+								
+							}
+						});
+						window.setVisible(false);
+					}
+					
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		contentPane.add(btnLoadExistingCreature);
 		}
 	
@@ -152,13 +195,15 @@ public class NewCreatureWindow extends JFrame {
 	}
 	
 	
+	
+	
 	public JPanel[] createStatPanels(){
 		JPanel[] res = new JPanel[6];
 		for(int i = 0 ; i <6 ; i++){
 		
 			JPanel statPanel = new JPanel();
 			
-			statPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			statPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 			
 			JTextPane txtpnStatName = new JTextPane();
 			txtpnStatName.setOpaque(false);
@@ -205,6 +250,7 @@ public class NewCreatureWindow extends JFrame {
 					}
 					try {
 						NewCreatureWindow.this.tempStats[((statSpinner) arg0.getSource()).getStat()]=(int) statValueSpinner.getValue();
+						creature.getStats().setStat(((statSpinner) arg0.getSource()).getStat(),(int) statValueSpinner.getValue());
 						
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
@@ -234,6 +280,93 @@ public class NewCreatureWindow extends JFrame {
 			
 		}
 		return res;
+	}
+	
+	public JPanel[] createSkillPanels(){
+		
+		
+		List<Skill> skillList = creature.getSkills().getSkills();
+		JPanel[] res = new JPanel[skillList.size()];
+		int c = 0;
+		
+		for(Skill skill :skillList){
+
+			JPanel skillPanel = new JPanel();
+			
+			skillPanel.setLayout(new FlowLayout(FlowLayout.RIGHT,5,5));
+			
+			JTextPane txtpnSkillName = new JTextPane();
+			txtpnSkillName.setOpaque(false);
+			txtpnSkillName.setEditable(false);
+			txtpnSkillName.setText(skill.getName());
+			
+			skillPanel.add(txtpnSkillName);
+			
+			class SkillSpinner extends JSpinner{
+				private Skill skill;
+				public SkillSpinner(Skill skill){
+					super();
+					this.skill = skill;
+				}
+				public Skill getSkill(){
+					return skill;
+				}
+			}
+			JSpinner skillValueSpinner = new SkillSpinner(skill);
+			skillValueSpinner.setValue(skill.getMod());
+			
+			
+			
+			skillValueSpinner.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent arg0) {
+					
+				
+					
+					skill.setMod((int)skillValueSpinner.getValue());
+					
+					
+					
+					
+				}
+			});
+			
+			
+			skillPanel.add(skillValueSpinner);
+			
+			class SkillTotValue extends JTextPane implements Observer{
+
+	
+				public void update(Observable arg0, Object arg1) {
+					// TODO Auto-generated method stub
+					try {
+						setText(skill.getScore()+"");
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+			}
+			
+			SkillTotValue txtpnSkilltotvalue = new SkillTotValue();
+			
+			
+			creature.addObserver(txtpnSkilltotvalue);
+			txtpnSkilltotvalue.setOpaque(false);
+			txtpnSkilltotvalue.setEditable(false);
+			try {
+				txtpnSkilltotvalue.setText(skill.getScore()+"");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			skillPanel.add(txtpnSkilltotvalue);
+			res[c] = skillPanel;
+			c++;
+			
+		}
+		return res;
+		
 	}
 	
 }

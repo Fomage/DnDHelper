@@ -513,8 +513,10 @@ public class NewBuffWindow extends JFrame {
 				
 				try {
 					//System.out.println(chooser.getSelectedFile().getPath());
-				
-					loadBuff((Buff)Serializer.load(chooser.getSelectedFile().getPath()));
+					
+					if(chooser.getSelectedFile()!=null){
+						loadBuff((Buff)Serializer.load(chooser.getSelectedFile().getPath()));
+					}
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
