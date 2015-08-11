@@ -30,7 +30,7 @@ public class Creature extends Observable implements Serializable, Observer {
 		inventory.addObserver(this);
 		stats = new Stats();
 		stats.addObserver(this);
-		setSkills(new Skills());
+		setSkills(new Skills(stats));
 		name="Default";
 	}
 	
@@ -84,6 +84,7 @@ public class Creature extends Observable implements Serializable, Observer {
 		this.skills = skills;
 		skills.setStats(getStats());
 		skills.addObserver(this);
+		setChanged();
 		notifyObservers();
 	}
 

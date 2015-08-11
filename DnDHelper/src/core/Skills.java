@@ -35,11 +35,11 @@ public class Skills extends Observable implements Serializable, Observer {
 	 * Initially with basic skills.
 	 * @param stats bases itself on theses stats for rolls.
 	 */
-	public Skills(Stats stats) throws Exception{
+	public Skills(Stats stats){
 		skills = new LinkedList<Skill>();
 		this.stats = stats;
 		ignoreNotify=false;
-		buildBasicSkills();
+		try{buildBasicSkills();}catch(Exception e){}
 	}
 	
 	//buildBasicSKills
