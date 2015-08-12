@@ -252,7 +252,7 @@ public class MainWindow extends JFrame {
 								.load(chooser.getSelectedFile().getPath());
 						creaturePanels = new ArrayList<CreaturePanel>();
 						for (Creature creat : creatureList) {
-
+							creat.restoreObservable();
 							creaturePanels.add(new CreaturePanel(main, creat));
 							if (creaturePanels.size() >= 6) {
 								scrollPane.setPreferredSize(new Dimension(325, 600));

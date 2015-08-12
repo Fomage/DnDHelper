@@ -23,6 +23,7 @@ public class BuffPanel extends JPanel implements Observer {
 	public BuffPanel(MainWindow main, CreaturePanel creaturePanel) {
 		super();
 		this.associatedCreature = creaturePanel.getCreature();
+		associatedCreature.addObserver(this);
 		this.main = main;
 		isCreatureBound = true;
 	}
@@ -31,12 +32,14 @@ public class BuffPanel extends JPanel implements Observer {
 		super();
 		this.main = main;
 		isCreatureBound = false;
+		
 		this.item = item;
 	}
 
 	private static final long serialVersionUID = 1L;
 
 	public void update(Observable arg0, Object arg1) {
+		//System.out.println("Updating");
 		update();
 
 	}
@@ -44,6 +47,7 @@ public class BuffPanel extends JPanel implements Observer {
 	public void update() {
 		List<Buff> buffs;
 		if (isCreatureBound) {
+			//System.out.println(associatedCreature.getBuffer().getBuffs().size());
 			buffs = associatedCreature.getBuffer().getBuffs();
 
 		} else {

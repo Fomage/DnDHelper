@@ -18,6 +18,7 @@ public class InventoryPanel extends JPanel implements Observer {
 		super();
 		this.associatedCreature = creaturePanel.getCreature();
 		this.main = main;
+		this.associatedCreature.addObserver(this);
 
 	}
 

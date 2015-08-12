@@ -35,7 +35,7 @@ public class CreaturePanel extends JPanel {
 	 */
 	private static final long serialVersionUID = -5364541950907930931L;
 	private JTabbedPane tabbedPane;
-	private Creature creature;
+	private Creature associatedCreature;
 	private BuffPanel currentBuffs;
 	private JTextPane resultPane;
 	private JToggleButton btnSelect;
@@ -65,7 +65,7 @@ public class CreaturePanel extends JPanel {
 
 		setBackground(Color.WHITE);
 		this.setPreferredSize(new Dimension(303, 100));
-		this.creature = creature;
+		this.associatedCreature = creature;
 		CreaturePanel panel = this;
 		setLayout(null);
 
@@ -108,7 +108,7 @@ public class CreaturePanel extends JPanel {
 		}
 
 		CreatureNamePanel txtpnCreaturename = new CreatureNamePanel();
-		this.creature.addObserver(txtpnCreaturename);
+		this.associatedCreature.addObserver(txtpnCreaturename);
 
 		txtpnCreaturename.setOpaque(false);
 		txtpnCreaturename.setBounds(10, 0, 117, 28);
@@ -183,7 +183,7 @@ public class CreaturePanel extends JPanel {
 
 		currentBuffs = new BuffPanel(main, this);
 		currentBuffs.update();
-		creature.addObserver(currentBuffs);
+		//associatedCreature.addObserver(currentBuffs);
 		currentBuffs.setLayout(new BoxLayout(currentBuffs, BoxLayout.LINE_AXIS));
 
 		JButton btnAddBuff = new JButton("+");
@@ -205,8 +205,9 @@ public class CreaturePanel extends JPanel {
 								if (newbuff.isPublic()) {
 									main.addPublicBuff(newbuff.getBuff());
 								}
-
-								creature.getBuffer().addBuff(newbuff.getBuff());
+								
+								CreaturePanel.this.associatedCreature.getBuffer().addBuff(newbuff.getBuff());
+								//System.out.println(CreaturePanel.this.associatedCreature.getBuffer().getBuffs().size());
 							}
 
 						} catch (Exception e1) {
@@ -217,7 +218,7 @@ public class CreaturePanel extends JPanel {
 						main.setAlwaysOnTop(main.onTopState);
 						
 						main.setFocusableWindowState(true);
-						// updateBuffPanel(currentBuffs);
+						currentBuffs.update();
 
 						// DONE : RETURN NEW BUFF HERE with newbuff
 						return;
@@ -245,7 +246,7 @@ public class CreaturePanel extends JPanel {
 
 		InventoryPanel currentInventory = new InventoryPanel(main, panel);
 		currentInventory.update();
-		creature.addObserver(currentInventory);
+		//this.associatedCreature.addObserver(currentInventory);
 		currentInventory.setLayout(new BoxLayout(currentInventory, BoxLayout.LINE_AXIS));
 
 		JScrollPane invScroll = new JScrollPane(currentInventory);
@@ -277,12 +278,12 @@ public class CreaturePanel extends JPanel {
 						// DONE : RETURN NEW ITEM HERE with newitem
 						try {
 							if (newitem.isFinished()) {
-								creature.getInventory().addItem(newitem.getItem());
+								CreaturePanel.this.associatedCreature.getInventory().addItem(newitem.getItem());
 								// System.out.println(creature.getInventory().getItems().size());
 								// System.out.println(newitem.getItem().getBuffs().size());
 								// System.out.println(creature.getBuffer().getBuffs().size());
 							}
-							currentBuffs.update();
+							currentInventory.update();
 							
 							main.setAlwaysOnTop(main.onTopState);
 							main.setFocusableWindowState(true);
@@ -293,7 +294,7 @@ public class CreaturePanel extends JPanel {
 							e1.printStackTrace();
 						}
 						// panel.setVisible(true);
-						return;
+						
 					}
 				});
 			}
@@ -325,7 +326,7 @@ public class CreaturePanel extends JPanel {
 
 	public Creature getCreature() {
 
-		return creature;
+		return associatedCreature;
 	}
 
 	public BuffPanel getCurrentBuffs() {
