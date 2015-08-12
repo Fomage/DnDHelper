@@ -15,7 +15,7 @@ public class ItemButton extends JButton {
 
 	ImageIcon amuletIcon = new ImageIcon(getClass().getResource("/images/amulet.png"));
 	ImageIcon armorIcon = new ImageIcon(getClass().getResource("/images/armor.png"));
-	ImageIcon gemIcon = new ImageIcon(getClass().getResource("images/gem.png"));
+	ImageIcon gemIcon = new ImageIcon(getClass().getResource("/images/gem.png"));
 	ImageIcon ringIcon = new ImageIcon(getClass().getResource("/images/ring.png"));
 	ImageIcon swordIcon = new ImageIcon(getClass().getResource("/images/sword.png"));
 	ImageIcon[] icons = { amuletIcon, armorIcon, gemIcon, ringIcon, swordIcon };
