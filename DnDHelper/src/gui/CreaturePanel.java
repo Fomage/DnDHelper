@@ -54,14 +54,14 @@ public class CreaturePanel extends JPanel {
 	public CreaturePanel(MainWindow main, Creature creature) {
 
 		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		ImageIcon editIcon = new ImageIcon("src/gui/images/edit2.png");
-		ImageIcon editIconPressed = new ImageIcon("src/gui/images/edit2pressed.png");
-		ImageIcon trashIcon = new ImageIcon("src/gui/images/trash2.png");
-		ImageIcon trashIconPressed = new ImageIcon("src/gui/images/trash2pressed.png");
-		ImageIcon creatureIcon = new ImageIcon("src/gui/images/person2.png");
-		ImageIcon inventoryIcon = new ImageIcon("src/gui/images/inventory2.png");
-		ImageIcon checkedIcon = new ImageIcon("src/gui/images/checked.png");
-		ImageIcon uncheckedIcon = new ImageIcon("src/gui/images/unchecked.png");
+		ImageIcon editIcon = new ImageIcon(getClass().getResource("/images/edit2.png"));
+		ImageIcon editIconPressed = new ImageIcon(getClass().getResource("/images/edit2pressed.png"));
+		ImageIcon trashIcon = new ImageIcon(getClass().getResource("/images/trash2.png"));
+		ImageIcon trashIconPressed = new ImageIcon(getClass().getResource("/images/trash2pressed.png"));
+		ImageIcon creatureIcon = new ImageIcon(getClass().getResource("/images/person2.png"));
+		ImageIcon inventoryIcon = new ImageIcon(getClass().getResource("/images/inventory2.png"));
+		ImageIcon checkedIcon = new ImageIcon(getClass().getResource("/images/checked.png"));
+		ImageIcon uncheckedIcon = new ImageIcon(getClass().getResource("/images/unchecked.png"));
 
 		setBackground(Color.WHITE);
 		this.setPreferredSize(new Dimension(303, 100));

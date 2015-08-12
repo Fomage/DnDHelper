@@ -13,10 +13,10 @@ import core.Creature;
 import core.Item;
 
 public class BuffButton extends JButton {
-	ImageIcon goodvisBuffIcon = new ImageIcon("src/gui/images/goodvis.png");
-	ImageIcon goodinvisBuffIcon = new ImageIcon("src/gui/images/goodinvis.png");
-	ImageIcon badvisBuffIcon = new ImageIcon("src/gui/images/badvis.png");
-	ImageIcon badinvisBuffIcon = new ImageIcon("src/gui/images/badinvis.png");
+	ImageIcon goodvisBuffIcon = new ImageIcon(getClass().getResource("/images/goodvis.png"));
+	ImageIcon goodinvisBuffIcon = new ImageIcon(getClass().getResource("/images/goodinvis.png"));
+	ImageIcon badvisBuffIcon = new ImageIcon(getClass().getResource("/images/badvis.png"));
+	ImageIcon badinvisBuffIcon = new ImageIcon(getClass().getResource("/images/badinvis.png"));
 	ImageIcon image;
 
 	private static final long serialVersionUID = 1L;

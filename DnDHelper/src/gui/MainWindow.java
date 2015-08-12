@@ -93,9 +93,9 @@ public class MainWindow extends JFrame {
 		setBounds(10, 10, 317, 145);
 		MainWindow main = this;
 
-		ImageIcon diceicon = new ImageIcon("src/gui/images/dice2.png");
+		ImageIcon diceicon = new ImageIcon(getClass().getResource("/images/dice2.png"));
 		Image icon = diceicon.getImage();
-		ImageIcon dicepressedicon = new ImageIcon("src/gui/images/dice2pressed.png");
+		ImageIcon dicepressedicon = new ImageIcon(getClass().getResource("/images/dice2pressed.png"));
 		// URL url = getClass().getResource("/gui/images/dice.png");
 		// Image diceimg;
 		// try {

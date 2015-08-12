@@ -13,11 +13,11 @@ import core.Item;
 
 public class ItemButton extends JButton {
 
-	ImageIcon amuletIcon = new ImageIcon("src/gui/images/amulet.png");
-	ImageIcon armorIcon = new ImageIcon("src/gui/images/armor.png");
-	ImageIcon gemIcon = new ImageIcon("src/gui/images/gem.png");
-	ImageIcon ringIcon = new ImageIcon("src/gui/images/ring.png");
-	ImageIcon swordIcon = new ImageIcon("src/gui/images/sword.png");
+	ImageIcon amuletIcon = new ImageIcon(getClass().getResource("/images/amulet.png"));
+	ImageIcon armorIcon = new ImageIcon(getClass().getResource("/images/armor.png"));
+	ImageIcon gemIcon = new ImageIcon(getClass().getResource("images/gem.png"));
+	ImageIcon ringIcon = new ImageIcon(getClass().getResource("/images/ring.png"));
+	ImageIcon swordIcon = new ImageIcon(getClass().getResource("/images/sword.png"));
 	ImageIcon[] icons = { amuletIcon, armorIcon, gemIcon, ringIcon, swordIcon };
 	ImageIcon image;
 
