@@ -372,6 +372,54 @@ public class MainWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO : roll everything
+				String rollString = (String) comboBox.getSelectedItem();
+				Boolean isStatRoll = false;
+				for(int i = 0; i<6; i++){
+					try {
+						if(rollString.equals(Stats.statToString(i))){
+							isStatRoll = true;
+						}
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+				if(isStatRoll){
+					for(CreaturePanel creaturePan: creaturePanels){
+						try {
+							
+							if(creaturePan.isSelected()){
+								int mod = creaturePan.getCreature().getStats().getMod(Stats.statToInt(rollString));
+								int roll = (int) (Math.floor(Math.random()*20)+1);
+								int tot = mod+roll;
+								creaturePan.showResult(tot+ "");
+								creaturePan.setResultToolTip(rollString+" : "+roll  +" + "+ mod  + " = " + tot );
+							}
+							
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				}
+				else{
+					for(CreaturePanel creaturePan: creaturePanels){
+						try {
+							
+							if(creaturePan.isSelected()){
+								int mod = creaturePan.getCreature().getSkills().getSkill(rollString).getScore();
+								int roll = (int) (Math.floor(Math.random()*20)+1);
+								int tot = mod+roll;
+								creaturePan.showResult(tot+ "");
+								creaturePan.setResultToolTip(rollString+" : "+roll  +" + "+ mod  + " = " + tot );
+							}
+							
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				}
+				
 
 			}
 		});

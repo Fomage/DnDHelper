@@ -38,6 +38,7 @@ public class CreaturePanel extends JPanel {
 	private Creature creature;
 	private BuffPanel currentBuffs;
 	private JTextPane resultPane;
+	private JToggleButton btnSelect;
 
 	/**
 	 * Create the panel.
@@ -315,7 +316,7 @@ public class CreaturePanel extends JPanel {
 		resultPane.setText("0");
 		selectPanel.add(resultPane, BorderLayout.NORTH);
 
-		JToggleButton btnSelect = new JToggleButton(uncheckedIcon);
+		btnSelect = new JToggleButton(uncheckedIcon);
 		btnSelect.setSelectedIcon(checkedIcon);
 		btnSelect.setBorder(null);
 		btnSelect.setBorderPainted(false);
@@ -481,6 +482,17 @@ public class CreaturePanel extends JPanel {
 
 	public String getLastResult() {
 		return resultPane.getText();
+	}
+
+	public void setResultToolTip(String string) {
+		resultPane.setToolTipText(string);
+		
+	}
+
+	public boolean isSelected() {
+		
+		return btnSelect.isSelected();
+		
 	}
 
 }

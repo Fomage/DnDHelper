@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -136,9 +137,9 @@ public class NewCreatureWindow extends JFrame {
 		okButton.setBounds(15, 401, 408, 62);
 		contentPane.add(okButton);
 
-		JButton btnLoadExistingCreature = new JButton("Load Existing Creature");
-		btnLoadExistingCreature.setBounds(250, 15, 143, 26);
-		btnLoadExistingCreature.addActionListener(new ActionListener() {
+		JButton btnLoad = new JButton("Load");
+		btnLoad.setBounds(311, 12, 107, 32);
+		btnLoad.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -174,8 +175,42 @@ public class NewCreatureWindow extends JFrame {
 				}
 			}
 		});
-		contentPane.add(btnLoadExistingCreature);
+		contentPane.add(btnLoad);
 		this.getRootPane().setDefaultButton(okButton);
+		
+		JButton btnSave = new JButton("Save");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser chooser = new JFileChooser(".");
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Creature Files", "cre");
+				chooser.setFileFilter(filter);
+				@SuppressWarnings("unused")
+				int returnVal = chooser.showSaveDialog(window);
+
+				try {
+					// System.out.println(chooser.getSelectedFile().getPath());
+					if (chooser.getSelectedFile() != null) {
+						NewCreatureWindow.this.creature.setName(NewCreatureWindow.this.txtCreatureName.getText());
+						for (int i = 0; i < 6; i++) {
+							try {
+								NewCreatureWindow.this.creature.getStats().setStat(i, NewCreatureWindow.this.tempStats[i]);
+
+							} catch (Exception e) {
+
+								e.printStackTrace();
+							}
+						}
+						Serializer.save((Serializable) NewCreatureWindow.this.creature , chooser.getSelectedFile().getPath() + ".cre");
+					}
+
+				} catch (Exception e1) {
+
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnSave.setBounds(194, 12, 107, 32);
+		contentPane.add(btnSave);
 		
 	}
 
@@ -340,5 +375,4 @@ public class NewCreatureWindow extends JFrame {
 		return res;
 
 	}
-
 }
