@@ -1,8 +1,11 @@
 package gui;
 
 import java.awt.Font;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -355,6 +358,19 @@ public class NewBuffWindow extends JFrame {
 			btnRemove.setBounds(310, 11, 114, 62);
 			contentPane.add(btnRemove);
 		}
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+			
+			@Override
+			public boolean dispatchKeyEvent(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+					window.dispose();
+				}
+				else if(e.getKeyCode() == KeyEvent.VK_ENTER){
+					btnOK.getActionListeners()[0].actionPerformed(null);
+				}
+				return false;
+			}
+		});
 		this.getRootPane().setDefaultButton(btnOK);
 
 	}
@@ -664,7 +680,21 @@ public class NewBuffWindow extends JFrame {
 			btnRemove.setBounds(310, 11, 114, 62);
 			contentPane.add(btnRemove);
 		}
-		this.getRootPane().setDefaultButton(btnOK);
+		//this.getRootPane().setDefaultButton(btnOK);
+		
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+			
+			@Override
+			public boolean dispatchKeyEvent(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+					window.dispose();
+				}
+				else if(e.getKeyCode() == KeyEvent.VK_ENTER){
+					btnOK.getActionListeners()[0].actionPerformed(null);
+				}
+				return false;
+			}
+		});
 	}
 
 	private void loadBuff(Buff buff) {

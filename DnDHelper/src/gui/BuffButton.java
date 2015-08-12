@@ -70,6 +70,7 @@ public class BuffButton extends JButton {
 						}
 						currentBuffPanel.update();
 						main.setAlwaysOnTop(main.getOnTopState());
+						main.requestFocus();
 
 						// DONE : RETURN NEW BUFF HERE with newbuff
 						return;

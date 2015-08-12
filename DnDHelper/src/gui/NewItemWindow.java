@@ -3,8 +3,11 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -103,7 +106,7 @@ public class NewItemWindow extends JFrame {
 		contentPane.add(comboItemType);
 
 		buffPanel = new JPanel();
-		buffPanel.setBounds(5, 157, 254, 94);
+		buffPanel.setBounds(5, 157, 254, 93);
 		contentPane.add(buffPanel);
 		buffPanel.setLayout(new BorderLayout(0, 0));
 
@@ -116,15 +119,25 @@ public class NewItemWindow extends JFrame {
 
 		associatedBuffs = new BuffPanel(main, associatedItem);
 		associatedItem.addObserver(associatedBuffs);
+		//associatedBuffs.setPreferredSize(new Dimension(160,0));
 		associatedBuffs.setLayout(new BoxLayout(associatedBuffs, BoxLayout.LINE_AXIS));
 		// buffPanel.add(associatedBuffs, BorderLayout.CENTER);
-
+		
+		JScrollPane buffScroll = new JScrollPane(associatedBuffs);
+		buffScroll.setBorder(null);
+		buffScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		buffScroll.setPreferredSize(new Dimension(160, 0));
+		buffPanel.add(buffScroll, BorderLayout.CENTER);
+		
 		JButton addBuff = new JButton("+");
 		addBuff.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				NewBuffWindow newbuff = new NewBuffWindow(null, item, main, associatedBuffs);
 				newbuff.setVisible(true);
-
+				
+				NewItemWindow.this.setVisible(false);
+				
+				
 				newbuff.addWindowListener(new WindowAdapter() {
 					public void windowClosed(WindowEvent e) {
 						try {
@@ -136,11 +149,17 @@ public class NewItemWindow extends JFrame {
 								associatedBuffs.addToBuffer(newbuff.getBuff());
 								associatedBuffs.update();
 							}
+							buffScroll.revalidate();
 
 						} catch (Exception e1) {
 
 							e1.printStackTrace();
 						}
+						
+						NewItemWindow.this.setVisible(true);
+						NewItemWindow.this.requestFocus(true);
+						
+						
 						// updateBuffPanel(currentBuffs);
 
 						// DONE : RETURN NEW BUFF HERE with newbuff
@@ -151,11 +170,8 @@ public class NewItemWindow extends JFrame {
 		});
 		buffPanel.add(addBuff, BorderLayout.EAST);
 
-		JScrollPane buffScroll = new JScrollPane(associatedBuffs);
-		buffScroll.setBorder(null);
-		buffScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-		buffScroll.setPreferredSize(new Dimension(160, 0));
-		buffPanel.add(buffScroll, BorderLayout.WEST);
+		
+		
 
 		JButton btnMoveToStash = new JButton("Move to Stash");
 		btnMoveToStash.setFocusable(false);
@@ -198,7 +214,25 @@ public class NewItemWindow extends JFrame {
 		loadItem(associatedItem);
 		
 		
-		
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+			
+			@Override
+			public boolean dispatchKeyEvent(KeyEvent e) {
+				if(NewItemWindow.this.isVisible()&& e.getKeyCode() == KeyEvent.KEY_TYPED){
+					if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+						if(NewItemWindow.this.isFocused()){
+							window.dispose();
+						}
+						
+					}
+					else if(e.getKeyCode() == KeyEvent.VK_ENTER){
+						btnOK.getActionListeners()[0].actionPerformed(null);
+					}
+				}
+				
+				return false;
+			}
+		});
 		this.getRootPane().setDefaultButton(btnOK);
 		
 		

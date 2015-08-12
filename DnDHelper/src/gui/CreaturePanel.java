@@ -138,9 +138,9 @@ public class CreaturePanel extends JPanel {
 
 							// DONE : refresh in some way (Obs)
 						}
-
-						main.setAlwaysOnTop(main.onTopState);
 						main.setFocusableWindowState(true);
+						main.setAlwaysOnTop(main.onTopState);
+						main.requestFocus();
 
 					}
 				});
@@ -218,6 +218,7 @@ public class CreaturePanel extends JPanel {
 						main.setAlwaysOnTop(main.onTopState);
 						
 						main.setFocusableWindowState(true);
+						main.requestFocus();
 						currentBuffs.update();
 
 						// DONE : RETURN NEW BUFF HERE with newbuff
@@ -288,6 +289,7 @@ public class CreaturePanel extends JPanel {
 							
 							main.setAlwaysOnTop(main.onTopState);
 							main.setFocusableWindowState(true);
+							main.requestFocus();
 							
 
 						} catch (Exception e1) {

@@ -187,6 +187,7 @@ public class MainWindow extends JFrame {
 						if (!main.isResizable()) {
 							main.pack();
 						}
+						main.requestFocus();
 
 					}
 				});
@@ -550,7 +551,7 @@ public class MainWindow extends JFrame {
 	}
 
 	public boolean getOnTopState() {
-
+		
 		return onTopState;
 	}
 

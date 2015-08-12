@@ -54,6 +54,7 @@ public class ItemButton extends JButton {
 				newitem.addWindowListener(new WindowAdapter() {
 					public void windowClosed(WindowEvent e) {
 						main.setAlwaysOnTop(main.getOnTopState());
+						main.requestFocus();
 						currentInventoryPanel.update();
 						
 
