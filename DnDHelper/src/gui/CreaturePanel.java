@@ -127,6 +127,7 @@ public class CreaturePanel extends JPanel {
 				editCreature.setVisible(true);
 
 				main.setAlwaysOnTop(false);
+				main.setFocusableWindowState(false);
 				editCreature.toFront();
 
 				editCreature.addWindowListener(new WindowAdapter() {
@@ -137,7 +138,8 @@ public class CreaturePanel extends JPanel {
 							// DONE : refresh in some way (Obs)
 						}
 
-						main.setAlwaysOnTop(main.getOnTopState());
+						main.setAlwaysOnTop(main.onTopState);
+						main.setFocusableWindowState(true);
 
 					}
 				});
@@ -190,6 +192,7 @@ public class CreaturePanel extends JPanel {
 				newbuff.setVisible(true);
 				// panel.setVisible(false);
 				main.setAlwaysOnTop(false);
+				main.setFocusableWindowState(false);
 				newbuff.toFront();
 
 				newbuff.addWindowListener(new WindowAdapter() {
@@ -208,6 +211,10 @@ public class CreaturePanel extends JPanel {
 
 							e1.printStackTrace();
 						}
+						
+						main.setAlwaysOnTop(main.onTopState);
+						
+						main.setFocusableWindowState(true);
 						// updateBuffPanel(currentBuffs);
 
 						// DONE : RETURN NEW BUFF HERE with newbuff
@@ -266,6 +273,7 @@ public class CreaturePanel extends JPanel {
 				newitem.toFront();
 				// panel.setVisible(false);
 				main.setAlwaysOnTop(false);
+				main.setFocusableWindowState(false);
 
 				newitem.addWindowListener(new WindowAdapter() {
 					public void windowClosed(WindowEvent e) {
@@ -278,6 +286,10 @@ public class CreaturePanel extends JPanel {
 								// System.out.println(creature.getBuffer().getBuffs().size());
 							}
 							currentBuffs.update();
+							
+							main.setAlwaysOnTop(main.onTopState);
+							main.setFocusableWindowState(true);
+							
 
 						} catch (Exception e1) {
 

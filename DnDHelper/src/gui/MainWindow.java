@@ -106,6 +106,7 @@ public class MainWindow extends JFrame {
 		// }
 
 		contentPane = new JPanel();
+		contentPane.setFocusable(false);
 		contentPane.setAlignmentY(Component.TOP_ALIGNMENT);
 		contentPane.setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -120,6 +121,7 @@ public class MainWindow extends JFrame {
 
 		// contentPane.add(scrollCreatures, BorderLayout.EAST);
 		creatures = new JPanel();
+		creatures.setFocusable(false);
 		creatures.setAlignmentY(Component.TOP_ALIGNMENT);
 		creatures.setAlignmentX(Component.LEFT_ALIGNMENT);
 		creatures.setBorder(null);
@@ -128,6 +130,7 @@ public class MainWindow extends JFrame {
 		creatures.setLayout(new BoxLayout(creatures, BoxLayout.PAGE_AXIS));
 
 		JScrollPane scrollPane = new JScrollPane(creatures);
+		scrollPane.setFocusable(false);
 		scrollPane.setAlignmentY(Component.TOP_ALIGNMENT);
 		scrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
 		scrollPane.setBorder(null);
@@ -143,12 +146,15 @@ public class MainWindow extends JFrame {
 		}
 
 		JPanel bot = new JPanel();
+		bot.setFocusable(false);
 		bot.setPreferredSize(new Dimension(300, 80));
 		contentPane.add(bot, BorderLayout.SOUTH);
 
 		JCheckBox chckbxOnTop = new JCheckBox("On Top");
+		chckbxOnTop.setFocusable(false);
 
 		JButton btnAddcreature = new JButton("+");
+		btnAddcreature.setFocusable(false);
 		btnAddcreature.setFocusPainted(false);
 		btnAddcreature.setFont(new Font("SansSerif", Font.PLAIN, 35));
 		btnAddcreature.addActionListener(new ActionListener() {
@@ -158,6 +164,7 @@ public class MainWindow extends JFrame {
 
 				main.setAlwaysOnTop(false);
 				newcreature.toFront();
+				main.setFocusableWindowState(false);
 
 				newcreature.addWindowListener(new WindowAdapter() {
 					public void windowClosed(WindowEvent e) {
@@ -167,6 +174,7 @@ public class MainWindow extends JFrame {
 						// RETURN NEW CREATURE HERE with <code> newcreature
 						// </code> DONE
 						main.setAlwaysOnTop(onTopState);
+						main.setFocusableWindowState(true);
 
 						if (creaturePanels.size() >= 6) {
 							scrollPane.setPreferredSize(new Dimension(325, 600));
@@ -188,10 +196,12 @@ public class MainWindow extends JFrame {
 		bot.setLayout(new BorderLayout(0, 0));
 
 		JPanel sessionPanel = new JPanel();
+		sessionPanel.setFocusable(false);
 		bot.add(sessionPanel, BorderLayout.CENTER);
 		sessionPanel.setLayout(null);
 
 		JButton saveSessionButton = new JButton("Save");
+		saveSessionButton.setFocusable(false);
 		saveSessionButton.setBounds(0, 0, 89, 45);
 		sessionPanel.add(saveSessionButton);
 		saveSessionButton.addActionListener(new ActionListener() {
@@ -221,6 +231,7 @@ public class MainWindow extends JFrame {
 		});
 
 		JButton loadSessionButton = new JButton("Load");
+		loadSessionButton.setFocusable(false);
 		loadSessionButton.setBounds(89, 0, 89, 45);
 		sessionPanel.add(loadSessionButton);
 		loadSessionButton.addActionListener(new ActionListener() {
@@ -266,6 +277,7 @@ public class MainWindow extends JFrame {
 		});
 
 		JPanel options = new JPanel();
+		options.setFocusable(false);
 		bot.add(options, BorderLayout.EAST);
 		options.setLayout(new BorderLayout(0, 0));
 
@@ -285,6 +297,7 @@ public class MainWindow extends JFrame {
 		});
 
 		JCheckBox chckbxResizable = new JCheckBox("Resizable");
+		chckbxResizable.setFocusable(false);
 		options.add(chckbxResizable, BorderLayout.NORTH);
 
 		Component verticalGlue = Box.createVerticalGlue();
@@ -320,10 +333,12 @@ public class MainWindow extends JFrame {
 		bot.add(btnAddcreature, BorderLayout.WEST);
 
 		JPanel diceRollPanel = new JPanel();
+		diceRollPanel.setFocusable(false);
 		bot.add(diceRollPanel, BorderLayout.SOUTH);
 		diceRollPanel.setLayout(new BorderLayout(0, 0));
 
 		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.setFocusable(false);
 		List<String> rolls = new ArrayList<String>();
 		for (Skill skill : new Creature().getSkills().getSkills()) {
 			rolls.add(skill.getName());
@@ -340,10 +355,12 @@ public class MainWindow extends JFrame {
 		diceRollPanel.add(comboBox, BorderLayout.WEST);
 
 		JPanel rollPanel = new JPanel();
+		rollPanel.setFocusable(false);
 		diceRollPanel.add(rollPanel, BorderLayout.EAST);
 		rollPanel.setLayout(new BorderLayout(0, 0));
 
 		JButton btnRoll = new JButton(diceicon);
+		btnRoll.setFocusable(false);
 		rollPanel.add(btnRoll, BorderLayout.WEST);
 		btnRoll.setPressedIcon(dicepressedicon);
 		btnRoll.setBorder(null);
@@ -360,6 +377,7 @@ public class MainWindow extends JFrame {
 		});
 
 		Component horizontalStrut = Box.createHorizontalStrut(20);
+		horizontalStrut.setFocusable(false);
 		horizontalStrut.setPreferredSize(new Dimension(5, 0));
 		rollPanel.add(horizontalStrut, BorderLayout.EAST);
 
@@ -404,7 +422,7 @@ public class MainWindow extends JFrame {
 
 			e1.printStackTrace();
 		}
-
+		this.getRootPane().setDefaultButton(btnRoll);
 	}
 
 	public boolean isOnTop() {

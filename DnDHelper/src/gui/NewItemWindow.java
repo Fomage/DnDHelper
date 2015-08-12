@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FocusTraversalPolicy;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -61,8 +62,18 @@ public class NewItemWindow extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-
+		
+		txtItemName = new JTextField();
+		txtItemName.setFocusCycleRoot(true);
+		txtItemName.setToolTipText("Enter a name");
+		txtItemName.setText("Item Name");
+		txtItemName.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		txtItemName.setColumns(10);
+		txtItemName.setBounds(5, 11, 143, 32);
+		contentPane.add(txtItemName);
+		
 		txtpnDescription = new JTextPane();
+		txtpnDescription.setFocusCycleRoot(false);
 		txtpnDescription.setText("Item Description");
 		txtpnDescription.setBounds(5, 60, 419, 86);
 		contentPane.add(txtpnDescription);
@@ -84,13 +95,7 @@ public class NewItemWindow extends JFrame {
 		btnOK.setBounds(280, 200, 144, 51);
 		contentPane.add(btnOK);
 
-		txtItemName = new JTextField();
-		txtItemName.setToolTipText("Enter a fucking name wtf are you retarded?");
-		txtItemName.setText("Item Name");
-		txtItemName.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		txtItemName.setColumns(10);
-		txtItemName.setBounds(5, 11, 143, 32);
-		contentPane.add(txtItemName);
+		
 
 		comboItemType = new JComboBox<String>();
 		comboItemType
@@ -154,6 +159,7 @@ public class NewItemWindow extends JFrame {
 		buffPanel.add(buffScroll, BorderLayout.WEST);
 
 		JButton btnMoveToStash = new JButton("Move to Stash");
+		btnMoveToStash.setFocusable(false);
 		btnMoveToStash.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
@@ -186,8 +192,19 @@ public class NewItemWindow extends JFrame {
 		loadFromStash.setModel(new DefaultComboBoxModel<>(names.toArray(new String[names.size()])));
 		loadFromStash.setBounds(158, 11, 125, 32);
 		contentPane.add(loadFromStash);
-
+		
+		
+		
+		
 		loadItem(associatedItem);
+		
+		
+		
+		this.getRootPane().setDefaultButton(btnOK);
+		
+		
+		//txtItemName.setRequestFocusEnabled(true);
+		//txtItemName.requestFocus();
 
 	}
 
@@ -199,8 +216,12 @@ public class NewItemWindow extends JFrame {
 			associatedBuffs.addToBuffer(buff);
 		}
 		associatedBuffs.update();
-		txtpnDescription.setText(item.getDescription());
 		txtItemName.setText(item.getName());
+		if(item.getDescription()!=null && !item.getDescription().equals("")){
+			txtpnDescription.setText(item.getDescription());
+		}
+		
+		
 		comboItemType.setSelectedIndex(item.getType());
 
 	}

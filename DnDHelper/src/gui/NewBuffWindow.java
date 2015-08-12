@@ -142,55 +142,69 @@ public class NewBuffWindow extends JFrame {
 				finished = true;
 				// creaturePanel.setVisible(true);
 				if (localBuff != null) {
-					if (statorskillBox.getSelectedItem() == "Stats" && localBuff instanceof SkillBuff) {
+					if (statorskillBox.getSelectedIndex()==1  && localBuff instanceof SkillBuff) {
 						// TODO : swap Class of Buff
-					} else if (statorskillBox.getSelectedItem() == "Skill" && localBuff instanceof StatBuff) {
-
-					} else {
-						if (localBuff instanceof StatBuff) {
-							int stat = Stats.Fo;
-							switch ((String) statComboBox.getSelectedItem()) {
-							case "Force":
-								stat = Stats.Fo;
-								break;
-							case "Dextérité":
-								stat = Stats.Dex;
-								break;
-							case "Constitution":
-								stat = Stats.Con;
-								break;
-							case "Intelligence":
-								stat = Stats.Int;
-								break;
-							case "Sagesse":
-								stat = Stats.Sag;
-								break;
-							case "Charisme":
-								stat = Stats.Cha;
-								break;
-							}
-							try {
-								((StatBuff) localBuff).setStat(stat);
-								((StatBuff) localBuff).setMod((int) spinnerMod.getValue());
-								((StatBuff) localBuff).setName(txtName.getText());
-								((StatBuff) localBuff).setHidden(chckbxHiddenBuff.isSelected());
-								((StatBuff) localBuff).setPositive(chckbxPositiveBuff.isSelected());
-							} catch (Exception e) {
-
-								e.printStackTrace();
-							}
-						} else {
-							try {
-								((SkillBuff) localBuff).setSkill((String) skillComboBox.getSelectedItem());
-								((SkillBuff) localBuff).setMod((int) spinnerMod.getValue());
-								((SkillBuff) localBuff).setName(txtName.getText());
-								((SkillBuff) localBuff).setHidden(chckbxHiddenBuff.isSelected());
-								((SkillBuff) localBuff).setPositive(chckbxPositiveBuff.isSelected());
-							} catch (Exception e) {
-
-								e.printStackTrace();
-							}
+						//System.out.println("Skill to Stat");
+						try {
+							
+							localBuff = ((SkillBuff)localBuff).toStatBuff(0, 0);
+						} catch (Exception e) {
+							
+							e.printStackTrace();
 						}
+					} else if (statorskillBox.getSelectedIndex()==2  && localBuff instanceof StatBuff) {
+						try {
+							localBuff = ((StatBuff)localBuff).toSkillBuff(creature.getSkills().getSkills().get(0).getName(), 0);
+						} catch (Exception e) {
+							
+							e.printStackTrace();
+						}
+					}
+					
+					if (localBuff instanceof StatBuff) {
+						int stat = Stats.Fo;
+						switch ((String) statComboBox.getSelectedItem()) {
+						case "Force":
+							stat = Stats.Fo;
+							break;
+						case "Dextérité":
+							stat = Stats.Dex;
+							break;
+						case "Constitution":
+							stat = Stats.Con;
+							break;
+						case "Intelligence":
+							stat = Stats.Int;
+							break;
+						case "Sagesse":
+							stat = Stats.Sag;
+							break;
+						case "Charisme":
+							stat = Stats.Cha;
+							break;
+						}
+						try {
+							((StatBuff) localBuff).setStat(stat);
+							((StatBuff) localBuff).setMod((int) spinnerMod.getValue());
+							((StatBuff) localBuff).setName(txtName.getText());
+							((StatBuff) localBuff).setHidden(chckbxHiddenBuff.isSelected());
+							((StatBuff) localBuff).setPositive(chckbxPositiveBuff.isSelected());
+						} catch (Exception e) {
+
+							e.printStackTrace();
+						}
+					} else {
+						try {
+							((SkillBuff) localBuff).setSkill((String) skillComboBox.getSelectedItem());
+							((SkillBuff) localBuff).setMod((int) spinnerMod.getValue());
+							((SkillBuff) localBuff).setName(txtName.getText());
+							((SkillBuff) localBuff).setHidden(chckbxHiddenBuff.isSelected());
+							((SkillBuff) localBuff).setPositive(chckbxPositiveBuff.isSelected());
+						} catch (Exception e) {
+
+							e.printStackTrace();
+						}
+					
 					}
 				} else {
 					if (statorskillBox.getSelectedItem() == "Stat") {
@@ -338,6 +352,7 @@ public class NewBuffWindow extends JFrame {
 			btnRemove.setBounds(310, 11, 114, 62);
 			contentPane.add(btnRemove);
 		}
+		this.getRootPane().setDefaultButton(btnOK);
 
 	}
 
@@ -380,7 +395,15 @@ public class NewBuffWindow extends JFrame {
 		contentPane.add(statorskillBox);
 
 		skillComboBox = new JComboBox<String>();
-		skillComboBox.setModel(new DefaultComboBoxModel<String>(new String[] { "Skill 1", "Skill 2" }));
+		
+		Creature creature = new Creature();
+		String[] skills = new String[creature.getSkills().getSkills().size()];
+		int c = 0;
+		for (Skill skill : creature.getSkills().getSkills()) {
+			skills[c] = skill.getName();
+			c++;
+		}
+		skillComboBox.setModel(new DefaultComboBoxModel<String>(skills));
 		skillComboBox.setBounds(60, 207, 153, 32);
 		contentPane.add(skillComboBox);
 
@@ -425,46 +448,72 @@ public class NewBuffWindow extends JFrame {
 				finished = true;
 				// creaturePanel.setVisible(true);
 				if (localBuff != null) {
-					if (statorskillBox.getSelectedItem() == "Stats" && localBuff instanceof SkillBuff) {
-
-					} else if (statorskillBox.getSelectedItem() == "Skill" && localBuff instanceof StatBuff) {
-
-					} else {
-						if (localBuff instanceof StatBuff) {
-							int stat = Stats.Fo;
-							switch ((String) statComboBox.getSelectedItem()) {
-							case "Force":
-								stat = Stats.Fo;
-								break;
-							case "Dextérité":
-								stat = Stats.Dex;
-								break;
-							case "Constitution":
-								stat = Stats.Con;
-								break;
-							case "Intelligence":
-								stat = Stats.Int;
-								break;
-							case "Sagesse":
-								stat = Stats.Sag;
-								break;
-							case "Charisme":
-								stat = Stats.Cha;
-								break;
-							}
-							try {
-								((StatBuff) localBuff).setStat(stat);
-								((StatBuff) localBuff).setMod((int) spinnerMod.getValue());
-								((StatBuff) localBuff).setName(txtName.getText());
-								((StatBuff) localBuff).setHidden(chckbxHiddenBuff.isSelected());
-								((StatBuff) localBuff).setPositive(chckbxPositiveBuff.isSelected());
-							} catch (Exception e) {
-
-								e.printStackTrace();
-							}
-						} else {
-
+					if (statorskillBox.getSelectedIndex()==1  && localBuff instanceof SkillBuff) {
+						// TODO : swap Class of Buff
+						//System.out.println("Skill to Stat");
+						try {
+							buffPanel.removeFromBuffer(localBuff);
+							localBuff = ((SkillBuff)localBuff).toStatBuff(0, 0);
+							buffPanel.addToBuffer(localBuff);
+						} catch (Exception e) {
+							
+							e.printStackTrace();
 						}
+					} else if (statorskillBox.getSelectedIndex()==2  && localBuff instanceof StatBuff) {
+						try {
+							buffPanel.removeFromBuffer(localBuff);
+							localBuff = ((StatBuff)localBuff).toSkillBuff(creature.getSkills().getSkills().get(0).getName(), 0);
+							buffPanel.addToBuffer(localBuff);
+						} catch (Exception e) {
+							
+							e.printStackTrace();
+						}
+					}
+					
+					if (localBuff instanceof StatBuff) {
+						int stat = Stats.Fo;
+						switch ((String) statComboBox.getSelectedItem()) {
+						case "Force":
+							stat = Stats.Fo;
+							break;
+						case "Dextérité":
+							stat = Stats.Dex;
+							break;
+						case "Constitution":
+							stat = Stats.Con;
+							break;
+						case "Intelligence":
+							stat = Stats.Int;
+							break;
+						case "Sagesse":
+							stat = Stats.Sag;
+							break;
+						case "Charisme":
+							stat = Stats.Cha;
+							break;
+						}
+						try {
+							((StatBuff) localBuff).setStat(stat);
+							((StatBuff) localBuff).setMod((int) spinnerMod.getValue());
+							((StatBuff) localBuff).setName(txtName.getText());
+							((StatBuff) localBuff).setHidden(chckbxHiddenBuff.isSelected());
+							((StatBuff) localBuff).setPositive(chckbxPositiveBuff.isSelected());
+						} catch (Exception e) {
+
+							e.printStackTrace();
+						}
+					} else {
+						try {
+							((SkillBuff) localBuff).setSkill((String) skillComboBox.getSelectedItem());
+							((SkillBuff) localBuff).setMod((int) spinnerMod.getValue());
+							((SkillBuff) localBuff).setName(txtName.getText());
+							((SkillBuff) localBuff).setHidden(chckbxHiddenBuff.isSelected());
+							((SkillBuff) localBuff).setPositive(chckbxPositiveBuff.isSelected());
+						} catch (Exception e) {
+
+							e.printStackTrace();
+						}
+					
 					}
 				} else {
 					if (statorskillBox.getSelectedItem() == "Stat") {
@@ -505,8 +554,26 @@ public class NewBuffWindow extends JFrame {
 							e.printStackTrace();
 						}
 					} else {
+						try {
+							String desc = txtpnDescription.getText();
+							if (desc.equals("Buff Description")) {
+								desc = "";
+							}
+							localBuff = new SkillBuff((String) skillComboBox.getSelectedItem(),
+									(int) spinnerMod.getValue(), txtName.getText(), chckbxHiddenBuff.isSelected(),
+									chckbxPositiveBuff.isSelected());
+							localBuff.setDescription(desc);
+							Serializer.save(localBuff, "./" + localBuff.getName() + ".buf");
+						}
 
+						catch (Exception e) {
+
+							e.printStackTrace();
+						}
 					}
+				}
+				if (localBuff == null) {
+					System.out.println("wtf");
 				}
 				window.dispose(); // DONE : save the new buff information into a
 									// new buff
@@ -595,6 +662,7 @@ public class NewBuffWindow extends JFrame {
 			btnRemove.setBounds(310, 11, 114, 62);
 			contentPane.add(btnRemove);
 		}
+		this.getRootPane().setDefaultButton(btnOK);
 	}
 
 	private void loadBuff(Buff buff) {

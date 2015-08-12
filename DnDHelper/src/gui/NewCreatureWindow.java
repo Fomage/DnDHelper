@@ -175,6 +175,8 @@ public class NewCreatureWindow extends JFrame {
 			}
 		});
 		contentPane.add(btnLoadExistingCreature);
+		this.getRootPane().setDefaultButton(okButton);
+		
 	}
 
 	public boolean isFinished() {
