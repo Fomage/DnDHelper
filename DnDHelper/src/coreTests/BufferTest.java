@@ -4,12 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import core.Buff;
-import core.Buffer;
-import core.Creature;
-import core.StatBuff;
-import core.Stats;
-
 public class BufferTest {
 
 	@Test
