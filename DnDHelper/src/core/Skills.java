@@ -155,7 +155,13 @@ public class Skills extends Observable implements Serializable, Observer {
 		//DOT NOT ADD ANYTHING HERE
 	}
 	
-	
+	public void restoreObservable(){
+		for(Skill s : skills){
+			s.addObserver(this);
+			s.restoreObservable();
+		}
+		stats.addObserver(this);
+	}
 
 }
 

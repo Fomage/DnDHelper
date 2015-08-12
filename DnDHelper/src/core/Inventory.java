@@ -98,5 +98,12 @@ public class Inventory extends Observable implements Observer, Serializable {
 		setChanged();
 		notifyObservers();
 	}
+	
+	public void restoreObservable(){
+		for(Item i : items){
+			i.addObserver(this);
+			i.restoreObservable();
+		}
+	}
 
 }

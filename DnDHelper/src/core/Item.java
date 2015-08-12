@@ -129,5 +129,9 @@ public class Item extends Observable implements Observer, Serializable {
 		notifyObservers();
 	}
 
+	public void restoreObservable(){
+		for(Buff b : buffs)
+			b.addObserver(this);
+	}
 	
 }

@@ -116,5 +116,15 @@ public class Creature extends Observable implements Serializable, Observer {
 		setChanged();
 		notifyObservers();
 	}
+	
+	public void restoreObservable(){
+		getBuffer().addObserver(this);
+		getBuffer().restoreObservable();
+		getInventory().addObserver(this);
+		getInventory().restoreObservable();
+		getSkills().addObserver(this);
+		getSkills().restoreObservable();
+		getStats().addObserver(this);
+	}
 
 }

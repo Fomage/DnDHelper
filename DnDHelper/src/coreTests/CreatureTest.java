@@ -7,6 +7,7 @@ import org.junit.Test;
 import core.Buff;
 import core.Creature;
 import core.Item;
+import core.Serializer;
 import core.StatBuff;
 import core.Stats;
 
@@ -14,24 +15,28 @@ public class CreatureTest {
 
 	@Test
 	public void testCreature() throws Exception{
-		Creature bob= new Creature();
-		bob.setName("bob");
-		Bugger bug = new Bugger();
-		bob.addObserver(bug);
-		
-		Item machin = new Item("Machin","Un machin",0);
-		bob.getInventory().addItem(machin);
-		assertEquals(0,bob.getStats().getMod(Stats.Fo));
-		Buff buffDeMachin = new StatBuff(Stats.Fo,2,"Buff de machin",false,true);
-		machin.addBuff(buffDeMachin);
-		assertEquals(1,bob.getStats().getMod(Stats.Fo));
-		System.out.println(bob.getBuffer().getBuffs().size());
-		
+		fail("Not yet implemented");
 	}
 
 	@Test
-	public void testCreatureInventoryStatsSkillsString() {
-		fail("Not yet implemented");
+	public void testCreatureInventoryStatsSkillsString() throws Exception{
+		Creature bob = new Creature();
+		bob.setName("bob");
+		Buff b = new StatBuff(Stats.Fo,2,"+2 Fo",false,true);
+		bob.getBuffer().addBuff(b);
+		
+		Serializer.save(bob, "test.t");
+		
+		Creature bob2 = (Creature)Serializer.load("test.t");
+		Buff b2 = bob2.getBuffer().getBuffs().get(0);
+		Bugger bugBob = new Bugger();
+		Bugger bugB = new Bugger();
+		bob2.addObserver(bugBob);
+		bob2.getBuffer().addObserver(bugB);
+		
+		b2.setName("SuperBuff");
+		System.out.println(bugBob.count);
+		System.out.println(bugB.count);
 	}
 
 	@Test

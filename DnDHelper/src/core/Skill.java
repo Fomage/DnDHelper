@@ -112,5 +112,9 @@ public class Skill extends Observable implements Serializable, Observer {
 		setChanged();
 		notifyObservers();
 	}
+	
+	public void restoreObservable(){
+		getStats().addObserver(this);
+	}
 
 }

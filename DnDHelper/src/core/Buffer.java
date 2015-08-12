@@ -126,5 +126,11 @@ public class Buffer extends Observable implements Observer, Serializable {
 		setChanged();
 		notifyObservers();
 	}
+	
+	public void restoreObservable(){
+		creature.addObserver(this);
+		for(Buff b : buffs)
+			b.addObserver(this);
+	}
 
 }
