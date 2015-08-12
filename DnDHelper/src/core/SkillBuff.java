@@ -108,6 +108,22 @@ public class SkillBuff extends Buff {
 		notifyObservers();
 	}
 	
-	
+	/**
+	 * Unapplies this buff to all the creatures it was applied to before, then creates a new StatBuff
+	 * and applies it to the sames creatures it was applied before. Needs extensive testing.
+	 * @param stat the stat modified by the new buff
+	 * @param mod the modification added by the new buff to stat
+	 * @return a StatBuff
+	 * @throws Exception
+	 */
+	public StatBuff toStatBuff(int stat, int mod) throws Exception{
+		StatBuff res = new StatBuff(stat,mod,getName(),isHidden(),isPositive());
+		for(Creature c : getApplied()){
+			res.apply(c);
+		}
+		while(!getApplied().isEmpty())
+			unapply(getApplied().get(0));
+		return res;
+	}
 
 }
