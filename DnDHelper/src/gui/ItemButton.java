@@ -55,6 +55,7 @@ public class ItemButton extends JButton {
 					public void windowClosed(WindowEvent e) {
 						main.setAlwaysOnTop(main.getOnTopState());
 						currentInventoryPanel.update();
+						
 
 						// DONE : RETURN NEW BUFF HERE with newbuff
 						return;

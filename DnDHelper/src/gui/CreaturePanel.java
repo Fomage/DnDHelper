@@ -284,6 +284,7 @@ public class CreaturePanel extends JPanel {
 								// System.out.println(creature.getBuffer().getBuffs().size());
 							}
 							currentInventory.update();
+							currentBuffs.update();
 							
 							main.setAlwaysOnTop(main.onTopState);
 							main.setFocusableWindowState(true);

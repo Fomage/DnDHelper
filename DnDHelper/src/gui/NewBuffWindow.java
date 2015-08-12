@@ -237,7 +237,11 @@ public class NewBuffWindow extends JFrame {
 							localBuff = new StatBuff(stat, (int) spinnerMod.getValue(), txtName.getText(),
 									chckbxHiddenBuff.isSelected(), chckbxPositiveBuff.isSelected());
 							localBuff.setDescription(desc);
-							Serializer.save(localBuff, "./" + localBuff.getName() + ".buf");
+							String end = ".buf";
+							if(localBuff.getName().endsWith(".buf")){
+								end = "";
+							}
+							Serializer.save(localBuff, "./" + localBuff.getName() + end);
 						}
 
 						catch (Exception e) {
@@ -283,7 +287,6 @@ public class NewBuffWindow extends JFrame {
 				JFileChooser chooser = new JFileChooser(".");
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("Buff Files", "buf");
 				chooser.setFileFilter(filter);
-				@SuppressWarnings("unused")
 				int returnVal = chooser.showOpenDialog(main);
 
 				try {
@@ -592,7 +595,6 @@ public class NewBuffWindow extends JFrame {
 				JFileChooser chooser = new JFileChooser(".");
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("Buff Files", "buf");
 				chooser.setFileFilter(filter);
-				@SuppressWarnings("unused")
 				int returnVal = chooser.showOpenDialog(main);
 
 				try {

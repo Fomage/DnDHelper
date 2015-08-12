@@ -214,12 +214,15 @@ public class MainWindow extends JFrame {
 				JFileChooser chooser = new JFileChooser(".");
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("Session Files", "ses");
 				chooser.setFileFilter(filter);
-				@SuppressWarnings("unused")
 				int returnVal = chooser.showSaveDialog(main);
 
 				try {
 					if (returnVal ==JFileChooser.APPROVE_OPTION && chooser.getSelectedFile() != null) {
-						Serializer.save((Serializable) session, chooser.getSelectedFile().getPath() + ".ses");
+						String end = ".ses";
+						if(chooser.getSelectedFile().getPath().endsWith(".ses")){
+							end = "";
+						}
+						Serializer.save((Serializable) session, chooser.getSelectedFile().getPath() + end);
 					}
 
 				} catch (Exception e) {
@@ -240,7 +243,6 @@ public class MainWindow extends JFrame {
 				JFileChooser chooser = new JFileChooser(".");
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("Session Files", "ses");
 				chooser.setFileFilter(filter);
-				@SuppressWarnings("unused")
 				int returnVal = chooser.showOpenDialog(main);
 
 				try {
@@ -439,7 +441,6 @@ public class MainWindow extends JFrame {
 		JFileChooser chooser = new JFileChooser(".");
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Session Files", "ses");
 		chooser.setFileFilter(filter);
-		@SuppressWarnings("unused")
 		int returnVal = chooser.showOpenDialog(main);
 
 		try {
@@ -450,7 +451,7 @@ public class MainWindow extends JFrame {
 				List<Creature> creatureList = (List<Creature>) Serializer.load(chooser.getSelectedFile().getPath());
 				creaturePanels = new ArrayList<CreaturePanel>();
 				for (Creature creat : creatureList) {
-
+					creat.restoreObservable();
 					creaturePanels.add(new CreaturePanel(main, creat));
 					if (creaturePanels.size() >= 6) {
 						scrollPane.setPreferredSize(new Dimension(325, 600));

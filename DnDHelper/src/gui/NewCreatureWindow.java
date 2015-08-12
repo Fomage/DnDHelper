@@ -146,7 +146,6 @@ public class NewCreatureWindow extends JFrame {
 				JFileChooser chooser = new JFileChooser(".");
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("Creature Files", "cre");
 				chooser.setFileFilter(filter);
-				@SuppressWarnings("unused")
 				int returnVal = chooser.showOpenDialog(window);
 
 				try {
@@ -184,7 +183,6 @@ public class NewCreatureWindow extends JFrame {
 				JFileChooser chooser = new JFileChooser(".");
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("Creature Files", "cre");
 				chooser.setFileFilter(filter);
-				@SuppressWarnings("unused")
 				int returnVal = chooser.showSaveDialog(window);
 
 				try {
@@ -200,7 +198,11 @@ public class NewCreatureWindow extends JFrame {
 								e.printStackTrace();
 							}
 						}
-						Serializer.save((Serializable) NewCreatureWindow.this.creature , chooser.getSelectedFile().getPath() + ".cre");
+						String end = ".cre";
+						if(chooser.getSelectedFile().getPath().endsWith(".cre")){
+							end = "";
+						}
+						Serializer.save((Serializable) NewCreatureWindow.this.creature , chooser.getSelectedFile().getPath() + end);
 					}
 
 				} catch (Exception e1) {
