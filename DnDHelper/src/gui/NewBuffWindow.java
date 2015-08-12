@@ -288,7 +288,7 @@ public class NewBuffWindow extends JFrame {
 
 				try {
 					// System.out.println(chooser.getSelectedFile().getPath());
-					if (chooser.getSelectedFile() != null) {
+					if (returnVal ==JFileChooser.APPROVE_OPTION && chooser.getSelectedFile() != null) {
 						loadBuff((Buff) Serializer.load(chooser.getSelectedFile().getPath()));
 					}
 
@@ -598,7 +598,7 @@ public class NewBuffWindow extends JFrame {
 				try {
 					// System.out.println(chooser.getSelectedFile().getPath());
 
-					if (chooser.getSelectedFile() != null) {
+					if (returnVal ==JFileChooser.APPROVE_OPTION && chooser.getSelectedFile() != null) {
 						loadBuff((Buff) Serializer.load(chooser.getSelectedFile().getPath()));
 					}
 				} catch (Exception e1) {

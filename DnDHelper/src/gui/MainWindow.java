@@ -218,7 +218,7 @@ public class MainWindow extends JFrame {
 				int returnVal = chooser.showSaveDialog(main);
 
 				try {
-					if (chooser.getSelectedFile() != null) {
+					if (returnVal ==JFileChooser.APPROVE_OPTION && chooser.getSelectedFile() != null) {
 						Serializer.save((Serializable) session, chooser.getSelectedFile().getPath() + ".ses");
 					}
 
@@ -246,7 +246,7 @@ public class MainWindow extends JFrame {
 				try {
 					// System.out.println(chooser.getSelectedFile().getPath());
 
-					if (chooser.getSelectedFile() != null) {
+					if (returnVal ==JFileChooser.APPROVE_OPTION && chooser.getSelectedFile() != null) {
 						@SuppressWarnings("unchecked")
 						List<Creature> creatureList = (List<Creature>) Serializer
 								.load(chooser.getSelectedFile().getPath());
@@ -445,7 +445,7 @@ public class MainWindow extends JFrame {
 		try {
 			// System.out.println(chooser.getSelectedFile().getPath());
 
-			if (chooser.getSelectedFile() != null) {
+			if (returnVal ==JFileChooser.APPROVE_OPTION && chooser.getSelectedFile() != null) {
 				@SuppressWarnings("unchecked")
 				List<Creature> creatureList = (List<Creature>) Serializer.load(chooser.getSelectedFile().getPath());
 				creaturePanels = new ArrayList<CreaturePanel>();

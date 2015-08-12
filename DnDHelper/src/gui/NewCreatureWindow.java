@@ -151,7 +151,7 @@ public class NewCreatureWindow extends JFrame {
 
 				try {
 					// System.out.println(chooser.getSelectedFile().getPath());
-					if (chooser.getSelectedFile() != null) {
+					if (returnVal ==JFileChooser.APPROVE_OPTION && chooser.getSelectedFile() != null) {
 						NewCreatureWindow loadedCreature = new NewCreatureWindow(
 								(Creature) Serializer.load(chooser.getSelectedFile().getPath()));
 						loadedCreature.setVisible(true);
@@ -189,7 +189,7 @@ public class NewCreatureWindow extends JFrame {
 
 				try {
 					// System.out.println(chooser.getSelectedFile().getPath());
-					if (chooser.getSelectedFile() != null) {
+					if (returnVal ==JFileChooser.APPROVE_OPTION && chooser.getSelectedFile() != null) {
 						NewCreatureWindow.this.creature.setName(NewCreatureWindow.this.txtCreatureName.getText());
 						for (int i = 0; i < 6; i++) {
 							try {
