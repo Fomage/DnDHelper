@@ -25,7 +25,7 @@ public class Buffer extends Observable implements Observer, Serializable {
 	public Buffer() {
 		buffs=new ArrayList<Buff>();
 		creature=new Creature();
-		this.addObserver(creature);
+		//this.addObserver(creature);
 	}
 
 	/**
@@ -35,7 +35,7 @@ public class Buffer extends Observable implements Observer, Serializable {
 	public Buffer(Creature creature) {
 		buffs=new ArrayList<Buff>();
 		this.creature=creature;
-		this.addObserver(creature);
+		//this.addObserver(creature);
 	}
 
 	//getters setters
@@ -128,7 +128,7 @@ public class Buffer extends Observable implements Observer, Serializable {
 	}
 	
 	public void restoreObservable(){
-		creature.addObserver(this);
+		//creature.addObserver(this);
 		for(Buff b : buffs)
 			b.addObserver(this);
 	}

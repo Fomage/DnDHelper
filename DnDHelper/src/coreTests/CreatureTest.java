@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import core.Buff;
 import core.Creature;
-import core.Item;
 import core.Serializer;
 import core.StatBuff;
 import core.Stats;
@@ -28,6 +27,7 @@ public class CreatureTest {
 		Serializer.save(bob, "test.t");
 		
 		Creature bob2 = (Creature)Serializer.load("test.t");
+		bob2.restoreObservable();
 		Buff b2 = bob2.getBuffer().getBuffs().get(0);
 		Bugger bugBob = new Bugger();
 		Bugger bugB = new Bugger();
