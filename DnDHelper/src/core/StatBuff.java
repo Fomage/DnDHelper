@@ -123,10 +123,10 @@ public class StatBuff extends Buff {
 	public SkillBuff toSkillBuff(String skill, int mod) throws Exception{
 		SkillBuff res = new SkillBuff(skill,mod,getName(),isHidden(),isPositive());
 		for(Creature c : getApplied()){
-			res.apply(c);
+			c.getBuffer().addBuff(res);
 		}
 		while(!getApplied().isEmpty())
-			unapply(getApplied().get(0));
+			getApplied().get(0).getBuffer().removeBuff(this);
 		return res;
 	}
 
