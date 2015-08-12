@@ -48,12 +48,12 @@ public class ItemButton extends JButton {
 				NewItemWindow newitem = new NewItemWindow(item, creature, main);
 				newitem.setVisible(true);
 				// panel.setVisible(false);
-				// main.setAlwaysOnTop(false);
+				main.setAlwaysOnTop(false);
 				newitem.toFront();
 
 				newitem.addWindowListener(new WindowAdapter() {
 					public void windowClosed(WindowEvent e) {
-
+						main.setAlwaysOnTop(main.getOnTopState());
 						currentInventoryPanel.update();
 
 						// DONE : RETURN NEW BUFF HERE with newbuff

@@ -59,7 +59,7 @@ public class BuffButton extends JButton {
 
 				newbuff.setVisible(true);
 				// panel.setVisible(false);
-				// main.setAlwaysOnTop(false);
+				main.setAlwaysOnTop(false);
 				newbuff.toFront();
 
 				newbuff.addWindowListener(new WindowAdapter() {
@@ -69,6 +69,7 @@ public class BuffButton extends JButton {
 							main.addPublicBuff(newbuff.getBuff());
 						}
 						currentBuffPanel.update();
+						main.setAlwaysOnTop(main.getOnTopState());
 
 						// DONE : RETURN NEW BUFF HERE with newbuff
 						return;
