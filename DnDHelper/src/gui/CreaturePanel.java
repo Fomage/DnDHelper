@@ -195,6 +195,7 @@ public class CreaturePanel extends JPanel {
 				// panel.setVisible(false);
 				main.setAlwaysOnTop(false);
 				main.setFocusableWindowState(false);
+				main.setEnabled(false);
 				newbuff.toFront();
 
 				newbuff.addWindowListener(new WindowAdapter() {
@@ -216,7 +217,7 @@ public class CreaturePanel extends JPanel {
 						}
 						
 						main.setAlwaysOnTop(main.onTopState);
-						
+						main.setEnabled(true);
 						main.setFocusableWindowState(true);
 						main.requestFocus();
 						currentBuffs.update();
@@ -272,6 +273,7 @@ public class CreaturePanel extends JPanel {
 				newitem.toFront();
 				// panel.setVisible(false);
 				main.setAlwaysOnTop(false);
+				main.setEnabled(false);
 				main.setFocusableWindowState(false);
 
 				newitem.addWindowListener(new WindowAdapter() {
@@ -288,6 +290,7 @@ public class CreaturePanel extends JPanel {
 							currentBuffs.update();
 							
 							main.setAlwaysOnTop(main.onTopState);
+							main.setEnabled(true);
 							main.setFocusableWindowState(true);
 							main.requestFocus();
 							

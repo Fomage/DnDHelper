@@ -163,18 +163,23 @@ public class MainWindow extends JFrame {
 				newcreature.setVisible(true);
 
 				main.setAlwaysOnTop(false);
+				main.setEnabled(false);
 				newcreature.toFront();
+				newcreature.requestFocusInWindow();
 				main.setFocusableWindowState(false);
 
 				newcreature.addWindowListener(new WindowAdapter() {
 					public void windowClosed(WindowEvent e) {
+						main.setAlwaysOnTop(onTopState);
+						main.setFocusableWindowState(true);
+						main.setEnabled(true);
+						main.requestFocus();
 						if (newcreature.isFinished()) {
 							creaturePanels.add(new CreaturePanel(main, newcreature.getCreature()));
 						}
 						// RETURN NEW CREATURE HERE with <code> newcreature
 						// </code> DONE
-						main.setAlwaysOnTop(onTopState);
-						main.setFocusableWindowState(true);
+						
 
 						if (creaturePanels.size() >= 6) {
 							scrollPane.setPreferredSize(new Dimension(325, 600));
@@ -187,7 +192,8 @@ public class MainWindow extends JFrame {
 						if (!main.isResizable()) {
 							main.pack();
 						}
-						main.requestFocus();
+						
+						
 
 					}
 				});

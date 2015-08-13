@@ -9,15 +9,19 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -138,6 +142,127 @@ public class NewBuffWindow extends JFrame {
 		chckbxHiddenBuff.setBounds(214, 31, 94, 23);
 		contentPane.add(chckbxHiddenBuff);
 
+		
+		loadBuff(buff);
+		JButton btnLoadSavedBuff = new JButton("Saved");
+		btnLoadSavedBuff.setBounds(5, 48, 63, 29);
+		btnLoadSavedBuff.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				JFileChooser chooser = new JFileChooser(".");
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Buff Files", "buf");
+				chooser.setFileFilter(filter);
+				int returnVal = chooser.showOpenDialog(main);
+
+				try {
+					// System.out.println(chooser.getSelectedFile().getPath());
+					if (returnVal ==JFileChooser.APPROVE_OPTION && chooser.getSelectedFile() != null) {
+						loadBuff((Buff) Serializer.load(chooser.getSelectedFile().getPath()));
+					}
+
+				} catch (Exception e1) {
+
+					e1.printStackTrace();
+				}
+
+				// System.out.println(chooser.getSelectedFile().getName());
+			}
+		});
+		contentPane.add(btnLoadSavedBuff);
+
+		publicCombo = new JComboBox<String>();
+		List<String> names = new ArrayList<String>();
+		for (Buff publicbuff : main.getPublicBuffs()) {
+			names.add(publicbuff.getName());
+		}
+		publicCombo.setModel(new DefaultComboBoxModel<String>(names.toArray(new String[names.size()])));
+		publicCombo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loadBuff(main.getPublicBuffs().get(publicCombo.getSelectedIndex()));
+
+			}
+		});
+		publicCombo.setBounds(85, 48, 123, 29);
+		publicCombo.setEnabled(false);
+		contentPane.add(publicCombo);
+
+		chckbxPublicBuff = new JCheckBox("Public Buff");
+		chckbxPublicBuff.setBounds(214, 57, 94, 23);
+		if (localBuff != null && names.contains(localBuff.getName())) {
+			chckbxPublicBuff.setSelected(true);
+			publicCombo.setEnabled(true);
+		}
+		chckbxPublicBuff.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				publicCombo.setEnabled(chckbxPublicBuff.isSelected());
+
+			}
+		});
+		contentPane.add(chckbxPublicBuff);
+
+		if (localBuff != null) {
+			JButton btnRemove = new JButton("REMOVE");
+			btnRemove.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			btnRemove.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						creature.getBuffer().removeBuff(localBuff);
+						window.dispose();
+					} catch (Exception e1) {
+
+						e1.printStackTrace();
+					}
+				}
+			});
+			btnRemove.setBounds(310, 11, 114, 62);
+			contentPane.add(btnRemove);
+		}
+		
+//		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+//			
+//			@Override
+//			public boolean dispatchKeyEvent(KeyEvent e) {
+//				
+//				if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+//					window.dispose();
+//				}
+//				else if(e.getKeyCode() == KeyEvent.VK_ENTER){
+//					btnOK.getActionListeners()[0].actionPerformed(null);
+//				}
+//					
+//				
+//				return false;
+//				
+//			}
+//		});
+		final Action closeWindow = new AbstractAction("closeWindow"){
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -3485420914415913052L;
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				window.dispose();
+				
+			}
+			
+		};
+		closeWindow.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0));
+		JButton escape = new JButton(closeWindow);
+		
+		escape.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0),"closeWindow");
+		escape.getActionMap().put("closeWindow", closeWindow);
+		escape.setFocusable(false);
+		contentPane.add(escape);
+		
 		JButton btnOK = new JButton("OK");
 		btnOK.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnOK.addActionListener(new ActionListener() {
@@ -279,99 +404,9 @@ public class NewBuffWindow extends JFrame {
 		});
 		btnOK.setBounds(280, 189, 144, 62);
 		contentPane.add(btnOK);
-		loadBuff(buff);
-		JButton btnLoadSavedBuff = new JButton("Saved");
-		btnLoadSavedBuff.setBounds(5, 48, 63, 29);
-		btnLoadSavedBuff.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				JFileChooser chooser = new JFileChooser(".");
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("Buff Files", "buf");
-				chooser.setFileFilter(filter);
-				int returnVal = chooser.showOpenDialog(main);
-
-				try {
-					// System.out.println(chooser.getSelectedFile().getPath());
-					if (returnVal ==JFileChooser.APPROVE_OPTION && chooser.getSelectedFile() != null) {
-						loadBuff((Buff) Serializer.load(chooser.getSelectedFile().getPath()));
-					}
-
-				} catch (Exception e1) {
-
-					e1.printStackTrace();
-				}
-
-				// System.out.println(chooser.getSelectedFile().getName());
-			}
-		});
-		contentPane.add(btnLoadSavedBuff);
-
-		publicCombo = new JComboBox<String>();
-		List<String> names = new ArrayList<String>();
-		for (Buff publicbuff : main.getPublicBuffs()) {
-			names.add(publicbuff.getName());
-		}
-		publicCombo.setModel(new DefaultComboBoxModel<String>(names.toArray(new String[names.size()])));
-		publicCombo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				loadBuff(main.getPublicBuffs().get(publicCombo.getSelectedIndex()));
-
-			}
-		});
-		publicCombo.setBounds(85, 48, 123, 29);
-		publicCombo.setEnabled(false);
-		contentPane.add(publicCombo);
-
-		chckbxPublicBuff = new JCheckBox("Public Buff");
-		chckbxPublicBuff.setBounds(214, 57, 94, 23);
-		if (localBuff != null && names.contains(localBuff.getName())) {
-			chckbxPublicBuff.setSelected(true);
-			publicCombo.setEnabled(true);
-		}
-		chckbxPublicBuff.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				publicCombo.setEnabled(chckbxPublicBuff.isSelected());
-
-			}
-		});
-		contentPane.add(chckbxPublicBuff);
-
-		if (localBuff != null) {
-			JButton btnRemove = new JButton("REMOVE");
-			btnRemove.setFont(new Font("Tahoma", Font.PLAIN, 15));
-			btnRemove.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					try {
-						creature.getBuffer().removeBuff(localBuff);
-						window.dispose();
-					} catch (Exception e1) {
-
-						e1.printStackTrace();
-					}
-				}
-			});
-			btnRemove.setBounds(310, 11, 114, 62);
-			contentPane.add(btnRemove);
-		}
-		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
-			
-			@Override
-			public boolean dispatchKeyEvent(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
-					window.dispose();
-				}
-				else if(e.getKeyCode() == KeyEvent.VK_ENTER){
-					btnOK.getActionListeners()[0].actionPerformed(null);
-				}
-				return false;
-			}
-		});
+		
 		this.getRootPane().setDefaultButton(btnOK);
+		btnOK.requestFocus();
 
 	}
 
@@ -460,6 +495,110 @@ public class NewBuffWindow extends JFrame {
 		chckbxHiddenBuff.setBounds(214, 31, 94, 23);
 		contentPane.add(chckbxHiddenBuff);
 
+		loadBuff(buff);
+		JButton btnLoadSavedBuff = new JButton("Saved");
+		btnLoadSavedBuff.setBounds(5, 48, 63, 29);
+		btnLoadSavedBuff.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				JFileChooser chooser = new JFileChooser(".");
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Buff Files", "buf");
+				chooser.setFileFilter(filter);
+				int returnVal = chooser.showOpenDialog(main);
+
+				try {
+					// System.out.println(chooser.getSelectedFile().getPath());
+
+					if (returnVal ==JFileChooser.APPROVE_OPTION && chooser.getSelectedFile() != null) {
+						loadBuff((Buff) Serializer.load(chooser.getSelectedFile().getPath()));
+					}
+				} catch (Exception e1) {
+
+					e1.printStackTrace();
+				}
+
+				// System.out.println(chooser.getSelectedFile().getName());
+			}
+		});
+		contentPane.add(btnLoadSavedBuff);
+
+		publicCombo = new JComboBox<String>();
+		List<String> names = new ArrayList<String>();
+		for (Buff publicbuff : main.getPublicBuffs()) {
+			names.add(publicbuff.getName());
+		}
+		publicCombo.setModel(new DefaultComboBoxModel<String>(names.toArray(new String[names.size()])));
+		publicCombo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loadBuff(main.getPublicBuffs().get(publicCombo.getSelectedIndex()));
+
+			}
+		});
+		publicCombo.setBounds(85, 48, 123, 29);
+		publicCombo.setEnabled(false);
+		contentPane.add(publicCombo);
+
+		// chckbxPublicBuff = new JCheckBox("Public Buff");
+		// chckbxPublicBuff.setBounds(214, 57, 94, 23);
+		// if(localBuff!=null && names.contains(localBuff.getName())){
+		// chckbxPublicBuff.setSelected(true);
+		// publicCombo.setEnabled(true);
+		// }
+		// chckbxPublicBuff.addActionListener(new ActionListener() {
+		//
+		// @Override
+		// public void actionPerformed(ActionEvent e) {
+		//
+		// publicCombo.setEnabled(chckbxPublicBuff.isSelected());
+		//
+		// }
+		// });
+		// contentPane.add(chckbxPublicBuff);
+
+		if (localBuff != null) {
+			JButton btnRemove = new JButton("REMOVE");
+			btnRemove.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			btnRemove.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						buffPanel.removeFromBuffer(localBuff);
+						buffPanel.update();
+					} catch (Exception e1) {
+
+						e1.printStackTrace();
+					}
+					window.dispose();
+				}
+			});
+			btnRemove.setBounds(310, 11, 114, 62);
+			contentPane.add(btnRemove);
+		}
+		
+		final Action closeWindow = new AbstractAction("closeWindow"){
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -3485420914415913052L;
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				window.dispose();
+				
+			}
+			
+		};
+		closeWindow.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0));
+		JButton escape = new JButton(closeWindow);
+		
+		escape.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0),"closeWindow");
+		escape.getActionMap().put("closeWindow", closeWindow);
+		escape.setFocusable(false);
+		contentPane.add(escape);
+		
 		JButton btnOK = new JButton("OK");
 		btnOK.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnOK.addActionListener(new ActionListener() {
@@ -471,18 +610,15 @@ public class NewBuffWindow extends JFrame {
 						// TODO : swap Class of Buff
 						//System.out.println("Skill to Stat");
 						try {
-							buffPanel.removeFromBuffer(localBuff);
+							
 							localBuff = ((SkillBuff)localBuff).toStatBuff(0, 0);
-							buffPanel.addToBuffer(localBuff);
 						} catch (Exception e) {
 							
 							e.printStackTrace();
 						}
 					} else if (statorskillBox.getSelectedIndex()==2  && localBuff instanceof StatBuff) {
 						try {
-							buffPanel.removeFromBuffer(localBuff);
 							localBuff = ((StatBuff)localBuff).toSkillBuff(creature.getSkills().getSkills().get(0).getName(), 0);
-							buffPanel.addToBuffer(localBuff);
 						} catch (Exception e) {
 							
 							e.printStackTrace();
@@ -565,7 +701,11 @@ public class NewBuffWindow extends JFrame {
 							localBuff = new StatBuff(stat, (int) spinnerMod.getValue(), txtName.getText(),
 									chckbxHiddenBuff.isSelected(), chckbxPositiveBuff.isSelected());
 							localBuff.setDescription(desc);
-							Serializer.save(localBuff, "./" + localBuff.getName() + ".buf");
+							String end = ".buf";
+							if(localBuff.getName().endsWith(".buf")){
+								end = "";
+							}
+							Serializer.save(localBuff, "./" + localBuff.getName() + end);
 						}
 
 						catch (Exception e) {
@@ -600,101 +740,29 @@ public class NewBuffWindow extends JFrame {
 		});
 		btnOK.setBounds(280, 189, 144, 62);
 		contentPane.add(btnOK);
-		loadBuff(buff);
-		JButton btnLoadSavedBuff = new JButton("Saved");
-		btnLoadSavedBuff.setBounds(5, 48, 63, 29);
-		btnLoadSavedBuff.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				JFileChooser chooser = new JFileChooser(".");
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("Buff Files", "buf");
-				chooser.setFileFilter(filter);
-				int returnVal = chooser.showOpenDialog(main);
-
-				try {
-					// System.out.println(chooser.getSelectedFile().getPath());
-
-					if (returnVal ==JFileChooser.APPROVE_OPTION && chooser.getSelectedFile() != null) {
-						loadBuff((Buff) Serializer.load(chooser.getSelectedFile().getPath()));
-					}
-				} catch (Exception e1) {
-
-					e1.printStackTrace();
-				}
-
-				// System.out.println(chooser.getSelectedFile().getName());
-			}
-		});
-		contentPane.add(btnLoadSavedBuff);
-
-		publicCombo = new JComboBox<String>();
-		List<String> names = new ArrayList<String>();
-		for (Buff publicbuff : main.getPublicBuffs()) {
-			names.add(publicbuff.getName());
-		}
-		publicCombo.setModel(new DefaultComboBoxModel<String>(names.toArray(new String[names.size()])));
-		publicCombo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				loadBuff(main.getPublicBuffs().get(publicCombo.getSelectedIndex()));
-
-			}
-		});
-		publicCombo.setBounds(85, 48, 123, 29);
-		publicCombo.setEnabled(false);
-		contentPane.add(publicCombo);
-
-		// chckbxPublicBuff = new JCheckBox("Public Buff");
-		// chckbxPublicBuff.setBounds(214, 57, 94, 23);
-		// if(localBuff!=null && names.contains(localBuff.getName())){
-		// chckbxPublicBuff.setSelected(true);
-		// publicCombo.setEnabled(true);
-		// }
-		// chckbxPublicBuff.addActionListener(new ActionListener() {
-		//
-		// @Override
-		// public void actionPerformed(ActionEvent e) {
-		//
-		// publicCombo.setEnabled(chckbxPublicBuff.isSelected());
-		//
-		// }
-		// });
-		// contentPane.add(chckbxPublicBuff);
-
-		if (localBuff != null) {
-			JButton btnRemove = new JButton("REMOVE");
-			btnRemove.setFont(new Font("Tahoma", Font.PLAIN, 15));
-			btnRemove.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					try {
-						buffPanel.removeFromBuffer(localBuff);
-						buffPanel.update();
-					} catch (Exception e1) {
-
-						e1.printStackTrace();
-					}
-					window.dispose();
-				}
-			});
-			btnRemove.setBounds(310, 11, 114, 62);
-			contentPane.add(btnRemove);
-		}
-		//this.getRootPane().setDefaultButton(btnOK);
 		
-		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
-			
-			@Override
-			public boolean dispatchKeyEvent(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
-					window.dispose();
-				}
-				else if(e.getKeyCode() == KeyEvent.VK_ENTER){
-					btnOK.getActionListeners()[0].actionPerformed(null);
-				}
-				return false;
-			}
-		});
+		this.getRootPane().setDefaultButton(btnOK);
+		btnOK.requestFocus();
+		
+		
+		
+		
+		
+		
+		
+//		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+//			
+//			@Override
+//			public boolean dispatchKeyEvent(KeyEvent e) {
+//				if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+//					window.dispose();
+//				}
+//				else if(e.getKeyCode() == KeyEvent.VK_ENTER){
+//					btnOK.getActionListeners()[0].actionPerformed(null);
+//				}
+//				return false;
+//			}
+//		});
 	}
 
 	private void loadBuff(Buff buff) {

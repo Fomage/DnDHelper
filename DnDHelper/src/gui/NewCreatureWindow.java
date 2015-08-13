@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.Serializable;
@@ -13,15 +14,19 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -159,6 +164,7 @@ public class NewCreatureWindow extends JFrame {
 							public void windowClosed(WindowEvent e) {
 								if (loadedCreature.isFinished()) {
 									finished = true;
+									loadedCreature.getCreature().restoreObservable();
 									NewCreatureWindow.this.creature = loadedCreature.getCreature();
 								}
 								window.dispose();
@@ -213,6 +219,28 @@ public class NewCreatureWindow extends JFrame {
 		});
 		btnSave.setBounds(194, 12, 107, 32);
 		contentPane.add(btnSave);
+		final Action closeWindow = new AbstractAction("closeWindow"){
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -3485420914415913052L;
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				window.dispose();
+				
+			}
+			
+		};
+		closeWindow.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0));
+		JButton escape = new JButton(closeWindow);
+		
+		escape.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0),"closeWindow");
+		escape.getActionMap().put("closeWindow", closeWindow);
+		escape.setFocusable(false);
+		contentPane.add(escape);
 		
 	}
 

@@ -3,8 +3,6 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -13,15 +11,19 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -134,7 +136,7 @@ public class NewItemWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				NewBuffWindow newbuff = new NewBuffWindow(null, item, main, associatedBuffs);
 				newbuff.setVisible(true);
-				
+				NewItemWindow.this.setEnabled(false);
 				NewItemWindow.this.setVisible(false);
 				
 				
@@ -157,7 +159,9 @@ public class NewItemWindow extends JFrame {
 						}
 						
 						NewItemWindow.this.setVisible(true);
-						NewItemWindow.this.requestFocus(true);
+						NewItemWindow.this.setEnabled(true);
+						btnOK.requestFocus();
+						//NewItemWindow.this.requestFocus(true);
 						
 						
 						// updateBuffPanel(currentBuffs);
@@ -214,25 +218,48 @@ public class NewItemWindow extends JFrame {
 		loadItem(associatedItem);
 		
 		
-		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
-			
+//		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+//			
+//			@Override
+//			public boolean dispatchKeyEvent(KeyEvent e) {
+//				if(NewItemWindow.this.isVisible() && NewItemWindow.this.isFocused()){
+//					
+//					if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+//						
+//						window.dispose();
+//						
+//						
+//					}
+//					else if(e.getKeyCode() == KeyEvent.VK_ENTER){
+//						btnOK.getActionListeners()[0].actionPerformed(null);
+//					}
+//				}
+//				
+//				return false;
+//			}
+//		});
+		final Action closeWindow = new AbstractAction("closeWindow"){
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -3485420914415913052L;
+
 			@Override
-			public boolean dispatchKeyEvent(KeyEvent e) {
-				if(NewItemWindow.this.isVisible()&& e.getKeyCode() == KeyEvent.KEY_TYPED){
-					if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
-						if(NewItemWindow.this.isFocused()){
-							window.dispose();
-						}
-						
-					}
-					else if(e.getKeyCode() == KeyEvent.VK_ENTER){
-						btnOK.getActionListeners()[0].actionPerformed(null);
-					}
-				}
+			public void actionPerformed(ActionEvent arg0) {
 				
-				return false;
+				window.dispose();
+				
 			}
-		});
+			
+		};
+		closeWindow.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0));
+		JButton escape = new JButton(closeWindow);
+		
+		escape.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0),"closeWindow");
+		escape.getActionMap().put("closeWindow", closeWindow);
+		escape.setFocusable(false);
+		contentPane.add(escape);
 		this.getRootPane().setDefaultButton(btnOK);
 		
 		
