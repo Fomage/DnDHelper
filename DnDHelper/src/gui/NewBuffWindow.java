@@ -1,8 +1,6 @@
 package gui;
 
 import java.awt.Font;
-import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -315,6 +313,7 @@ public class NewBuffWindow extends JFrame {
 							((StatBuff) localBuff).setStat(stat);
 							((StatBuff) localBuff).setMod((int) spinnerMod.getValue());
 							((StatBuff) localBuff).setName(txtName.getText());
+							((StatBuff) localBuff).setDescription(txtpnDescription.getText());
 							((StatBuff) localBuff).setHidden(chckbxHiddenBuff.isSelected());
 							((StatBuff) localBuff).setPositive(chckbxPositiveBuff.isSelected());
 						} catch (Exception e) {
@@ -326,6 +325,7 @@ public class NewBuffWindow extends JFrame {
 							((SkillBuff) localBuff).setSkill((String) skillComboBox.getSelectedItem());
 							((SkillBuff) localBuff).setMod((int) spinnerMod.getValue());
 							((SkillBuff) localBuff).setName(txtName.getText());
+							((SkillBuff) localBuff).setDescription(txtpnDescription.getText());
 							((SkillBuff) localBuff).setHidden(chckbxHiddenBuff.isSelected());
 							((SkillBuff) localBuff).setPositive(chckbxPositiveBuff.isSelected());
 						} catch (Exception e) {
@@ -651,6 +651,7 @@ public class NewBuffWindow extends JFrame {
 							((StatBuff) localBuff).setStat(stat);
 							((StatBuff) localBuff).setMod((int) spinnerMod.getValue());
 							((StatBuff) localBuff).setName(txtName.getText());
+							((StatBuff) localBuff).setDescription(txtpnDescription.getText());
 							((StatBuff) localBuff).setHidden(chckbxHiddenBuff.isSelected());
 							((StatBuff) localBuff).setPositive(chckbxPositiveBuff.isSelected());
 						} catch (Exception e) {
@@ -662,6 +663,7 @@ public class NewBuffWindow extends JFrame {
 							((SkillBuff) localBuff).setSkill((String) skillComboBox.getSelectedItem());
 							((SkillBuff) localBuff).setMod((int) spinnerMod.getValue());
 							((SkillBuff) localBuff).setName(txtName.getText());
+							((SkillBuff) localBuff).setDescription(txtpnDescription.getText());
 							((SkillBuff) localBuff).setHidden(chckbxHiddenBuff.isSelected());
 							((SkillBuff) localBuff).setPositive(chckbxPositiveBuff.isSelected());
 						} catch (Exception e) {
