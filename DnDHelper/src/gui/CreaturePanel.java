@@ -325,6 +325,7 @@ public class CreaturePanel extends JPanel {
 		btnSelect.setBorderPainted(false);
 		btnSelect.setFocusPainted(false);
 		btnSelect.setContentAreaFilled(false);
+		btnSelect.setSelected(true);
 		selectPanel.add(btnSelect, BorderLayout.CENTER);
 
 	}

@@ -11,6 +11,9 @@ import javax.swing.JButton;
 import core.Buff;
 import core.Creature;
 import core.Item;
+import core.SkillBuff;
+import core.StatBuff;
+import core.Stats;
 
 public class BuffButton extends JButton {
 	ImageIcon goodvisBuffIcon = new ImageIcon(getClass().getResource("/images/goodvis.png"));
@@ -41,7 +44,7 @@ public class BuffButton extends JButton {
 		}
 		this.setIcon(image);
 		// DONE: set the right icon and update accordingly
-		this.setToolTipText("<html>" + associatedBuff.getName() + "<br>" + associatedBuff.getDescription() + "</html>");
+		this.setToolTipText(getFullDescription());
 		this.setBuff(associatedBuff);
 		this.setBorder(null);
 		this.setOpaque(false);
@@ -81,7 +84,7 @@ public class BuffButton extends JButton {
 		});
 	}
 
-	public BuffButton(Buff buff, Item item, MainWindow main, BuffPanel currentBuffPanel) {
+	public BuffButton(Buff buff, Item item, MainWindow main, BuffPanel currentBuffPanel){
 
 		super();
 		associatedBuff = buff;
@@ -100,7 +103,7 @@ public class BuffButton extends JButton {
 		}
 		this.setIcon(image);
 		// DONE: set the right icon and update accordingly
-		this.setToolTipText("<html>" + associatedBuff.getName() + "<br>" + associatedBuff.getDescription() + "</html>");
+		this.setToolTipText(getFullDescription());
 		this.setBuff(associatedBuff);
 		this.setBorder(null);
 		this.setOpaque(false);
@@ -143,5 +146,39 @@ public class BuffButton extends JButton {
 
 	public void setBuff(Buff buff) {
 		this.associatedBuff = buff;
+	}
+	
+	public String getFullDescription(){
+		String res = "<html>";
+		res+= associatedBuff.getName()+"<br>";
+		if(associatedBuff instanceof SkillBuff){
+			if(((SkillBuff)associatedBuff).getMod()>=0){
+				res+="+";
+			}
+			else{
+				res+="-";
+			}
+			res+=((SkillBuff)associatedBuff).getMod()+" ";
+			res+=((SkillBuff) associatedBuff).getSkill();
+		}
+		else{
+			if(((StatBuff)associatedBuff).getMod()>=0){
+				res+="+";
+			}
+			else{
+				res+="-";
+			}
+			res+=((StatBuff)associatedBuff).getMod()+" ";
+			try {
+				res+=Stats.statToString(((StatBuff) associatedBuff).getStat());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		res+="<br>"+associatedBuff.getDescription()+"</html>";
+		return res;
 	}
 }
